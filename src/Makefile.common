@@ -1,0 +1,145 @@
+# assumes that the including makefile will define
+# HDRS
+# SOURCES
+# PROG
+# RUN_OPTIONS
+# STDIN_FILENAME
+# OUTPUT
+# CFLAGS
+# LDFLAGS
+
+# also requires
+# CC
+# C3
+# THREEC
+
+HDRS_ORIG = $(addprefix orig/,$(HDRS))
+SOURCES_ORIG = $(addprefix orig/,$(SOURCES))
+OBJS_ORIG = $(SOURCES_ORIG:.c=.o)
+PROG_ORIG = $(PROG)_orig
+
+HDRS_MANUAL = $(addprefix manual/,$(HDRS))
+SOURCES_MANUAL = $(addprefix manual/,$(SOURCES))
+OBJS_MANUAL = $(SOURCES_MANUAL:.c=.o)
+PROG_MANUAL = $(PROG)_manual
+
+HDRS_REVERT = $(addprefix revert/,$(HDRS))
+SOURCES_REVERT = $(addprefix revert/,$(SOURCES))
+OBJS_REVERT = $(SOURCES_REVERT:.c=.o)
+PROG_REVERT = $(PROG)_revert
+
+HDRS_3C_ORIG = $(addprefix 3c-orig/,$(HDRS))
+SOURCES_3C_ORIG = $(addprefix 3c-orig/,$(SOURCES))
+OBJS_3C_ORIG = $(SOURCES_3C_ORIG:.c=.o)
+PROG_3C_ORIG = $(PROG)_3c_orig
+
+HDRS_3C_REVERT = $(addprefix 3c-revert/,$(HDRS))
+SOURCES_3C_REVERT = $(addprefix 3c-revert/,$(SOURCES))
+OBJS_3C_REVERT = $(SOURCES_3C_REVERT:.c=.o)
+PROG_3C_REVERT = $(PROG)_3c_revert
+
+
+.PRECIOUS: orig/%.c manual/%.c revert/%.c 3c-orig/%.c 3c-revert/%.c
+
+all: 3c-orig revert 3c-revert
+
+3c-orig: $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG)
+
+revert: $(HDRS_REVERT) $(SOURCES_REVERT)
+
+3c-revert: $(HDRS_3C_REVERT) $(SOURCES_3C_REVERT)
+
+$(PROG_ORIG): $(OBJS_ORIG)
+	$(CC) -o $@ $(OBJS_ORIG) $(LDFLAGS)
+
+$(PROG_MANUAL): $(OBJS_MANUAL)
+	$(CC) -o $@ $(OBJS_MANUAL) $(LDFLAGS)
+
+$(PROG_REVERT): $(OBJS_REVERT)
+	$(CC) -o $@ $(OBJS_REVERT) $(LDFLAGS)
+
+$(PROG_3C_ORIG): $(OBJS_3C_ORIG)
+	$(CC) -o $@ $(OBJS_3C_ORIG) $(LDFLAGS)
+
+$(PROG_3C_REVERT): $(OBJS_3C_REVERT)
+	$(CC) -o $@ $(OBJS_3C_REVERT) $(LDFLAGS)
+
+$(OBJS_ORIG): $(HDRS_ORIG)
+$(OBJS_MANUAL): $(HDRS_MANUAL)
+$(OBJS_REVERT): $(HDRS_REVERT)
+$(OBJS_3C_ORIG): $(HDRS_3C_ORIG)
+$(OBJS_3C_REVERT): $(HDRS_3C_REVERT)
+
+revert/%.c: manual/%.c
+	mkdir -p revert
+	$(C3) -f $^ > $@
+
+revert/%.h: manual/%.h
+	mkdir -p revert
+	$(C3) -f $^ > $@
+
+3c-orig/%.c: $(SOURCES_ORIG) $(HDRS_ORIG)
+	$(THREEC) -addcr -alltypes -base-dir=orig -output-dir=3c-orig \
+		$(SOURCES_ORIG) $(HDRS_ORIG) --
+
+3c-orig/%.h: $(SOURCES_ORIG) $(HDRS_ORIG)
+	$(THREEC) -addcr -alltypes -base-dir=orig -output-dir=3c-orig \
+		$(SOURCES_ORIG) $(HDRS_ORIG) --
+
+3c-revert/%.c: $(SOURCES_REVERT) $(HDRS_REVERT)
+	$(THREEC) -addcr -alltypes -base-dir=revert -output-dir=3c-revert \
+		$(SOURCES_REVERT) $(HDRS_REVERT) --
+
+3c-revert/%.h: $(SOURCES_REVERT) $(HDRS_REVERT)
+	$(THREEC) -addcr -alltypes -base-dir=revert -output-dir=3c-revert \
+		$(SOURCES_REVERT) $(HDRS_REVERT) --
+
+
+test: test-orig test-manual test-revert test-3c-orig test-3c-manual
+ 
+test-orig: $(PROG_ORIG)
+	./$(PROG_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
+	diff -w $(OUTPUT) FOO
+	$(RM) FOO
+
+test-manual: $(PROG_MANUAL)
+	./$(PROG_MANUAL) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
+	diff -w $(OUTPUT) FOO
+	$(RM) FOO
+
+test-revert: $(PROG_REVERT)
+	./$(PROG_REVERT) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
+	diff -w $(OUTPUT) FOO
+	$(RM) FOO
+
+test-3c-orig: $(PROG_3C_ORIG)
+	./$(PROG_3C_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
+	diff -w $(OUTPUT) FOO
+	$(RM) FOO
+
+test-3c-revert: $(PROG_3C_REVERT)
+	./$(PROG_3C_MANUAL) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
+	diff -w $(OUTPUT) FOO
+	$(RM) FOO
+
+git-diffs: 
+	NAME=$(PROG) ../create-git-diffs.sh
+
+clean: clean-3c-orig clean-revert clean-3c-revert
+	$(RM) $(PROG_ORIG) $(PROG_MANUAL)
+
+clean-3c-orig:
+	$(RM) $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG) $(OBJS_3C_ORIG) $(PROG_3C_ORIG)
+	$(RM) -dr 3c-orig
+	$(RM) $(PROG_3C_ORIG)
+
+clean-revert:
+	$(RM) $(HDRS_REVERT) $(SOURCES_REVERT) $(OBJS_REVERT) $(PROG_REVERT)
+	$(RM) -dr revert
+	$(RM) $(PROG_REVERT)
+
+clean-3c-revert:
+	$(RM) $(HDRS_3C_REVERT) $(SOURCES_3C_REVERT) $(OBJS_3C_REVERT) $(PROG_3C_REVERT)
+	$(RM) -dr 3c-revert
+	$(RM) $(PROG_3C_REVERT)
+
