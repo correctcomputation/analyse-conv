@@ -10,33 +10,33 @@ if ! git diff-index --quiet HEAD --; then
 	exit 1
 fi
 
-git checkout -B $NAME-diff-orig
 mkdir -p git-changes
 if cp orig/* git-changes/ ; then
+	git checkout -B $NAME-diff-orig
 	git add git-changes/*
 	git commit -m"$NAME: setup originals"
 	[ ! -z $PUSH ] && git push --set-upstream origin $NAME-diff-orig
 
-	git checkout -B $NAME-diff-3c-orig
 	if cp 3c-orig/* git-changes ; then
+		git checkout -B $NAME-diff-3c-orig
 		git add git-changes/*
 		git commit -m"$NAME: convert to 3c version"
 		[ ! -z $PUSH ] && git push --set-upstream origin $NAME-diff-3c-orig
 
-		git checkout -B $NAME-diff-manual
 		if cp manual/* git-changes ; then
+			git checkout -B $NAME-diff-manual
 			git add git-changes/*
 			git commit -m"$NAME: replace with manual version"
 			[ ! -z $PUSH ] && git push --set-upstream origin $NAME-diff-manual
 
-			git checkout -B $NAME-diff-revert
 			if cp revert/* git-changes ; then
+				git checkout -B $NAME-diff-revert
 				git add git-changes/*
 				git commit -m"$NAME: remove checkedc annotations"
 				[ ! -z $PUSH ] && git push --set-upstream origin $NAME-diff-revert
 
-				git checkout -B $NAME-diff-3c-revert
 				if cp 3c-revert/* git-changes ; then
+					git checkout -B $NAME-diff-3c-revert
 					git add git-changes/*
 					git commit -m"$NAME: reconvert to 3c version"
 					[ ! -z $PUSH ] && git push --set-upstream origin $NAME-diff-3c-revert
