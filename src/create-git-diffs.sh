@@ -2,7 +2,7 @@
 
 # requires NAME
 
-PUSH=
+#PUSH=
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 if ! git diff-index --quiet HEAD --; then
@@ -47,5 +47,5 @@ if cp orig/* git-changes/ ; then
 fi
 
 git checkout $BRANCH
-
+echo "New git branches were added with git-diffs/ filled with relavant files"
 
