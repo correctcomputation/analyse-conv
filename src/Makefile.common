@@ -125,6 +125,9 @@ test-3c-revert: $(PROG_3C_REVERT)
 git-diffs: 
 	NAME=$(PROG) ../create-git-diffs.sh
 
+stats:
+	NAME=$(PROG) ../create-stats.sh
+
 clean: clean-3c-orig clean-revert clean-3c-revert
 	$(RM) $(PROG_ORIG) $(PROG_MANUAL)
 
