@@ -126,7 +126,7 @@ git-diffs:
 	NAME=$(PROG) ../create-git-diffs.sh
 
 stats:
-	NAME=$(PROG) ../create-stats.sh
+	../create-stats.sh
 
 clean: clean-3c-orig clean-revert clean-3c-revert
 	$(RM) $(PROG_ORIG) $(PROG_MANUAL) diffs.dat

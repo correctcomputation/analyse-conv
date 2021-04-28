@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# requires NAME
-
 echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.dat
 for pair in "3c-orig>manual" "orig>3c-orig" "manual>revert" "revert>3c-revert" ; do
 	first=$(echo $pair | cut -d ">" -f 1)
