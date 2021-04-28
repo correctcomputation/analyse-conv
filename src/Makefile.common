@@ -129,7 +129,8 @@ stats:
 	NAME=$(PROG) ../create-stats.sh
 
 clean: clean-3c-orig clean-revert clean-3c-revert
-	$(RM) $(PROG_ORIG) $(PROG_MANUAL)
+	$(RM) $(PROG_ORIG) $(PROG_MANUAL) diffs.dat
+	$(RM) -dr git-changes
 
 clean-3c-orig:
 	$(RM) $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG) $(OBJS_3C_ORIG) $(PROG_3C_ORIG)
