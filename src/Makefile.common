@@ -125,12 +125,18 @@ test-3c-revert: $(PROG_3C_REVERT)
 git-diffs: 
 	NAME=$(PROG) ../create-git-diffs.sh
 
-stats:
+stats: clean-objs
 	../create-stats.sh
 
-clean: clean-3c-orig clean-revert clean-3c-revert
-	$(RM) $(PROG_ORIG) $(PROG_MANUAL) diffs.dat
+clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs
+	$(RM) diffs.dat
 	$(RM) -dr git-changes
+
+clean-objs:
+	$(RM) $(OBJS_ORIG) $(OBJS_MANUAL) $(OBJS_3C_ORIG) $(OBJS_REVERT) $(OBJS_3C_REVERT)
+
+clean-progs:
+	$(RM) $(PROG_ORIG) $(PROG_MANUAL) $(PROG_3C_ORIG) $(PROG_REVERT) $(PROG_3C_REVERT)
 
 clean-3c-orig:
 	$(RM) $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG) $(OBJS_3C_ORIG) $(PROG_3C_ORIG)
