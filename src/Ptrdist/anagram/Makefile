@@ -9,5 +9,7 @@ OUTPUT = anagram.reference_output
 CFLAGS =
 LDFLAGS =
 
-include ../Makefile.common
+PATH_TO_SRC=../../
+
+include $(PATH_TO_SRC)Makefile.common
 
