@@ -8,7 +8,7 @@ export THREEC=path/to/converter
 export C3=path/to/deconverter
 ```
 
-# Usage
+# Convert
 each sample project has 2 versions of its source code:
 - orig: c version
 - manual: checkedc version, manually ported from the c version
@@ -22,13 +22,20 @@ this will attempt to create 3 additional versions
 - revert: "manual" automatically deconverted c
 - 3c-revert: "revert" automatically reconverted to checkedc
 
-for convenience you can also
+# Analyse
+for convenience you can
 ```
 make git-diffs
 ```
 to create git branches that have a single directory changed one step at a time
 
 you can set to automatically push these changes to the repo by changing `PUSH` in `src/create-git-diffs.sh`. You may want to manually make pull requests to use the full github interface.
+
+you can also show the diff stats:
+```
+make stats
+```
+this will create a file `diffs.dat` showing the number of changes per file per conversion
 
 # more make targets
 - `make <version>`: do things one at a time
