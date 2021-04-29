@@ -7,6 +7,7 @@
 # OUTPUT
 # CFLAGS
 # LDFLAGS
+# PATH_TO_SRC
 
 # also requires
 # CC
@@ -123,10 +124,10 @@ test-3c-revert: $(PROG_3C_REVERT)
 	$(RM) FOO
 
 git-diffs: 
-	NAME=$(PROG) ../create-git-diffs.sh
+	NAME=$(PROG) $(PATH_TO_SRC)create-git-diffs.sh
 
 stats: clean-objs
-	../create-stats.sh
+	$(PATH_TO_SRC)create-stats.sh
 
 clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs
 	$(RM) diffs.dat
