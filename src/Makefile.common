@@ -42,7 +42,10 @@ PROG_3C_REVERT = $(PROG)_3c_revert
 
 .PRECIOUS: orig/%.c manual/%.c revert/%.c 3c-orig/%.c 3c-revert/%.c
 
-all: 3c-orig revert 3c-revert
+convert:
+	-make 3c-orig
+	-make revert
+	-make 3c-revert
 
 3c-orig: $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG)
 
