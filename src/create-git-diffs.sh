@@ -16,7 +16,7 @@ if make git-orig ; then
 	git commit -m"$NAME: setup originals"
 	[ ! -z $PUSH ] && git push --set-upstream origin $NAME-diff-orig
 
-	if make git 3c-orig ; then
+	if make git-3c-orig ; then
 		git checkout -B $NAME-diff-3c-orig
 		git add git-changes/*
 		git commit -m"$NAME: convert to 3c version"
