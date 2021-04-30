@@ -32,12 +32,12 @@ test-orig test-manual test-revert test-3c-orig test-3c-manual:
 git-diffs: 
 	$(PATH_TO_SRC)create-git-diffs.sh
 
-git-orig:
-	mkdir -p git-changes
-	cp orig/* git-changes/
-
 git-%:
-	cp $*/* git-changes/
+	for target in $(TARGETS) ; do \
+		cd $$target ; \
+		make git-$* ; \
+		cd .. ; \
+	done
 
 stats: clean-objs
 	$(PATH_TO_SRC)create-stats.sh
