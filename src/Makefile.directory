@@ -46,3 +46,16 @@ add-git:
 		cd .. ; \
 	done
 
+stats:
+	for target in $(TARGETS) ; do \
+		cd $$target ; \
+		make stats ; \
+		cd .. ; \
+	done
+	NAME=$(NAME) $(PATH_TO_SOURCE)combine-stats.sh
+
+
+diffs.dat diffs.sum: clean-objs
+	$(PATH_TO_SRC)create-stats.sh
+
+

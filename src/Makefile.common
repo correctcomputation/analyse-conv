@@ -130,8 +130,10 @@ git-%:
 add-git:
 	git add git-changes/*
 
-stats: clean-objs
-	$(PATH_TO_SRC)create-stats.sh
+stats: diffs.dat
+
+diffs.dat diffs.sum: clean-objs
+	NAME=$(PROG) $(PATH_TO_SRC)create-stats.sh
 
 clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs
 	$(RM) diffs.dat
