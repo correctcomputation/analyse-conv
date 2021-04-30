@@ -39,6 +39,13 @@ git-%:
 		cd .. ; \
 	done
 
+add-git:
+	for target in $(TARGETS) ; do \
+		cd $$target ; \
+		make add-git ; \
+		cd .. ; \
+	done
+
 stats: clean-objs
 	$(PATH_TO_SRC)create-stats.sh
 

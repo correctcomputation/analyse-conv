@@ -127,6 +127,9 @@ git-orig:
 git-%:
 	cp $*/* git-changes/
 
+add-git:
+	git add git-changes/*
+
 stats: clean-objs
 	$(PATH_TO_SRC)create-stats.sh
 
