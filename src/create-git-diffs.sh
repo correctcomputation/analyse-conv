@@ -45,6 +45,10 @@ if make git-orig ; then
 	fi
 fi
 
+NOW=$(date '+%Y%m%d%H%M%S')
+git checkout -b $NAME-$NOW
+[ ! -z $PUSH ] && git push --set-upstream origin $NAME-$NOW
+
 git checkout $BRANCH
 echo "New git branches were added with git-diffs/ filled with relavant files"
 
