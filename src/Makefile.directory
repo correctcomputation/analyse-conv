@@ -58,4 +58,21 @@ stats:
 diffs.dat diffs.sum: clean-objs
 	$(PATH_TO_SRC)create-stats.sh
 
+clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs
+
+clean-diffs:
+	for target in $(TARGETS) ; do \
+		cd $$target ; \
+		make clean-diffs ; \
+		cd .. ; \
+	done
+	$(RM) diffs.dat diffs.sum
+	$(RM) -dr git-changes
+
+clean-%:
+	for target in $(TARGETS) ; do \
+		cd $$target ; \
+		make clean-$* ; \
+		cd .. ; \
+	done
 
