@@ -12,7 +12,8 @@ export C3=path/to/deconverter
 each sample project has 2 versions of its source code:
 - orig: c version
 - manual: checkedc version, manually ported from the c version
-to create more:
+
+To create more:
 ```
 cd src/<project>
 make
@@ -33,6 +34,8 @@ Any failed conversions will not be included in the stats (needs to be confirmed 
 make git-diffs
 ```
 to create git branches that have a single directory changed one step at a time. These branches are reused on repeated creation, so there is also a datestamped branch for the final one.
+
+You may want to check the results by using `git log --oneline --graph --all` to see all the branches.
 
 you can set to automatically push these changes to the repo by changing `PUSH` in `src/create-git-diffs.sh`. You may want to manually make pull requests to use the full github interface.
 
