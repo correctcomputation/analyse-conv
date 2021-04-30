@@ -120,6 +120,13 @@ test-3c-revert: $(PROG_3C_REVERT)
 git-diffs: 
 	NAME=$(PROG) $(PATH_TO_SRC)create-git-diffs.sh
 
+git-orig:
+	mkdir -p git-changes
+	cp orig/* git-changes/
+
+git-%:
+	cp $*/* git-changes/
+
 stats: clean-objs
 	$(PATH_TO_SRC)create-stats.sh
 
