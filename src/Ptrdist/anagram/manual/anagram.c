@@ -250,8 +250,8 @@ unsigned long pchDictionarySize;
 _Array_ptr<char> pchDictionary : count(pchDictionarySize);               /* the dictionary is read here */
 
 #define Zero(t) memset(t, 0, sizeof(t)) /* quickly zero out an integer array */
-#define fprintf(...) _Unchecked { (fprintf)(__VA_ARGS__); }
-#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
+#define fprintf(...) _Unchecked { fprintf(__VA_ARGS__); }
+#define printf(...) _Unchecked { printf(__VA_ARGS__); }
 
 /* Fatal -- print a message before expiring */
 void Fatal(_Nt_array_ptr<const char> pchMsg, unsigned u) {
