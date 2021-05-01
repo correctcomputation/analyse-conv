@@ -82,13 +82,15 @@ revert/%.h: manual/%.h
 	mkdir -p revert
 	$(C3) -f $^ > $@
 
+THREEC_FLAGS = $(addprefix -extra-arg-before=,$(CFLAGS))
+
 $(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
 	$(THREEC) -alltypes -base-dir=orig -output-dir=3c-orig \
-		$(SOURCES_ORIG) --
+		$(THREEC_FLAGS) $(SOURCES_ORIG) --
 
 $(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
 	$(THREEC) -alltypes -base-dir=revert -output-dir=3c-revert \
-		$(SOURCES_REVERT) --
+		$(THREEC_FLAGS) $(SOURCES_REVERT) --
 
 test: test-orig test-manual test-revert test-3c-orig test-3c-manual
  
