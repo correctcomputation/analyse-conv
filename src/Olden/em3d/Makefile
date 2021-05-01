@@ -2,7 +2,7 @@ SOURCES = args.c em3d.c main.c make_graph.c util.c
 HDRS = em3d.h make_graph.h util.h
 PROG       = em3d
 
-CFLAGS   = -DTORONTO -I..
+CFLAGS   = -DTORONTO 
 LDFLAGS    = 
 
 ifdef SMALL_PROBLEM_SIZE
@@ -16,6 +16,9 @@ endif
 STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
+
+# special handling of stdchecked macros
+C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
 
