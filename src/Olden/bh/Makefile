@@ -2,7 +2,7 @@ SOURCES = args.c newbh.c util.c walksub.c
 HDRS = code.h defs.h stdinc.h vectmath.h
 PROG     = bh
 
-CFLAGS = -I.. -fcommon -DTORONTO
+CFLAGS = -fcommon -DTORONTO
 LDFLAGS  = -lm
 
 ifdef LARGE_PROBLEM_SIZE

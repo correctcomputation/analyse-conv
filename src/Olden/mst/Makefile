@@ -15,5 +15,7 @@ STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 
+# special handling of stdchecked macros
+C3 := $(C3) -c
 include $(PATH_TO_SRC)Makefile.common
 
