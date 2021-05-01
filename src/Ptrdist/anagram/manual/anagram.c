@@ -483,7 +483,7 @@ void DumpCandidates(void) {
     unsigned u;
 
     for (u = 0; u < cpwCand; u++)
-        printf(StringFormat, apwCand[u]->pchWord, (u % 4 == 3) ? '\n' : ' ');
+        printf(StringFormat, apwCand[u]->pchWord, (u % 4 == 3) ? '\n' : /**/ ' ');
     printf("\n");
 }
 
