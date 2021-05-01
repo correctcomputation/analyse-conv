@@ -88,8 +88,7 @@ $(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
 	$(THREEC) -alltypes -base-dir=orig -output-dir=3c-orig \
 		$(THREEC_FLAGS) $(SOURCES_ORIG) --
 
-# $(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
-$(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) : $(SOURCES_REVERT) $(HDRS_REVERT)
+$(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
 	$(THREEC) -alltypes -base-dir=revert -output-dir=3c-revert \
 		$(THREEC_FLAGS) $(SOURCES_REVERT) --
 
