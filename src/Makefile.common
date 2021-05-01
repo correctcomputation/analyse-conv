@@ -83,11 +83,11 @@ revert/%.h: manual/%.h
 	$(C3) -f $^ > $@
 
 $(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
-	$(THREEC) -addcr -alltypes -base-dir=orig -output-dir=3c-orig \
+	$(THREEC) -alltypes -base-dir=orig -output-dir=3c-orig \
 		$(SOURCES_ORIG) $(HDRS_ORIG) --
 
 $(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
-	$(THREEC) -addcr -alltypes -base-dir=revert -output-dir=3c-revert \
+	$(THREEC) -alltypes -base-dir=revert -output-dir=3c-revert \
 		$(SOURCES_REVERT) $(HDRS_REVERT) --
 
 test: test-orig test-manual test-revert test-3c-orig test-3c-manual
