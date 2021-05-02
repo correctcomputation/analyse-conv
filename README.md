@@ -7,6 +7,7 @@ export CC=path/to/checkedc/compiler
 export THREEC=path/to/converter
 export C3=path/to/deconverter
 ```
+Run `setup.sh` to instantiate the submodules
 
 # Convert
 each sample project has 2 versions of its source code:
