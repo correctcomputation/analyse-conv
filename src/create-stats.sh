@@ -1,4 +1,11 @@
 #!/bin/bash
+# Computes statistics about the diffs between various versions of a target
+
+# Rationale for these diff pairs:
+# (1) orig --> revert: This is the refactoring work
+# (2) revert --> manual: This is the annotation work
+# (3) revert --> 3c-revert: This 3c's attempt at (2), so we can compare this diff to that one
+# (4) orig --> 3c-orig: This is 3c's attempt at converting the original. We can compare this diff against (3) to see how much of what was achieved here approximates what's achieved there
 
 # breaks on MacOS; seems to not be needed
 # declare -A summation
