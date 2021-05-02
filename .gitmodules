@@ -1,0 +1,3 @@
+[submodule "src/vsftpd/vsftpd-port"]
+	path = src/vsftpd/vsftpd-port
+	url = git@github.com:correctcomputation/vsftpd-port.git
