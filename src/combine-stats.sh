@@ -4,8 +4,9 @@
 # NAME
 # TARGETS
 
-declare -A diffs
-declare -A summation
+# breaks on MacOS
+# declare -A diffs
+# declare -A summation
 
 VERSIONS="orig-to-3c-orig 3c-orig-to-manual manual-to-revert revert-to-3c-revert"
 for v in $VERSIONS; do

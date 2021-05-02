@@ -3,14 +3,18 @@
 # breaks on MacOS; seems to not be needed
 # declare -A summation
 
+# TODO: Different diff command? See below
+
 echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.dat
 echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.sum
-for pair in "orig>revert" "revert>manual" "3c-revert>revert" "3c-orig>orig" ; do
+for pair in "orig>revert" "revert>manual" "revert>3c-revert" "orig>3c-orig" ; do
 	first=$(echo $pair | cut -d ">" -f 1)
 	second=$(echo $pair | cut -d ">" -f 2)
 	if [ -d $first ] && [ -d $second ] ; then
 		echo "# $first-to-$second" >> diffs.dat
 		echo "# $first-to-$second" >> diffs.sum
+		# TODO: Reconsider diff line, here
+		# git diff -w --no-index --numstat $first $second ?
 		lines=$(diff -w $first $second | diffstat -t -S$first | sed '1d')
 		summation[ins]=0
 		summation[del]=0
