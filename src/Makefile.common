@@ -139,10 +139,14 @@ stats: diffs.dat
 diffs.dat diffs.sum: clean-objs
 	NAME=$(PROG) $(PATH_TO_SRC)create-stats.sh
 
-clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs
+clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs clean-reports
+
+clean-reports:
+	$(RM) -dr workdir
+	$(RM) final.csv
 
 clean-diffs:
-	$(RM) diffs.dat diffs.sum
+	$(RM) diffs.dat diffs.sum final.csv
 	$(RM) -dr git-changes
 
 clean-objs:

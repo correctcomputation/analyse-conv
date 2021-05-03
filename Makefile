@@ -1,6 +1,8 @@
-PATH_TO_SRC=src/
-NAME = All
-TARGETS = src
 
-include $(PATH_TO_SRC)Makefile.directory
+all: 
+	bash -c "cd src; make; cp final.txt ../; cp final.tex ../"
+
+clean: 
+	rm -f final.tex final.txt
+	bash -c "cd src; make clean"
 

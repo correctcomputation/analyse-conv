@@ -52,13 +52,19 @@ stats:
 		make stats ; \
 		cd .. ; \
 	done
-	NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine-stats.sh
+	TARGETS="$(TARGETS)" $(PATH_TO_SRC)report.sh
+	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine-stats.sh
+
 
 
 diffs.dat diffs.sum: clean-objs
 	$(PATH_TO_SRC)create-stats.sh
 
-clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs
+clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs clean-reports
+
+clean-reports:
+	$(RM) -dr workdir
+	$(RM) final.csv
 
 clean-diffs:
 	for target in $(TARGETS) ; do \

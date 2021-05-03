@@ -12,31 +12,33 @@
 
 # TODO: Different diff command? See below
 
-echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.dat
-echo "Total refactored lines" > diffs.sum
+echo "TEST,TOTAL_LINES,LINES_CHANGED,INSERTED,DELETED,MODIFIED,UNCHANGED" > diffs.dat
+echo "TEST,TOTAL_LINES,LINES_CHANGED" > diffs.sum
 for pair in "orig>revert" "revert>manual" "revert>3c-revert" "orig>3c-orig" ; do
 	first=$(echo $pair | cut -d ">" -f 1)
 	second=$(echo $pair | cut -d ">" -f 2)
 	if [ -d $first ] && [ -d $second ] ; then
 		echo "# $first-to-$second" >> diffs.dat
-		echo "# $first-to-$second" >> diffs.sum
+		#echo "# $first-to-$second" >> diffs.sum
 		# TODO: Reconsider diff line, here
 		# git diff -w --no-index --numstat $first $second ?
 		lines=$(diff -w $first $second | diffstat -t -S$first | sed '1d')
-		summation[ins]=0
-		summation[del]=0
-		summation[mod]=0
-		summation[unc]=0
+    test_lines=0
+    test_changed=0
 		if [[ ! -z $lines ]]; then
-      ins=$(echo $lines | awk 'BEGIN { FS = "," } { print $1 }')
-      del=$(echo $lines | awk 'BEGIN { FS = "," } { print $2 }')
-      chg=$(echo $lines | awk 'BEGIN { FS = "," } { print $3 }')
-      total=$(echo "$ins $del $chg + p" | dc)
-			echo -e "$lines" >> diffs.dat
-      echo -e "$total" >> diffs.sum
+      echo $lines >> diffs.dat
+      for line in $lines; do 
+        ins=$(echo $lines | awk 'BEGIN { FS = "," } { print $1 }')
+        del=$(echo $lines | awk 'BEGIN { FS = "," } { print $2 }')
+        mod=$(echo $lines | awk 'BEGIN { FS = "," } { print $3 }')
+        uch=$(echo $lines | awk 'BEGIN { FS = "," } { print $4 }')
+        total_changed=$(echo "$ins $del $mod 0d[+2z>a]salaxp" | dc)
+        total_lines=$(echo "$ins $del $mod $uch 0d[+2z>a]salaxp" | dc)
+        test_lines=$(echo "$test_lines $total_lines + p" | dc)
+        test_changed=$(echo "$test_changed $total_changed + p" | dc)
+      done
+      echo "$first-to-$second,$test_lines,$test_changed" >> diffs.sum
 		fi
-		echo -e "\n" >> diffs.dat # this is 2 spaces, as required
-		echo -e "\n" >> diffs.sum # this is 2 spaces, as required
 	fi
 done
 
