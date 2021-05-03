@@ -27,8 +27,8 @@ program=sys.argv[1]
 # Process a given row into our desired global output
 def process_row(row : List[str]) -> str:
     row = row_to_int(row)
-    refact = compute_percentage(row[2], row[1])
     test = row[0]
+    refact = compute_percentage(row[2], row[1]) if test == 'orig-to-revert' else 'N/A'
     ptrstats = loadstats(test) if is3c(test) else ['N/A'] * 7
     outrow = [program, row[0], refact] + ptrstats
     assert(len(outrow) == len(outheader))

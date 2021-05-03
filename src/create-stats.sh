@@ -7,8 +7,6 @@
 # (3) revert --> 3c-revert: This 3c's attempt at (2), so we can compare this diff to that one
 # (4) orig --> 3c-orig: This is 3c's attempt at converting the original. We can compare this diff against (3) to see how much of what was achieved here approximates what's achieved there
 
-# breaks on MacOS; seems to not be needed
-# declare -A summation
 
 # TODO: Different diff command? See below
 
@@ -22,26 +20,16 @@ for pair in "orig>revert" "revert>manual" "revert>3c-revert" "orig>3c-orig" ; do
 		#echo "# $first-to-$second" >> diffs.sum
 		# TODO: Reconsider diff line, here
 		# git diff -w --no-index --numstat $first $second ?
-		lines=$(diff -w $first $second | diffstat -t -S$first | sed '1d')
-    test_lines=0
-    test_changed=0
-		if [[ ! -z $lines ]]; then
-      echo $lines >> diffs.dat
-      for line in $lines; do 
-        ins=$(echo $lines | awk 'BEGIN { FS = "," } { print $1 }')
-        del=$(echo $lines | awk 'BEGIN { FS = "," } { print $2 }')
-        mod=$(echo $lines | awk 'BEGIN { FS = "," } { print $3 }')
-        uch=$(echo $lines | awk 'BEGIN { FS = "," } { print $4 }')
-        # This magig incantation for dc is the best way I could find 
-        # to sum a list in bash
-        total_changed=$(echo "$ins $del $mod 0d[+2z>a]salaxp" | dc)
-        total_lines=$(echo "$ins $del $mod $uch 0d[+2z>a]salaxp" | dc)
-        # Update out global summation variables
-        test_lines=$(echo "$test_lines $total_lines + p" | dc)
-        test_changed=$(echo "$test_changed $total_changed + p" | dc)
-      done
-      echo "$first-to-$second,$test_lines,$test_changed" >> diffs.sum
-		fi
+    test_name="$first-to-$second"
+    if [ "$test_name" = "orig-to-revert" ]; then
+      added=$(diff -w orig revert | diffstat -s | awk '{ print $4 }')
+      delled=$(diff -w orig revert | diffstat -s | awk '{ print $6 }')
+      total_lines=$(sloccount orig | grep -e "^ansic" | awk '{ print $2 }')
+      refactored=$(( $added > $delled ? $added : $delled ))
+      echo "$test_name,$total_lines,$refactored" >> diffs.sum
+    else 
+      echo "$test_name,N/A,N/A" >> diffs.sum
+    fi 
 	fi
 done
 
