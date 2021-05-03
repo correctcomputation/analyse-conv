@@ -32,8 +32,11 @@ for pair in "orig>revert" "revert>manual" "revert>3c-revert" "orig>3c-orig" ; do
         del=$(echo $lines | awk 'BEGIN { FS = "," } { print $2 }')
         mod=$(echo $lines | awk 'BEGIN { FS = "," } { print $3 }')
         uch=$(echo $lines | awk 'BEGIN { FS = "," } { print $4 }')
+        # This magig incantation for dc is the best way I could find 
+        # to sum a list in bash
         total_changed=$(echo "$ins $del $mod 0d[+2z>a]salaxp" | dc)
         total_lines=$(echo "$ins $del $mod $uch 0d[+2z>a]salaxp" | dc)
+        # Update out global summation variables
         test_lines=$(echo "$test_lines $total_lines + p" | dc)
         test_changed=$(echo "$test_changed $total_changed + p" | dc)
       done

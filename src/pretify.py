@@ -1,4 +1,5 @@
 #!/usr/bin/env python3 
+# Produce a latex table from the final CSV
 
 import csv,sys
 
