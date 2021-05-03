@@ -8,6 +8,8 @@ export THREEC=path/to/converter
 export C3=path/to/deconverter
 ```
 
+For now 3C should be on the `morestats` branch
+
 # Running the expirement 
 Run `make` to produce the tables 
 
