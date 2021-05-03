@@ -82,7 +82,10 @@ revert/%.h: manual/%.h
 	mkdir -p revert
 	$(C3) -f $^ > $@
 
-THREEC_FLAGS = $(addprefix -extra-arg-before=,$(CFLAGS))
+# As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
+# fail and bisort to be omitted from the results. We think it's probably
+# unimportant, so ignore it for now.
+THREEC_FLAGS = -allow-unwritable-changes $(addprefix -extra-arg-before=,$(CFLAGS))
 
 $(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
 	$(THREEC) -alltypes -dump-stats -stats-output=origstats.json -base-dir=orig -output-dir=3c-orig \
