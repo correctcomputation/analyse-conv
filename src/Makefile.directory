@@ -12,6 +12,15 @@ convert:
 	-make 3c-orig
 	-make revert
 	-make 3c-revert
+	-make gathermanualstats
+
+gathermanualstats:
+	for target in $(TARGETS) ; do \
+		cd $$target ; \
+		make gathermanualstats ; \
+		cd .. ; \
+	done
+
 
 3c-orig revert 3c-revert:
 	for target in $(TARGETS) ; do \

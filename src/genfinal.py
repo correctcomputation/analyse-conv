@@ -29,7 +29,7 @@ def process_row(row : List[str]) -> str:
     row = row_to_int(row)
     version = row[0] 
     if version == 'manual':
-        out = [program, version, compute_percentage(row[1], row[2]), compute_percentage(row[3], row[4])] + (['NA'] * 6)
+        out = [program, version, compute_percentage(row[1], row[2]), compute_percentage(row[3], row[4])] + loadstats(version)
     else:
         out = [program, version, 'N/A', compute_percentage(row[3], row[4])] + loadstats(version)
     assert(len(out) == len(outheader))
@@ -39,16 +39,16 @@ def process_row(row : List[str]) -> str:
 
 # Given a kind of test load the statistics file produced by that run of 3c
 def loadstats(test_name: str) -> List[str]:
-    with open('./%s/%s' % (program, test_to_statsfile(test_name))) as f:
-        stats = json.load(f) 
+    try:
+        with open('./%s/%s' % (program, test_to_statsfile(test_name))) as f:
+            stats = json.load(f) 
+    except FileNotFoundError:
+        return ['NA'] * 6
     # Select
     ptrstats = stats['AggregateStats'][0]['TotalStats']
     casts = sum(stats['AggregateStats'][3]['PerformanceStats'][1]['ReWriteStats'].values())
     return [str(i) for i in [ptrstats['ptr'], ptrstats['ntarr'], ptrstats['arr'], ptrstats['wild'], 'N/A', casts]]
 
-# Is this a test case that we have statistics for?
-def is3c(test_name : str) -> bool:
-    return test_name == 'revert' or test_name == 'orig'
 
 # Map test case name to statistics file name
 def test_to_statsfile(test_name : str) -> str:
@@ -56,6 +56,8 @@ def test_to_statsfile(test_name : str) -> str:
         return 'origstats.json.aggregate.json'
     elif test_name == 'revert':
         return 'revertstats.json.aggregate.json'
+    elif test_name == 'manual':
+        return 'manualstats.json.aggregate.json'
     else:
         raise Error("This kind of test doesn't have pointer stats!")
 

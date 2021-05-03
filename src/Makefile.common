@@ -46,6 +46,11 @@ convert:
 	-make 3c-orig
 	-make revert
 	-make 3c-revert
+	-make gathermanualstats
+
+gathermanualstats:
+	$(THREEC) -alltypes -dump-stats -stats-output=manualstats.json -base-dir=manual -output-dir=3c-manual \
+		$(THREEC_FLAGS) $(SOURCES_MANUAL) -- 
 
 3c-orig: $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG)
 
@@ -151,7 +156,7 @@ clean-reports:
 clean-diffs:
 	$(RM) diffs.dat diffs.sum final.csv
 	$(RM) -dr git-changes
-	$(RM) origstats.json* revertstats.json* PerWildPtrStats.json WildPtrStats.json
+	$(RM) origstats.json* revertstats.json* manualstats.json* PerWildPtrStats.json WildPtrStats.json
 
 clean-objs:
 	$(RM) $(OBJS_ORIG) $(OBJS_MANUAL) $(OBJS_3C_ORIG) $(OBJS_REVERT) $(OBJS_3C_REVERT)
