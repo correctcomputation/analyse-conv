@@ -2,7 +2,10 @@ PATH_TO_SRC=./
 NAME = All
 TARGETS = Olden parson Ptrdist
 
-all: final.tex final.txt
+all: checkenv final.tex final.txt
+
+checkenv:
+	./checkenv.sh
 
 final.tex: final.csv
 	./pretify.py > final.tex
