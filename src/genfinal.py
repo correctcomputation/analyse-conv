@@ -11,10 +11,10 @@ from typing import List
 
 
 # Input format
-# TEST,TOTAL_LINES,LINES_CHANGED
-#  0  |      1    |     2      |
+# TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL
+#  0  |      1       |     2        |        3      |      4       |
 # Output format:
-outheader = ['Program', 'Ver', 'Lines Refactored', 'Lines Annotated', '#ptr', '#ntarr', '#arr', '#wild', '#bounds', '#casts']
+outheader = ['Program', 'Version', 'Lines Refactored', 'Lines Annotated', '#ptr', '#ntarr', '#arr', '#wild', '#bounds', '#casts']
 
 # If run w/ no arguments, just output the header
 if len(sys.argv) < 2:
@@ -27,12 +27,15 @@ program=sys.argv[1]
 # Process a given row into our desired global output
 def process_row(row : List[str]) -> str:
     row = row_to_int(row)
-    test = row[0]
-    refact = compute_percentage(row[2], row[1]) if test == 'orig-to-revert' else 'N/A'
-    ptrstats = loadstats(test) if is3c(test) else ['N/A'] * 7
-    outrow = [program, row[0], refact] + ptrstats
-    assert(len(outrow) == len(outheader))
-    return ','.join(outrow)
+    version = row[0] 
+    if version == 'manual':
+        out = [program, version, compute_percentage(row[1], row[2]), compute_percentage(row[3], row[4])] + (['NA'] * 6)
+    else:
+        out = [program, version, 'N/A', compute_percentage(row[3], row[4])] + loadstats(version)
+    assert(len(out) == len(outheader))
+    return ','.join(out)
+
+    
 
 # Given a kind of test load the statistics file produced by that run of 3c
 def loadstats(test_name: str) -> List[str]:
@@ -40,17 +43,17 @@ def loadstats(test_name: str) -> List[str]:
         stats = json.load(f) 
     # Select
     stats = stats['AggregateStats'][0]['TotalStats']
-    return [str(i) for i in ['N/A', stats['ptr'], stats['ntarr'], stats['arr'], stats['wild'], 'N/A', 'N/A']]
+    return [str(i) for i in [stats['ptr'], stats['ntarr'], stats['arr'], stats['wild'], 'N/A', 'N/A']]
 
 # Is this a test case that we have statistics for?
 def is3c(test_name : str) -> bool:
-    return test_name == 'orig-to-3c-orig' or test_name == 'revert-to-3c-revert'
+    return test_name == 'revert' or test_name == 'orig'
 
 # Map test case name to statistics file name
 def test_to_statsfile(test_name : str) -> str:
-    if test_name == 'orig-to-3c-orig':
+    if test_name == 'orig':
         return 'origstats.json.aggregate.json'
-    elif test_name == 'revert-to-3c-revert':
+    elif test_name == 'revert':
         return 'revertstats.json.aggregate.json'
     else:
         raise Error("This kind of test doesn't have pointer stats!")

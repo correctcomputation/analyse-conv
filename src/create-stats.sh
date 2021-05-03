@@ -10,26 +10,40 @@
 
 # TODO: Different diff command? See below
 
-echo "TEST,TOTAL_LINES,LINES_CHANGED,INSERTED,DELETED,MODIFIED,UNCHANGED" > diffs.dat
-echo "TEST,TOTAL_LINES,LINES_CHANGED" > diffs.sum
-for pair in "orig>revert" "revert>manual" "revert>3c-revert" "orig>3c-orig" ; do
-	first=$(echo $pair | cut -d ">" -f 1)
-	second=$(echo $pair | cut -d ">" -f 2)
-	if [ -d $first ] && [ -d $second ] ; then
-		echo "# $first-to-$second" >> diffs.dat
-		#echo "# $first-to-$second" >> diffs.sum
-		# TODO: Reconsider diff line, here
-		# git diff -w --no-index --numstat $first $second ?
-    test_name="$first-to-$second"
-    if [ "$test_name" = "orig-to-revert" ]; then
-      added=$(diff -w orig revert | diffstat -s | awk '{ print $4 }')
-      delled=$(diff -w orig revert | diffstat -s | awk '{ print $6 }')
-      total_lines=$(sloccount orig | grep -e "^ansic" | awk '{ print $2 }')
-      refactored=$(( $added > $delled ? $added : $delled ))
-      echo "$test_name,$total_lines,$refactored" >> diffs.sum
-    else 
-      echo "$test_name,N/A,N/A" >> diffs.sum
-    fi 
-	fi
+set -o errexit
+set -o nounset
+
+echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL" > diffs.sum
+
+# pass the two folders to compare
+function compute_diff() { 
+  local added=$(diff -w $1 $2 | diffstat -s | awk '{ print $4 }')
+  local delled=$(diff -w $1 $2 | diffstat -s | awk '{ print $6 }')
+  echo $(( $added > $delled ? $added : $delled ))
+}
+
+# pass the folder to count
+function count_lines() { 
+  echo $(sloccount $1 | grep -e "^ansic" | awk '{ print $2 }')
+}
+
+for version in "manual" "revert" "orig" ; do 
+  if [ "$version" = "manual" ]; then 
+    ref=$(compute_diff "orig"  "revert" )
+    ref_total=$(count_lines "orig" )
+    anno=$(compute_diff "revert" "manual") 
+    anno_total=$(count_lines "revert")
+    echo "$version,$ref,$ref_total,$anno,$anno_total" >> diffs.sum
+  elif [ "$version" = "revert" ]; then
+    anno=$(compute_diff "revert" "3c-revert")
+    anno_total=$(count_lines "revert") 
+    echo "$version,N/A,N/A,$anno,$anno_total" >> diffs.sum
+  elif [ "$version" = "orig" ]; then 
+    anno=$(compute_diff "orig" "3c-revert") 
+    anno_total=$(count_lines "orig") 
+    echo "$version,N/A,N/A,$anno,$anno_total" >> diffs.sum
+  fi
 done
+
+
 
