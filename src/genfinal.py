@@ -42,8 +42,9 @@ def loadstats(test_name: str) -> List[str]:
     with open('./%s/%s' % (program, test_to_statsfile(test_name))) as f:
         stats = json.load(f) 
     # Select
-    stats = stats['AggregateStats'][0]['TotalStats']
-    return [str(i) for i in [stats['ptr'], stats['ntarr'], stats['arr'], stats['wild'], 'N/A', 'N/A']]
+    ptrstats = stats['AggregateStats'][0]['TotalStats']
+    casts = sum(stats['AggregateStats'][3]['PerformanceStats'][1]['ReWriteStats'].values())
+    return [str(i) for i in [ptrstats['ptr'], ptrstats['ntarr'], ptrstats['arr'], ptrstats['wild'], 'N/A', casts]]
 
 # Is this a test case that we have statistics for?
 def is3c(test_name : str) -> bool:
