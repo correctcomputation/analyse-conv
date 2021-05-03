@@ -13,7 +13,7 @@
 # TODO: Different diff command? See below
 
 echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.dat
-echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.sum
+echo "Total refactored lines" > diffs.sum
 for pair in "orig>revert" "revert>manual" "revert>3c-revert" "orig>3c-orig" ; do
 	first=$(echo $pair | cut -d ">" -f 1)
 	second=$(echo $pair | cut -d ">" -f 2)
