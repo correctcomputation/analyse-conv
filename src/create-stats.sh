@@ -7,39 +7,47 @@
 # (3) revert --> 3c-revert: This 3c's attempt at (2), so we can compare this diff to that one
 # (4) orig --> 3c-orig: This is 3c's attempt at converting the original. We can compare this diff against (3) to see how much of what was achieved here approximates what's achieved there
 
-# breaks on MacOS; seems to not be needed
-# declare -A summation
 
-# TODO: Different diff command? See below
+# TODO: Different diff command -- should ignore differences due to the `_Unchecked` annotation
 
-echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.dat
-echo "INSERTED,DELETED,MODIFIED,UNCHANGED,FILENAME" > diffs.sum
-for pair in "orig>revert" "revert>manual" "revert>3c-revert" "orig>3c-orig" ; do
-	first=$(echo $pair | cut -d ">" -f 1)
-	second=$(echo $pair | cut -d ">" -f 2)
-	if [ -d $first ] && [ -d $second ] ; then
-		echo "# $first-to-$second" >> diffs.dat
-		echo "# $first-to-$second" >> diffs.sum
-		# TODO: Reconsider diff line, here
-		# git diff -w --no-index --numstat $first $second ?
-		lines=$(diff -w $first $second | diffstat -t -S$first | sed '1d')
-		summation[ins]=0
-		summation[del]=0
-		summation[mod]=0
-		summation[unc]=0
-		if [[ ! -z $lines ]]; then
-			while IFS=, read -r ins del mod unc fil; do
-				summation[ins]=$((summation[ins]+$ins))
-				summation[del]=$((summation[del]+$del))
-				summation[mod]=$((summation[mod]+$mod))
-				summation[unc]=$((summation[unc]+$unc))
-			done < <(echo -e "$lines")
-			echo -e "$lines" >> diffs.dat
-		fi
-		echo -e "${summation[ins]},${summation[del]},${summation[mod]},${summation[unc]},$NAME" \
-			 >> diffs.sum
-		echo -e "\n" >> diffs.dat # this is 2 spaces, as required
-		echo -e "\n" >> diffs.sum # this is 2 spaces, as required
-	fi
+set -o errexit
+set -o nounset
+
+echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL,LEFT_LINES,LEFT_TOTAL" > diffs.sum
+
+# pass the two folders to compare
+function compute_diff() { 
+  local added=$(diff -w $1 $2 | diffstat -s | awk '{ print $4 }')
+  local delled=$(diff -w $1 $2 | diffstat -s | awk '{ print $6 }')
+  echo $(( $added > $delled ? $added : $delled ))
+}
+
+# pass the folder to count
+function count_lines() { 
+  echo $(sloccount $1 | grep -e "^ansic" | awk '{ print $2 }')
+}
+
+for version in "manual" "revert" "orig" ; do 
+  if [ "$version" = "manual" ]; then 
+    ref=$(compute_diff "orig"  "revert" )
+    ref_total=$(count_lines "orig" )
+    anno=$(compute_diff "revert" "manual") 
+    anno_total=$(count_lines "revert")
+    echo "$version,$ref,$ref_total,$anno,$anno_total,N/A,N/A" >> diffs.sum
+  elif [ "$version" = "revert" ]; then
+    anno=$(compute_diff "revert" "3c-revert")
+    anno_total=$(count_lines "revert") 
+    left=$(compute_diff "3c-revert" "manual")
+    left_total=$(count_lines "3c-revert") 
+    echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
+  elif [ "$version" = "orig" ]; then 
+    anno=$(compute_diff "orig" "3c-orig") 
+    anno_total=$(count_lines "orig") 
+    left=$(compute_diff "3c-orig" "manual")
+    left_total=$(count_lines "3c-orig") 
+    echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
+  fi
 done
+
+
 

@@ -46,6 +46,11 @@ convert:
 	-make 3c-orig
 	-make revert
 	-make 3c-revert
+	-make gathermanualstats
+
+gathermanualstats:
+	$(THREEC) -alltypes -dump-stats -stats-output=manualstats.json -base-dir=manual -output-dir=3c-manual \
+		$(THREEC_FLAGS) $(SOURCES_MANUAL) -- 
 
 3c-orig: $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG)
 
@@ -82,15 +87,18 @@ revert/%.h: manual/%.h
 	mkdir -p revert
 	$(C3) -f $^ > $@
 
-THREEC_FLAGS = $(addprefix -extra-arg-before=,$(CFLAGS))
+# As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
+# fail and bisort to be omitted from the results. We think it's probably
+# unimportant, so ignore it for now.
+THREEC_FLAGS = -allow-unwritable-changes $(addprefix -extra-arg-before=,$(CFLAGS))
 
 $(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
-	$(THREEC) -alltypes -base-dir=orig -output-dir=3c-orig \
+	$(THREEC) -alltypes -dump-stats -stats-output=origstats.json -base-dir=orig -output-dir=3c-orig \
 		$(THREEC_FLAGS) $(SOURCES_ORIG) -- && \
 		$(PATH_TO_SRC)missing-files.sh orig 3c-orig
 
 $(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
-	$(THREEC) -alltypes -base-dir=revert -output-dir=3c-revert \
+	$(THREEC) -alltypes -dump-stats -stats-output=revertstats.json  -base-dir=revert -output-dir=3c-revert \
 		$(THREEC_FLAGS) $(SOURCES_REVERT) -- && \
 		$(PATH_TO_SRC)missing-files.sh revert 3c-revert
 
@@ -139,11 +147,16 @@ stats: diffs.dat
 diffs.dat diffs.sum: clean-objs
 	NAME=$(PROG) $(PATH_TO_SRC)create-stats.sh
 
-clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs
+clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs clean-reports
+
+clean-reports:
+	$(RM) -dr workdir
+	$(RM) final.csv
 
 clean-diffs:
-	$(RM) diffs.dat diffs.sum
+	$(RM) diffs.dat diffs.sum final.csv
 	$(RM) -dr git-changes
+	$(RM) origstats.json* revertstats.json* manualstats.json* PerWildPtrStats.json WildPtrStats.json
 
 clean-objs:
 	$(RM) $(OBJS_ORIG) $(OBJS_MANUAL) $(OBJS_3C_ORIG) $(OBJS_REVERT) $(OBJS_3C_REVERT)
