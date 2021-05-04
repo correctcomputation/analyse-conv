@@ -17,13 +17,13 @@
 int NumNodes, NDim;
 
 int random(int);
-void *calloc(size_t nmemb, size_t size) : byte_count(nmemb * size);
+_Itype_for_any(T) void *calloc(size_t nmemb, size_t size) : itype(_Array_ptr<T>) byte_count(nmemb * size);
 
 int flag=0,foo=0;
 
 #define LocalNewNode(h,v) \
 { \
-    h = (ptr<HANDLE>) calloc(1,sizeof(struct node)); \
+    h = (ptr<HANDLE>) calloc<HANDLE>(1,sizeof(struct node)); \
       h->value = v; \
 	h->left = NIL; \
 	  h->right = NIL; \
