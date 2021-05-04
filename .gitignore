@@ -32,3 +32,6 @@ workdir
 *_3c_orig
 *_revert
 *_3c_revert
+
+# Test products
+ACTUAL_OUTPUT

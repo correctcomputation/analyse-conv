@@ -102,32 +102,32 @@ $(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
 		$(THREEC_FLAGS) $(SOURCES_REVERT) -- && \
 		$(PATH_TO_SRC)missing-files.sh revert 3c-revert
 
-test: test-orig test-manual test-revert test-3c-orig test-3c-manual
+test: test-orig test-manual test-revert test-3c-orig test-3c-revert
  
 test-orig: $(PROG_ORIG)
-	./$(PROG_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
-	diff -w $(OUTPUT) FOO
-	$(RM) FOO
+	./$(PROG_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT
 
 test-manual: $(PROG_MANUAL)
-	./$(PROG_MANUAL) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
-	diff -w $(OUTPUT) FOO
-	$(RM) FOO
+	./$(PROG_MANUAL) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT
 
 test-revert: $(PROG_REVERT)
-	./$(PROG_REVERT) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
-	diff -w $(OUTPUT) FOO
-	$(RM) FOO
+	./$(PROG_REVERT) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT
 
 test-3c-orig: $(PROG_3C_ORIG)
-	./$(PROG_3C_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
-	diff -w $(OUTPUT) FOO
-	$(RM) FOO
+	./$(PROG_3C_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT
 
 test-3c-revert: $(PROG_3C_REVERT)
-	./$(PROG_3C_MANUAL) $(RUN_OPTIONS) < $(STDIN_FILENAME) > FOO 2>&1
-	diff -w $(OUTPUT) FOO
-	$(RM) FOO
+	./$(PROG_3C_MANUAL) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT
 
 git-diffs: 
 	NAME=$(PROG) $(PATH_TO_SRC)create-git-diffs.sh
