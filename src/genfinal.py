@@ -47,7 +47,9 @@ def loadstats(test_name: str) -> List[str]:
     # Select
     ptrstats = stats['AggregateStats'][0]['TotalStats']
     casts = sum(stats['AggregateStats'][3]['PerformanceStats'][1]['ReWriteStats'].values())
-    return [str(i) for i in [ptrstats['ptr'], ptrstats['ntarr'], ptrstats['arr'], ptrstats['wild'], 'N/A', casts]]
+    # TODO This may not be the correct selector. Need to confirm w/ Aravind.
+    bounds = stats['AggregateStats'][1]['ArrBoundsStats']['NumPointersNeedBounds']
+    return [str(i) for i in [ptrstats['ptr'], ptrstats['ntarr'], ptrstats['arr'], ptrstats['wild'], bounds, casts]]
 
 
 # Map test case name to statistics file name
