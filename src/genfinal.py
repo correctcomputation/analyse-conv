@@ -42,7 +42,7 @@ def loadstats(test_name: str) -> List[str]:
         with open('./%s/%s' % (program, test_to_statsfile(test_name))) as f:
             stats = json.load(f) 
     except FileNotFoundError:
-        return ['NA'] * 6
+        return ['N/A'] * 6
     # Select
     ptrstats = stats['AggregateStats'][0]['TotalStats']
     casts = sum(stats['AggregateStats'][3]['PerformanceStats'][1]['ReWriteStats'].values())
