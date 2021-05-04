@@ -32,6 +32,16 @@ this will attempt to create 3 additional versions
 
 You can also use `make` from any directory and it will make all sub-projects
 
+To build all 5 versions of a project and save the build logs (errors, etc.) and
+a compilation database that you can use to experiment with the code in an IDE,
+run:
+
+```
+make bear-test
+```
+
+in `src` or any descendant directory.
+
 # Analyse
 
 After conversion is done you can make diffs or generate their stats

@@ -103,7 +103,16 @@ $(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
 		$(PATH_TO_SRC)missing-files.sh revert 3c-revert
 
 test: test-orig test-manual test-revert test-3c-orig test-3c-revert
- 
+
+# We need to at least clean-objs to ensure that the compilation database is
+# complete. We also need missing-files.sh to run _before_ we start adding build
+# products to the `orig` and `revert` subdirectories.
+bear-test: clean-objs clean-progs convert
+# Don't propagate errors for this.
+	-for v in orig manual revert 3c-orig 3c-revert; do \
+	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
+	done
+
 test-orig: $(PROG_ORIG)
 	./$(PROG_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
 	diff -w $(OUTPUT) ACTUAL_OUTPUT

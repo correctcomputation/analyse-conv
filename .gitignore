@@ -32,6 +32,8 @@ workdir
 *_3c_orig
 *_revert
 *_3c_revert
+build.log
+compile_commands.json
 
 # Test products
 ACTUAL_OUTPUT
