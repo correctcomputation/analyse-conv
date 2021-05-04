@@ -18,6 +18,6 @@ typedef struct future_cell_int{
   ptr<HANDLE> value;
 } future_cell_int;
 
-#define NIL ((ptr<HANDLE>) 0)
+#define NIL (0)
 
 #pragma CHECKED_SCOPE OFF

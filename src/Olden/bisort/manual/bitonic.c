@@ -5,6 +5,7 @@
 #include "node.h"   /* Node Definition */
 #include "proc.h"   /* Procedure Types/Nums */
 #include <stdio.h>
+#include <stdlib.h>
 
 #pragma CHECKED_SCOPE ON
 
@@ -16,14 +17,13 @@
 
 int NumNodes, NDim;
 
-int random(int);
-void *calloc(size_t nmemb, size_t size) : byte_count(nmemb * size);
+int my_random(int);
 
 int flag=0,foo=0;
 
 #define LocalNewNode(h,v) \
 { \
-    h = (ptr<HANDLE>) calloc(1,sizeof(struct node)); \
+    h = (ptr<HANDLE>) calloc<HANDLE>(1,sizeof(struct node)); \
       h->value = v; \
 	h->left = NIL; \
 	  h->right = NIL; \
@@ -55,11 +55,11 @@ int mult(int p, int q) {
 
 /* Generate the nth random # */
 int skiprand(int seed, int n) {
-  for (; n; n--) seed=random(seed);
+  for (; n; n--) seed=my_random(seed);
   return seed;
 }
 
-int random(int seed) {
+int my_random(int seed) {
   return mult(seed,CONST_b)+1;
 }
 
@@ -74,7 +74,7 @@ ptr<HANDLE> RandTree(int n, int seed, int node, int level) {
       newnode = node + (1 <<  (NDim-level-1));
     else
       newnode = node;
-    seed = random(seed);
+    seed = my_random(seed);
     next_val=seed % RANGE;
     NewNode(h,next_val,node);
     f_left.value = RandTree((n/2),seed,newnode,level+1);
@@ -244,7 +244,7 @@ int main(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc)) {
   printf("Bisort with %d size of dim %d\n", n, NDim);
 
   h = RandTree(n,12345768,0,0);
-  sval = random(245867) % RANGE;
+  sval = my_random(245867) % RANGE;
   if (flag) {
     InOrder(h);
     printf("%d\n",sval);
