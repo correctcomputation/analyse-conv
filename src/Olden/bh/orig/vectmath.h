@@ -22,7 +22,8 @@
 #  define NDIM 3
 #endif
 
-typedef real vector[NDIM], matrix[NDIM][NDIM];
+typedef real vector[NDIM];
+typedef real matrix[NDIM][NDIM];
 #ifdef TORONTO
 extern double sqrt(double x);
 #endif

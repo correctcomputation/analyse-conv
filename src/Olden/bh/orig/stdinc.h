@@ -63,9 +63,11 @@ typedef char *string;
  */
 
 #ifndef  SINGLEPREC
-  typedef  double  real, *realptr;
+  typedef  double  real;
+  typedef  double  *realptr;
 #else
-  typedef  float   real, *realptr;
+  typedef  float   real;
+  typedef  float   *realptr;
 #endif
 
 /*
