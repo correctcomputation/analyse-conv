@@ -157,7 +157,8 @@ typedef struct {
   nodeptr root;
   bodyptr bodytab[MAX_NUM_NODES];
   bodyptr bodiesperproc[MAX_NUM_NODES];
-} tree, *treeptr;
+} tree;
+typedef tree *treeptr;
 
 #define Root(t) ((t)->root)
 #define Rmin(t) ((t)->rmin)
