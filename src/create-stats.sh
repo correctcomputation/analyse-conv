@@ -8,12 +8,12 @@
 # (4) orig --> 3c-orig: This is 3c's attempt at converting the original. We can compare this diff against (3) to see how much of what was achieved here approximates what's achieved there
 
 
-# TODO: Different diff command? See below
+# TODO: Different diff command -- should ignore differences due to the `_Unchecked` annotation
 
 set -o errexit
 set -o nounset
 
-echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL" > diffs.sum
+echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL,LEFT_LINES,LEFT_TOTAL" > diffs.sum
 
 # pass the two folders to compare
 function compute_diff() { 
@@ -33,15 +33,19 @@ for version in "manual" "revert" "orig" ; do
     ref_total=$(count_lines "orig" )
     anno=$(compute_diff "revert" "manual") 
     anno_total=$(count_lines "revert")
-    echo "$version,$ref,$ref_total,$anno,$anno_total" >> diffs.sum
+    echo "$version,$ref,$ref_total,$anno,$anno_total,N/A,N/A" >> diffs.sum
   elif [ "$version" = "revert" ]; then
     anno=$(compute_diff "revert" "3c-revert")
     anno_total=$(count_lines "revert") 
-    echo "$version,N/A,N/A,$anno,$anno_total" >> diffs.sum
+    left=$(compute_diff "3c-revert" "manual")
+    left_total=$(count_lines "3c-revert") 
+    echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   elif [ "$version" = "orig" ]; then 
-    anno=$(compute_diff "orig" "3c-revert") 
+    anno=$(compute_diff "orig" "3c-orig") 
     anno_total=$(count_lines "orig") 
-    echo "$version,N/A,N/A,$anno,$anno_total" >> diffs.sum
+    left=$(compute_diff "3c-orig" "manual")
+    left_total=$(count_lines "3c-orig") 
+    echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   fi
 done
 

@@ -9,12 +9,11 @@
 import sys,csv,json
 from typing import List
 
-
 # Input format
-# TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL
+# TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL,LEFT_LINES,LEFT_TOTAL
 #  0  |      1       |     2        |        3      |      4       |
 # Output format:
-outheader = ['Program', 'Version', 'Lines Refactored', 'Lines Annotated', '#ptr', '#ntarr', '#arr', '#wild', '#bounds', '#casts']
+outheader = ['Program', 'Version', 'Lines Refactored', 'Lines Annotated', 'Lines Left',  '#ptr', '#ntarr', '#arr', '#wild', '#bounds', '#casts']
 
 # If run w/ no arguments, just output the header
 if len(sys.argv) < 2:
@@ -29,9 +28,9 @@ def process_row(row : List[str]) -> str:
     row = row_to_int(row)
     version = row[0] 
     if version == 'manual':
-        out = [program, version, compute_percentage(row[1], row[2]), compute_percentage(row[3], row[4])] + loadstats(version)
+        out = [program, version, compute_percentage(row[1], row[2]), compute_percentage(row[3], row[4]), 'N/A'] + loadstats(version)
     else:
-        out = [program, version, 'N/A', compute_percentage(row[3], row[4])] + loadstats(version)
+        out = [program, version, 'N/A', compute_percentage(row[3], row[4]), compute_percentage(row[5], row[6])] + loadstats(version)
     assert(len(out) == len(outheader))
     return ','.join(out)
 
