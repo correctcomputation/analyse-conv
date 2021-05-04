@@ -481,13 +481,15 @@ datapoints uniform_testdata(int proc, int nbodyx, int seedfactor)
  * 	    It's free because it's yours.
  */
 
-/********
+/* Preprocessor directives in a block comment broke the macro expander:
+ * https://github.com/correctcomputation/analyse-conv/issues/11 */
+#if 0
 #define global extern
 
 #include "defs.h"
 #include "code.h"
 #include "mem-ref.h"
-*********/
+#endif
 
 /*extern int NumNodes;*/
 

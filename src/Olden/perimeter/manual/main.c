@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define printf(...) unchecked { printf(__VA_ARGS__); }
+#define printf(...) unchecked { (printf)(__VA_ARGS__); }
 
 #pragma CHECKED_SCOPE ON
 

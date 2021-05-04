@@ -33,8 +33,8 @@
 
 #pragma CHECKED_SCOPE ON
 
-#define printf(...) _Unchecked { printf(__VA_ARGS__); }
-#define fprintf(...) _Unchecked { fprintf(__VA_ARGS__); }
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
+#define fprintf(...) _Unchecked { (fprintf)(__VA_ARGS__); }
 
 struct _Vertices;
 

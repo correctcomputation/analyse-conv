@@ -31,7 +31,7 @@ int NumNodes;
 #define MAX_NUM_NODES 64
 extern double fabs(double);
 
-#define printf(...) _Unchecked { printf(__VA_ARGS__); }
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
 
 /*
  * BODY and CELL data structures are used to represent the tree:

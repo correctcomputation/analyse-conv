@@ -8,8 +8,8 @@
 #include "assign.h"
 
 #pragma CHECKED_SCOPE ON
-#define printf(...) _Unchecked { printf(__VA_ARGS__); }
-#define fprintf(...) _Unchecked { fprintf(__VA_ARGS__); }
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
+#define fprintf(...) _Unchecked { (fprintf)(__VA_ARGS__); }
 
 #define min(a,b)	((a<b) ? a : b)
 #define max(a,b)	((a<b) ? b : a)

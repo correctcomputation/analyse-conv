@@ -53,7 +53,7 @@ double map_Q _Checked[36] =
 #define      MIN_THETA_I       0.13
 #define      PER_INDEX_I       0.002
 #define      MAX_THETA_I       0.199
-#define printf(...) _Unchecked { printf(__VA_ARGS__); }
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
 
 int main(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {

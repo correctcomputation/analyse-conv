@@ -8,7 +8,7 @@
 
 #pragma CHECKED_SCOPE ON
 
-#define printf(...) _Unchecked { printf(__VA_ARGS__); }
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
 
 #define CONST_m1 10000
 #define CONST_b 31415821

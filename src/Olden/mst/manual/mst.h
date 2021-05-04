@@ -6,7 +6,7 @@
 #pragma CHECKED_SCOPE ON
 #define MAXPROC 1
 
-#define printf(...) unchecked { printf(__VA_ARGS__); }
+#define printf(...) unchecked { (printf)(__VA_ARGS__); }
 extern int NumNodes;
 
 struct vert_st {

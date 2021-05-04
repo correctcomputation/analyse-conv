@@ -29,7 +29,7 @@
 #define BUF_LEN 1024    /* maximum line length */
 #define G_SZ    1024    /* maximum group size */
 
-#define fprintf(...) _Unchecked { fprintf(__VA_ARGS__); }
+#define fprintf(...) _Unchecked { (fprintf)(__VA_ARGS__); }
 
 /* simple exception handler */
 #define TRY(exp, accpt_tst, fn, fail_fmt, arg1, arg2, arg3, fail_action) { \
