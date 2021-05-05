@@ -8,7 +8,8 @@ extern int flag;
 
 void print_tree(Tree t)
 {
-  Tree left = NULL, right = NULL;
+  Tree left = NULL;
+  Tree right = NULL;
 
   double x,y;
 
@@ -35,7 +36,7 @@ void print_list(Tree t)
     }
 }
 
-int main(int argc,array_ptr<nt_array_ptr<char>> argv : count(argc))
+int main(int argc,_Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
   Tree t = NULL;
   int num;

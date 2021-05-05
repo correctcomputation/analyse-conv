@@ -7,7 +7,8 @@ extern int flag;
 
 void print_tree(Tree t)
 {
-  Tree left,right;
+  Tree left;
+  Tree right;
 
   double x,y;
 
