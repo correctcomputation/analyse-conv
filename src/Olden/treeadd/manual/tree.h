@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdchecked.h>
+
 
 #pragma CHECKED_SCOPE ON
 
@@ -17,12 +17,12 @@
 
 typedef struct tree {
     int		val;
-    ptr<struct tree> left;
-    ptr<struct tree> right;
+    _Ptr<struct tree> left;
+    _Ptr<struct tree> right;
 } tree_t;
 
-extern ptr<tree_t> TreeAlloc(int level, int lo, int hi);
-int TreeAdd (ptr<tree_t> t);
+extern _Ptr<tree_t> TreeAlloc(int level, int lo, int hi);
+int TreeAdd (_Ptr<tree_t> t);
 
 
 

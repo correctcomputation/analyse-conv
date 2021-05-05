@@ -12,13 +12,13 @@
 
 #pragma CHECKED_SCOPE ON
 
-ptr<tree_t> TreeAlloc (int level, int lo, int proc) {
+_Ptr<tree_t> TreeAlloc (int level, int lo, int proc) {
   if (level == 0)
     return NULL;
   else {
-    ptr<tree_t> new = NULL;
-    ptr<tree_t> right = NULL;
-    ptr<tree_t> left = NULL;
+    _Ptr<tree_t> new = NULL;
+    _Ptr<tree_t> right = NULL;
+    _Ptr<tree_t> left = NULL;
     new = calloc<tree_t>(1, sizeof(tree_t));
     left = TreeAlloc(level -1, lo+proc/2, proc/2);
     right=TreeAlloc(level-1,lo,proc/2);
