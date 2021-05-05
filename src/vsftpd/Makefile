@@ -7,7 +7,16 @@ SOURCES = 	main.c utility.c prelogin.c ftpcmdio.c postlogin.c privsock.c \
     tcpwrap.c ipaddrparse.c access.c features.c readwrite.c opts.c \
     ssl.c sslslave.c ptracesandbox.c ftppolicy.c sysutil.c sysdeputil.c \
     seccompsandbox.c
-HDRS =
+HDRS = access.h     ftpcodes.h     oneprocess.h      readwrite.h       strlist.h \
+	ascii.h      ftpdataio.h    opts.h            secbuf.h          sysdeputil.h \
+	banner.h     ftppolicy.h    parseconf.h       seccompsandbox.h  sysstr.h \
+	builddefs.h  hacks.h        postlogin.h       secutil.h         sysutil.h \
+	defs.h       hash.h         postprivparent.h  session.h         tcpwrap.h \
+	features.h   ipaddrparse.h  prelogin.h        ssl.h             tunables.h \
+	filesize.h   logging.h      privops.h         sslslave.h        twoprocess.h \
+	filestr.h    ls.h           privsock.h        standalone.h      utility.h \
+	ftpcmdio.h   netstr.h       ptracesandbox.h   str.h             vsftpver.h \
+
 
 CFLAGS = -g -w -O0 -idirafter dummyinc
 LDFLAGS = -Wl `./vsf_findlibs.sh`
