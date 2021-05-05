@@ -12,7 +12,6 @@
 
 set -o errexit
 set -o nounset
-set -x otrace
 
 echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL,LEFT_LINES,LEFT_TOTAL" > diffs.sum
 
