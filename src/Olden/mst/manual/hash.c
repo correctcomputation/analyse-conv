@@ -1,19 +1,19 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
 
-#include <stdchecked.h>
+
 #include <stdlib.h>
 #include "hash.h"
 #pragma CHECKED_SCOPE ON
 
-#define printf(...) unchecked { (printf)(__VA_ARGS__); }
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
 #define assert(num,a) if (!(a)) {printf("Assertion failure:%d in hash\n",num); exit(-1);}
 
 static int remaining = 0;
-static array_ptr<char> temp : count(remaining);
+static _Array_ptr<char> temp : count(remaining);
 
-static array_ptr<void> localmalloc(int size) : byte_count(size)
+static _Array_ptr<void> localmalloc(int size) : byte_count(size)
 {
-  array_ptr<void> blah;
+  _Array_ptr<void> blah;
   
   if (size>remaining) 
     {
@@ -29,13 +29,13 @@ static array_ptr<void> localmalloc(int size) : byte_count(size)
 
 #define localfree(sz)
 
-Hash MakeHash(int size, ptr<int(unsigned int)> map)
+Hash MakeHash(int size, _Ptr<int(unsigned int)> map)
 {
   Hash retval = NULL;
   int i;
 
   retval = (Hash) localmalloc(sizeof(*retval));
-  retval->array = (array_ptr<HashEntry>)localmalloc(size*sizeof(HashEntry));
+  retval->array = (_Array_ptr<HashEntry>)localmalloc(size*sizeof(HashEntry));
   retval->size = size;
   for (i=0; i<size; i++)
     retval->array[i] = NULL;
@@ -43,7 +43,7 @@ Hash MakeHash(int size, ptr<int(unsigned int)> map)
   return retval;
 }
 
-unchecked void *HashLookup(unsigned int key, Hash hash)
+_Unchecked void *HashLookup(unsigned int key, Hash hash)
 {
   int j;
   HashEntry ent = NULL;
@@ -59,7 +59,7 @@ unchecked void *HashLookup(unsigned int key, Hash hash)
   return NULL;
 }
 
-unchecked void HashInsert(void *entry,unsigned int key,Hash hash)
+_Unchecked void HashInsert(void *entry,unsigned int key,Hash hash)
 {
   HashEntry ent = NULL;
   int j;
@@ -79,7 +79,7 @@ void HashDelete(unsigned key, Hash hash) {
   int j = (hash->mapfunc)(key);
   int size = hash->size;
   _Dynamic_check(j <= size);
-  ptr<HashEntry> ent = 0; 
+  _Ptr<HashEntry> ent = 0; 
   _Unchecked { ent = &hash->array[j]; }
 
   while (*ent && (*ent)->key != key) {
