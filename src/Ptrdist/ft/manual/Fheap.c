@@ -50,7 +50,7 @@
 #define INLINE
 #endif
 
-static _Ptr<HeapP> hTable _Checked[MAX_RANK];
+static _Ptr<HeapP> hTable _Checked[MAX_RANK] = {((void *)0)};
 
 void  CombineLists(_Ptr<HeapP> h1, _Ptr<HeapP> h2);
 void  AddEntry(_Ptr<HeapP> h1, _Ptr<HeapP> h2);
