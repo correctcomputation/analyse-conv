@@ -60,7 +60,10 @@ static ChildType reflect(Direction d, ChildType ct)
 
 int CountTree(QuadTree tree) 
 {
-  QuadTree nw,ne,sw,se;
+  QuadTree nw;
+  QuadTree ne;
+  QuadTree sw;
+  QuadTree se;
 
   nw = tree->nw; ne = tree->ne; sw = tree->sw; se = tree->se;
   if (nw==NULL && ne==NULL && sw==NULL && se==NULL)
@@ -93,7 +96,8 @@ static QuadTree child(QuadTree tree, ChildType ct)
 
 static QuadTree gtequal_adj_neighbor(QuadTree tree, Direction d)
 {
-  QuadTree q,parent;
+  QuadTree q;
+  QuadTree parent;
   ChildType ct;
   
   parent=tree->parent;

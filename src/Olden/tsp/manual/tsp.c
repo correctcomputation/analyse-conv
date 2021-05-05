@@ -26,8 +26,10 @@ static double distance(Tree a, Tree b) {
 /* sling tree nodes into a list -- requires root to be tail of list */
 /* only fills in next field, not prev */
 static Tree makelist(Tree t) {
-  Tree left = NULL, right = NULL;
-  Tree tleft = NULL, tright = NULL;
+  Tree left = NULL;
+  Tree right = NULL;
+  Tree tleft = NULL;
+  Tree tright = NULL;
   Tree retval = t;
 
   if (!t) return NULL;
@@ -44,7 +46,10 @@ static Tree makelist(Tree t) {
 
 /* reverse orientation of list */
 static void reverse(Tree t) {
-  Tree prev = NULL,back = NULL, next = NULL, tmp = NULL;
+  Tree prev = NULL;
+  Tree back = NULL;
+  Tree next = NULL;
+  Tree tmp = NULL;
 
   if (!t) return;
   /*chatting("REVERSE\n");*/
@@ -68,8 +73,12 @@ static void reverse(Tree t) {
 
 /* Use closest-point heuristic from Cormen Leiserson and Rivest */
 static Tree conquer(Tree t) {
-  Tree cycle = NULL, tmp = NULL, min = NULL, prev = NULL, next = NULL,
-       donext = NULL;
+  Tree cycle = NULL;
+  Tree tmp = NULL;
+  Tree min = NULL;
+  Tree prev = NULL;
+  Tree next = NULL;
+  Tree donext = NULL;
   double mindist,test;
   double mintonext, mintoprev, ttonext, ttoprev;
 
@@ -121,9 +130,15 @@ static Tree conquer(Tree t) {
 
 /* Merge two cycles as per Karp */
 static Tree merge(Tree a, Tree b, Tree t, int nproc) {
-  Tree min = NULL, next = NULL, prev = NULL, tmp = NULL;
+  Tree min = NULL;
+  Tree next = NULL;
+  Tree prev = NULL;
+  Tree tmp = NULL;
   double mindist,test,mintonext,mintoprev,ttonext,ttoprev;
-  Tree n1 = NULL, p1 = NULL, n2 = NULL, p2 = NULL;
+  Tree n1 = NULL;
+  Tree p1 = NULL;
+  Tree n2 = NULL;
+  Tree p2 = NULL;
   double tton1,ttop1,tton2,ttop2;
   double n1ton2,n1top2,p1ton2,p1top2;
   int choice;
@@ -266,7 +281,8 @@ static Tree merge(Tree a, Tree b, Tree t, int nproc) {
 
 /* Compute TSP for the tree t -- use conquer for problems <= sz */
 Tree tsp(Tree t,int sz,int nproc) {
-  Tree left = NULL, right = NULL;
+  Tree left = NULL;
+  Tree right = NULL;
   Tree leftval = NULL;
 #ifdef FUTURES
   future_cell_pointer fc;

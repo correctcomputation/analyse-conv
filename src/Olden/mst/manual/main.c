@@ -17,7 +17,8 @@ typedef struct fc_br {
 static BlueReturn BlueRule(Vertex inserted, Vertex vlist) 
 {
   BlueReturn retval = {0};
-  Vertex tmp = NULL, prev = NULL;
+  Vertex tmp = NULL;
+  Vertex prev = NULL;
   Hash hash = NULL;
   int dist,dist2;
   int count;
@@ -31,7 +32,7 @@ static BlueReturn BlueRule(Vertex inserted, Vertex vlist)
   retval.vert = vlist;
   retval.dist = vlist->mindist;
   hash = vlist->edgehash;
-  unchecked { dist = (int) HashLookup((unsigned int) inserted, hash); }
+  _Unchecked { dist = (int) HashLookup((unsigned int) inserted, hash); }
   /*printf("Found %d at 0x%x for 0x%x\n",dist,inserted,vlist);*/
   if (dist) 
     {
@@ -57,7 +58,7 @@ static BlueReturn BlueRule(Vertex inserted, Vertex vlist)
         {
           hash = tmp->edgehash; /* <------  6% miss in tmp->edgehash */ 
           dist2 = tmp->mindist;
-          unchecked { dist = (int) HashLookup((unsigned int) inserted, hash); }
+          _Unchecked { dist = (int) HashLookup((unsigned int) inserted, hash); }
           /*printf("Found %d at 0x%x for 0x%x\n",dist,inserted,tmp);*/
           if (dist) 
             {
@@ -106,7 +107,8 @@ static BlueReturn Do_all_BlueRule(Vertex inserted, int nproc, int pn) {
 
 static int ComputeMst(Graph graph,int numproc,int numvert) 
 {
-  Vertex inserted = NULL, tmp = NULL;
+  Vertex inserted = NULL;
+  Vertex tmp = NULL;
   int cost=0,dist;
 
   /* make copy of graph */
@@ -133,7 +135,7 @@ static int ComputeMst(Graph graph,int numproc,int numvert)
   return cost;
 }
 
-int main(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc))
+int main(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
   Graph graph = NULL;
   int dist;

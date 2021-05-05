@@ -2,17 +2,17 @@
 
 /* ========== PROCEDURE TYPES/NUMS ================== */
 
-#include <stdchecked.h>
+
 
 #pragma CHECKED_SCOPE ON
 
-ptr<HANDLE> RandTree(int, int, int, int);
+_Ptr<HANDLE> RandTree(int, int, int, int);
 
-void SwapValue(ptr<HANDLE>, ptr<HANDLE>);
-void SwapValLeft(ptr<HANDLE>, ptr<HANDLE>, ptr<HANDLE>, ptr<HANDLE>, int, int);
-void SwapValRight(ptr<HANDLE>, ptr<HANDLE>, ptr<HANDLE>, ptr<HANDLE>, int, int);
-int Bimerge(ptr<HANDLE>, int, int);
-int Bisort(ptr<HANDLE>, int, int);
-int dealwithargs(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc));
+void SwapValue(_Ptr<HANDLE> l, _Ptr<HANDLE> r);
+void SwapValLeft(_Ptr<HANDLE> l, _Ptr<HANDLE> r, _Ptr<HANDLE> ll, _Ptr<HANDLE> rl, int lval, int rval);
+void SwapValRight(_Ptr<HANDLE> l, _Ptr<HANDLE> r, _Ptr<HANDLE> lr, _Ptr<HANDLE> rr, int lval, int rval);
+int Bimerge(_Ptr<HANDLE> root, int spr_val, int dir);
+int Bisort(_Ptr<HANDLE> root, int spr_val, int dir);
+int dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc));
 
 #pragma CHECKED_SCOPE OFF

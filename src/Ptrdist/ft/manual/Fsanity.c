@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include "Fheap.h"
 #include "Fstruct.h"
+#include "Fsanity.h"
 
 #pragma CHECKED_SCOPE ON
 

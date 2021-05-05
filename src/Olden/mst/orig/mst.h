@@ -20,4 +20,3 @@ typedef struct graph_st {
 Graph MakeGraph(int numvert, int numproc);
 int dealwithargs(int argc, char *argv[]);
 
-int atoi(const char *);

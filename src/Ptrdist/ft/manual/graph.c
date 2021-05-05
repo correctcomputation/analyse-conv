@@ -139,8 +139,7 @@ GenTree(int nVertex)
   return(graph);
 }
 
-_Ptr<Vertices> 
-AddEdges(_Ptr<Vertices>  graph, int nVertex, int nEdge)
+_Ptr<Vertices> AddEdges(_Ptr<Vertices>  graph, int nVertex, int nEdge)
 {
   int       i;
   _Ptr<Vertices>  vertex1 = 0;
@@ -165,8 +164,7 @@ AddEdges(_Ptr<Vertices>  graph, int nVertex, int nEdge)
   return(graph);
 }
 
-_Ptr<Vertices> 
-PickVertex(_Ptr<Vertices>  graph, int whichVertex)
+_Ptr<Vertices> PickVertex(_Ptr<Vertices>  graph, int whichVertex)
 {
   int       i;
 

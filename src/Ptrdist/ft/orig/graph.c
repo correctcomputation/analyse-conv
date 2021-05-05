@@ -137,8 +137,7 @@ GenTree(int nVertex)
   return(graph);
 }
 
-Vertices *
-AddEdges(Vertices * graph, int nVertex, int nEdge)
+Vertices *AddEdges(Vertices * graph, int nVertex, int nEdge)
 {
   int       i;
   Vertices * vertex1;
@@ -163,8 +162,7 @@ AddEdges(Vertices * graph, int nVertex, int nEdge)
   return(graph);
 }
 
-Vertices *
-PickVertex(Vertices * graph, int whichVertex)
+Vertices *PickVertex(Vertices * graph, int whichVertex)
 {
   int       i;
 

@@ -5,14 +5,14 @@
  *           To be used with health.c                               *
  ********************************************************************/
 
-#include <stdchecked.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include "health.h"
 #pragma CHECKED_SCOPE ON
 
-void addList(ptr<struct List> list, ptr<struct Patient> patient) {
-  ptr<struct List> b = NULL;
+void addList(_Ptr<struct List> list, _Ptr<struct Patient> patient) {
+  _Ptr<struct List> b = NULL;
 
   while (list != NULL) {
     b = list;
@@ -25,10 +25,10 @@ void addList(ptr<struct List> list, ptr<struct Patient> patient) {
   b->forward = list;
 } 
 
-void removeList(ptr<struct List> list, ptr<struct Patient> patient) {
-  ptr<struct List>      l1 = NULL;
-  ptr<struct List>      l2 = NULL;
-  ptr<struct Patient>   p = list->patient;
+void removeList(_Ptr<struct List> list, _Ptr<struct Patient> patient) {
+  _Ptr<struct List>      l1 = NULL;
+  _Ptr<struct List>      l2 = NULL;
+  _Ptr<struct Patient>   p = list->patient;
 
   while(p != patient) {
       list = list->forward; 

@@ -23,15 +23,15 @@
 extern int NumNodes;
 #endif
 
-int dealwithargs(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc));
+int dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc));
 
 typedef struct {
     long 	level;
 } startmsg_t;
 
-int main (int argc, array_ptr<nt_array_ptr<char>> argv : count(argc))
+int main (int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
-    ptr<tree_t> root = NULL;
+    _Ptr<tree_t> root = NULL;
     int level,result;
 
 #ifdef FUTURES
@@ -98,7 +98,7 @@ int main (int argc, array_ptr<nt_array_ptr<char>> argv : count(argc))
 
 /* TreeAdd:
  */
-int TreeAdd (ptr<tree_t> t)
+int TreeAdd (_Ptr<tree_t> t)
 {
   if (t == NULL)  {
     return 0;
@@ -107,7 +107,8 @@ int TreeAdd (ptr<tree_t> t)
 #ifdef FUTURES    
     future_cell_int leftval;
     int rightval;
-    ptr<tree_t> tleft = NULL, tright = NULL;
+    tree_t * tleft = NULL;
+    tree_t * tright = NULL;
     int value;
 
     tleft = t->left;
@@ -125,8 +126,8 @@ int TreeAdd (ptr<tree_t> t)
 #else
     int leftval;
     int rightval;
-    ptr<tree_t> tleft = NULL;
-    ptr<tree_t> tright = NULL;
+    _Ptr<tree_t> tleft = NULL;
+    _Ptr<tree_t> tright = NULL;
     int value;
 
     tleft = t->left;            /* <---- 57% load penalty */

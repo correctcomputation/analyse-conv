@@ -1,6 +1,6 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
 
-#include <stdchecked.h>
+
 #include "perimeter.h"
 #include <stdlib.h>
 
@@ -31,8 +31,7 @@ static int CheckIntersect(int center_x, int center_y, int size)
   return 1;
 }  
 
-QuadTree MakeTree(int size, int center_x, int center_y, int lo_proc,
-		  int hi_proc, QuadTree parent, ChildType ct, int level) 
+QuadTree MakeTree(int size, int center_x, int center_y, int lo_proc, int hi_proc, QuadTree parent, ChildType ct, int level) 
 {
   int intersect=0;
   QuadTree retval = NULL;

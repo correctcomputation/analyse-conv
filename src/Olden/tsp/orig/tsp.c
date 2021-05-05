@@ -25,8 +25,10 @@ static double distance(Tree a, Tree b) {
 /* sling tree nodes into a list -- requires root to be tail of list */
 /* only fills in next field, not prev */
 static Tree makelist(Tree t) {
-  Tree left, right;
-  Tree tleft,tright;
+  Tree left;
+  Tree right;
+  Tree tleft;
+  Tree tright;
   Tree retval = t;
 
   if (!t) return NULL;
@@ -43,7 +45,10 @@ static Tree makelist(Tree t) {
 
 /* reverse orientation of list */
 static void reverse(Tree t) {
-  Tree prev,back,next,tmp;
+  Tree prev;
+  Tree back;
+  Tree next;
+  Tree tmp;
 
   if (!t) return;
   /*chatting("REVERSE\n");*/
@@ -67,7 +72,12 @@ static void reverse(Tree t) {
 
 /* Use closest-point heuristic from Cormen Leiserson and Rivest */
 static Tree conquer(Tree t) {
-  Tree cycle,tmp,min,prev,next,donext;
+  Tree cycle;
+  Tree tmp;
+  Tree min;
+  Tree prev;
+  Tree next;
+  Tree donext;
   double mindist,test;
   double mintonext, mintoprev, ttonext, ttoprev;
 
@@ -119,9 +129,15 @@ static Tree conquer(Tree t) {
 
 /* Merge two cycles as per Karp */
 static Tree merge(Tree a, Tree b, Tree t, int nproc) {
-  Tree min,next,prev,tmp;
+  Tree min;
+  Tree next;
+  Tree prev;
+  Tree tmp;
   double mindist,test,mintonext,mintoprev,ttonext,ttoprev;
-  Tree n1,p1,n2,p2;
+  Tree n1;
+  Tree p1;
+  Tree n2;
+  Tree p2;
   double tton1,ttop1,tton2,ttop2;
   double n1ton2,n1top2,p1ton2,p1top2;
   int choice;
@@ -264,7 +280,8 @@ static Tree merge(Tree a, Tree b, Tree t, int nproc) {
 
 /* Compute TSP for the tree t -- use conquer for problems <= sz */
 Tree tsp(Tree t,int sz,int nproc) {
-  Tree left,right;
+  Tree left;
+  Tree right;
   Tree leftval;
 #ifdef FUTURES
   future_cell_pointer fc;

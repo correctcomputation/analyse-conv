@@ -16,7 +16,8 @@ typedef struct fc_br {
 static BlueReturn BlueRule(Vertex inserted, Vertex vlist) 
 {
   BlueReturn retval;
-  Vertex tmp,prev;
+  Vertex tmp;
+  Vertex prev;
   Hash hash;
   int dist,dist2;
   int count;
@@ -107,7 +108,8 @@ static BlueReturn Do_all_BlueRule(Vertex inserted, int nproc, int pn) {
 
 static int ComputeMst(Graph graph,int numproc,int numvert) 
 {
-  Vertex inserted,tmp;
+  Vertex inserted;
+  Vertex tmp;
   int cost=0,dist;
 
   /* make copy of graph */

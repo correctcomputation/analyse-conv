@@ -1,11 +1,11 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
 
-#include <stdchecked.h>
+
 #include "perimeter.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-#define printf(...) unchecked { (printf)(__VA_ARGS__); }
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
 
 #pragma CHECKED_SCOPE ON
 
@@ -65,7 +65,10 @@ static ChildType reflect(Direction d, ChildType ct)
 
 int CountTree(QuadTree tree) 
 {
-  QuadTree nw = tree->nw, ne = tree->ne, sw = tree->sw, se = tree->se;
+  QuadTree nw = tree->nw;
+  QuadTree ne = tree->ne;
+  QuadTree sw = tree->sw;
+  QuadTree se = tree->se;
 
   if (nw==NULL && ne==NULL && sw==NULL && se==NULL)
     return 1;
@@ -97,7 +100,8 @@ static QuadTree child(QuadTree tree, ChildType ct)
 
 static QuadTree gtequal_adj_neighbor(QuadTree tree, Direction d)
 {
-  QuadTree q = NULL, parent = tree->parent;
+  QuadTree q = NULL;
+  QuadTree parent = tree->parent;
   ChildType ct;
   
   ct=tree->childtype;
@@ -186,9 +190,9 @@ int perimeter(QuadTree tree, int size)
   return retval;
 }
 
-extern int dealwithargs(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc));
+extern int dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc));
 
-int main(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc))
+int main(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
   QuadTree tree = NULL;
   int count;

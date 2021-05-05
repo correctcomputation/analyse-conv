@@ -52,12 +52,12 @@
 
 static _Ptr<HeapP> hTable _Checked[MAX_RANK];
 
-void  CombineLists(_Ptr<HeapP> , _Ptr<HeapP> );
-void  AddEntry(_Ptr<HeapP> , _Ptr<HeapP> );
-_Ptr<HeapP>  RemoveEntry(_Ptr<HeapP> );
-_Ptr<HeapP>  NewHeap(_Ptr<Item> );
-void  RemoveChild(_Ptr<HeapP> );
-void  FixRank(_Ptr<HeapP> , int);
+void  CombineLists(_Ptr<HeapP> h1, _Ptr<HeapP> h2);
+void  AddEntry(_Ptr<HeapP> h1, _Ptr<HeapP> h2);
+_Ptr<HeapP> RemoveEntry(_Ptr<HeapP> h);
+_Ptr<HeapP> NewHeap(_Ptr<Item> i);
+void  RemoveChild(_Ptr<HeapP> i);
+void  FixRank(_Ptr<HeapP> h, int delta);
 
 INLINE void
 InitFHeap(void)
@@ -76,8 +76,7 @@ MakeHeap(void)
   return(NULL);
 }
 
-INLINE _Ptr<Item> 
-FindMin(_Ptr<HeapP>  h)
+INLINE _Ptr<Item> FindMin(_Ptr<HeapP>  h)
 {
   if(h == NULL)
   {
@@ -89,8 +88,7 @@ FindMin(_Ptr<HeapP>  h)
   }
 }
 
-INLINE _Ptr<HeapP> 
-Insert(_Ptr<_Ptr<HeapP>>  h, _Ptr<Item>  i)
+INLINE _Ptr<HeapP> Insert(_Ptr<_Ptr<HeapP>>  h, _Ptr<Item>  i)
 {
   _Ptr<HeapP>  h1 = 0;
 
@@ -99,8 +97,7 @@ Insert(_Ptr<_Ptr<HeapP>>  h, _Ptr<Item>  i)
   return(h1);
 }
 
-INLINE _Ptr<HeapP> 
-Meld(_Ptr<HeapP>  h1, _Ptr<HeapP>  h2)
+INLINE _Ptr<HeapP> Meld(_Ptr<HeapP>  h1, _Ptr<HeapP>  h2)
 {
   if(h2 == NULL)
   {
@@ -124,8 +121,7 @@ Meld(_Ptr<HeapP>  h1, _Ptr<HeapP>  h2)
 /*
  * This function needs some aesthetic changes.
  */
-INLINE _Ptr<HeapP> 
-DeleteMin(_Ptr<HeapP>  h)
+INLINE _Ptr<HeapP> DeleteMin(_Ptr<HeapP>  h)
 {
   int   r, rMax, j;
   _Ptr<HeapP>  h1 = 0;
@@ -271,8 +267,7 @@ DeleteMin(_Ptr<HeapP>  h)
   return(min);
 }
 
-INLINE _Ptr<HeapP> 
-DecreaseKey(_Ptr<HeapP>  h, _Ptr<HeapP>  i, int delta)
+INLINE _Ptr<HeapP> DecreaseKey(_Ptr<HeapP>  h, _Ptr<HeapP>  i, int delta)
 {
   assert(h != NULL);
   assert(i != NULL);
@@ -340,8 +335,7 @@ FixRank(_Ptr<HeapP>  h, int delta)
   while(h != NULL);
 }
 
-INLINE _Ptr<HeapP> 
-Delete(_Ptr<HeapP>  h, _Ptr<HeapP>  i)
+INLINE _Ptr<HeapP> Delete(_Ptr<HeapP>  h, _Ptr<HeapP>  i)
 {
   _Ptr<HeapP>  h1 = 0;
   _Ptr<HeapP>  h2 = 0;
@@ -465,8 +459,7 @@ AddEntry(_Ptr<HeapP>  h1, _Ptr<HeapP>  h2)
  * Return values:
  *   a smaller heap, possibly NULL
  */
-INLINE _Ptr<HeapP> 
-RemoveEntry(_Ptr<HeapP>  h)
+INLINE _Ptr<HeapP> RemoveEntry(_Ptr<HeapP>  h)
 {
   assert(h != NULL);
 
@@ -494,8 +487,7 @@ RemoveEntry(_Ptr<HeapP>  h)
  * Return values:
  *   a single entry heap
  */
-INLINE _Ptr<HeapP> 
-NewHeap(_Ptr<Item>  i)
+INLINE _Ptr<HeapP> NewHeap(_Ptr<Item>  i)
 {
   _Ptr<HeapP>  h = 0;
 
@@ -517,14 +509,12 @@ NewHeap(_Ptr<Item>  i)
   return(h);
 }
 
-INLINE _Ptr<Item> 
-ItemOf(_Ptr<HeapP>  h)
+INLINE _Ptr<Item> ItemOf(_Ptr<HeapP>  h)
 {
   return(ITEM(h));
 }
 
-INLINE _Ptr<HeapP> 
-Find(_Ptr<HeapP>  h, _Ptr<Item>  item)
+INLINE _Ptr<HeapP> Find(_Ptr<HeapP>  h, _Ptr<Item>  item)
 {
   _Ptr<HeapP>  h1 = 0;
   _Ptr<HeapP>  h2 = 0;
