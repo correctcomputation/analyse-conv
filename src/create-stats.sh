@@ -12,13 +12,20 @@
 
 set -o errexit
 set -o nounset
+set -x otrace
 
 echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL,LEFT_LINES,LEFT_TOTAL" > diffs.sum
 
 # pass the two folders to compare
 function compute_diff() { 
   local added=$(diff -w $1 $2 | diffstat -s | awk '{ print $4 }')
+  if [ -z $added ]; then 
+    added=0
+  fi
   local delled=$(diff -w $1 $2 | diffstat -s | awk '{ print $6 }')
+  if [ -z $delled ]; then 
+    delled=0 
+  fi
   echo $(( $added > $delled ? $added : $delled ))
 }
 
@@ -29,7 +36,13 @@ function compute_filtered_diff() {
     cat "$2/$file" | ../../filter.sh | diff -w "$1/$file" - >> $workfile
   done
   local added=$(cat $workfile | diffstat -s | awk '{ print $4 }')
+  if [ -z $added ]; then 
+    added=0
+  fi
   local delled=$(cat $workfile | diffstat -s | awk '{ print $6 }')
+  if [ -z $delled ]; then 
+    delled=0 
+  fi
   echo $(( $added > $delled ? $added : $delled ))
 }
 
