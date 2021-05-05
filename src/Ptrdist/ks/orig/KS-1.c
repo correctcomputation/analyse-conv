@@ -38,7 +38,9 @@ ReadNetList(char *fname)
     char line[BUF_LEN];
     char *tok;
     unsigned long net, dest;
-    ModulePtr node, prev, head;
+    ModulePtr node;
+    ModulePtr prev;
+    ModulePtr head;
 
     TRY(inFile = fopen(fname, "r"),
 	inFile != NULL, "ReadData",

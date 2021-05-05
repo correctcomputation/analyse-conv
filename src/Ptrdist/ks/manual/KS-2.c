@@ -46,8 +46,7 @@ CAiBj(ModuleRecPtr mrA, ModuleRecPtr mrB)
 
 /* swap a node out of the current group, and into a target group */
 void
-SwapNode(ModuleRecPtr maxPrev, ModuleRecPtr max,
-	 ModuleListPtr group, ModuleListPtr swapTo)
+SwapNode(ModuleRecPtr maxPrev, ModuleRecPtr max, ModuleListPtr group, ModuleListPtr swapTo)
 {
     if (maxPrev == NULL) {	/* found at head of list */
 	if ((*group).head == (*group).tail)	{ /* only one in the list */
@@ -109,8 +108,14 @@ UpdateDs(ModuleRecPtr max, Groups group)
 float
 FindMaxGpAndSwap(void)
 {
-    ModuleRecPtr mrA = 0, mrPrevA = 0, mrB = 0, mrPrevB = 0;
-    ModuleRecPtr maxA = 0, maxPrevA = 0, maxB = 0, maxPrevB = 0;
+  ModuleRecPtr mrA = 0;
+  ModuleRecPtr mrPrevA = 0;
+  ModuleRecPtr mrB = 0;
+  ModuleRecPtr mrPrevB = 0;
+  ModuleRecPtr maxA = 0;
+  ModuleRecPtr maxPrevA = 0;
+  ModuleRecPtr maxB = 0;
+  ModuleRecPtr maxPrevB = 0;
     float gp, gpMax;
 
     gpMax = -9999999;
@@ -182,7 +187,10 @@ void
 SwapSubsetAndReset(unsigned long iMax)
 {
     unsigned long i;
-    ModuleRecPtr mrPrevA = 0, mrA = 0, mrPrevB = 0, mrB = 0;
+    ModuleRecPtr mrPrevA = 0;
+    ModuleRecPtr mrA = 0;
+    ModuleRecPtr mrPrevB = 0;
+    ModuleRecPtr mrB = 0;
 
     /* re-splice the lists @ iMax pointers into the lists */
     for (mrPrevA = NULL, mrA = swapToA.head,
@@ -223,11 +231,12 @@ SwapSubsetAndReset(unsigned long iMax)
 }
 
 
-struct {
+struct _netstats {
     unsigned long total;
     unsigned long edgesCut;
     unsigned long netsCut;
-} netStats _Checked [256];
+};
+struct _netstats netStats _Checked [256];
 long maxStat;
 
 /* print the current groups, and their edge and net cut counts */
