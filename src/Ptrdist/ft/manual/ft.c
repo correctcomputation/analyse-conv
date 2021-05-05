@@ -124,8 +124,7 @@ main(int argc, _Array_ptr<_Nt_array_ptr<const char>> argv : count(argc) )
   return 0;
 }
 
-_Ptr<Vertices> 
-MST(_Ptr<Vertices>  graph)
+_Ptr<Vertices> MST(_Ptr<Vertices>  graph)
 {
   _Ptr<HeapP>  heap = 0;
   _Ptr<Vertices>  vertex = 0;

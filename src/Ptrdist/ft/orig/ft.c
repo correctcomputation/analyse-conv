@@ -122,8 +122,7 @@ main(int argc, char *argv[])
   return 0;
 }
 
-Vertices *
-MST(Vertices * graph)
+Vertices *MST(Vertices * graph)
 {
   HeapP * heap;
   Vertices * vertex;
