@@ -38,8 +38,7 @@ static int hashfunc(unsigned int key)
   return ((key>>3) % HashRange);
 }
 
-static void AddEdges(int count1, Graph retval, int numproc, 
-                     int perproc, int numvert, int j) 
+static void AddEdges(int count1, Graph retval, int numproc, int perproc, int numvert, int j) 
 {
   Vertex tmp;
   Vertex helper[MAXPROC];
@@ -77,7 +76,8 @@ Graph MakeGraph(int numvert, int numproc)
   int perproc = numvert/numproc;
   int i,j;
   int count1;
-  Vertex v,tmp;
+  Vertex v;
+  Vertex tmp;
   Vertex block;
   Graph retval;
   retval = (Graph)malloc(sizeof(*retval));

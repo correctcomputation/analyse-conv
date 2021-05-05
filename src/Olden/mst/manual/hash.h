@@ -1,29 +1,29 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
 
-#include <stdchecked.h>
+
 #include <stdio.h>
 
 struct hash_entry {
   unsigned int key;
   void *entry;
-  ptr<struct hash_entry> next;
+  _Ptr<struct hash_entry> next;
 };
 
 #pragma CHECKED_SCOPE ON
 
-typedef ptr<struct hash_entry> HashEntry;
+typedef _Ptr<struct hash_entry> HashEntry;
 
 struct hash {
-  array_ptr<HashEntry> array : count(size);
-  ptr<int(unsigned int)> mapfunc;
+  _Array_ptr<HashEntry> array : count(size);
+  _Ptr<int(unsigned int)> mapfunc;
   int size;
 };
 
-typedef ptr<struct hash> Hash;
+typedef _Ptr<struct hash> Hash;
 
-Hash MakeHash(int size, ptr<int(unsigned int)> map);
-unchecked void *HashLookup(unsigned int key, Hash hash);
-unchecked void HashInsert(void *entry, unsigned int key, Hash hash);
+Hash MakeHash(int size, _Ptr<int(unsigned int)> map);
+_Unchecked void *HashLookup(unsigned int key, Hash hash);
+_Unchecked void HashInsert(void *entry, unsigned int key, Hash hash);
 void HashDelete(unsigned int key, Hash hash);
 
 #pragma CHECKED_SCOPE OFF

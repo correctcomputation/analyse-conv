@@ -4,7 +4,7 @@
 #pragma CHECKED_SCOPE ON
 
 /*#define assert(num,a) \
-   if (!(a)) unchecked {printf("Assertion failure:%d in makegraph\n",num); exit(-1);}*/
+   if (!(a)) _Unchecked {printf("Assertion failure:%d in makegraph\n",num); exit(-1);}*/
 
 #define CONST_m1 10000
 #define CONST_b 31415821
@@ -39,11 +39,10 @@ static int hashfunc(unsigned int key)
   return ((key>>3) % HashRange);
 }
 
-static void AddEdges(int count1, Graph retval, int numproc, 
-                     int perproc, int numvert, int j) 
+static void AddEdges(int count1, Graph retval, int numproc, int perproc, int numvert, int j) 
 {
   Vertex tmp = NULL;
-  VertexArray helper checked[MAXPROC] = {0};
+  VertexArray helper _Checked[MAXPROC] = {0};
   int i;
 
   for (i=0; i<numproc; i++) {
@@ -66,7 +65,7 @@ static void AddEdges(int count1, Graph retval, int numproc,
               offset = i % perproc;
               _Unchecked { dest = ((helper[pn].block)+offset); }
               hash = tmp->edgehash;
-              unchecked { HashInsert((void*)dist,(unsigned int) dest,hash); }
+              _Unchecked { HashInsert((void*)dist,(unsigned int) dest,hash); }
               /*assert(4, HashLookup((unsigned int) dest,hash) == (void*) dist);*/
             }
         } /* for i... */
@@ -79,8 +78,9 @@ Graph MakeGraph(int numvert, int numproc)
   int perproc = numvert/numproc;
   int i,j;
   int count1;
-  Vertex v = NULL, tmp = NULL;
-  array_ptr<struct vert_st> block : count(perproc) = NULL;
+  Vertex v = NULL;
+  Vertex tmp = NULL;
+  _Array_ptr<struct vert_st> block : count(perproc) = NULL;
   Graph retval = NULL;
 
   retval = calloc<struct graph_st>(1, sizeof(*retval));
@@ -119,7 +119,7 @@ Graph MakeGraph(int numvert, int numproc)
   return retval;
 }
 
-void chatting(nt_array_ptr<char> str) {
+void chatting(_Nt_array_ptr<char> str) {
   printf("%s", str);
 }
 
