@@ -18,7 +18,30 @@ echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL,LEFT_LI
 # pass the two folders to compare
 function compute_diff() { 
   local added=$(diff -w $1 $2 | diffstat -s | awk '{ print $4 }')
+  if [ -z $added ]; then 
+    added=0
+  fi
   local delled=$(diff -w $1 $2 | diffstat -s | awk '{ print $6 }')
+  if [ -z $delled ]; then 
+    delled=0 
+  fi
+  echo $(( $added > $delled ? $added : $delled ))
+}
+
+# pass the two folders to compare
+function compute_filtered_diff() { 
+  local workfile=$(mktemp)
+  for file in $(ls $1); do 
+    cat "$2/$file" | ../../filter.sh | diff -w "$1/$file" - >> $workfile
+  done
+  local added=$(cat $workfile | diffstat -s | awk '{ print $4 }')
+  if [ -z $added ]; then 
+    added=0
+  fi
+  local delled=$(cat $workfile | diffstat -s | awk '{ print $6 }')
+  if [ -z $delled ]; then 
+    delled=0 
+  fi
   echo $(( $added > $delled ? $added : $delled ))
 }
 
@@ -37,13 +60,13 @@ for version in "manual" "revert" "orig" ; do
   elif [ "$version" = "revert" ]; then
     anno=$(compute_diff "revert" "3c-revert")
     anno_total=$(count_lines "revert") 
-    left=$(compute_diff "3c-revert" "manual")
+    left=$(compute_filtered_diff "3c-revert" "manual")
     left_total=$(count_lines "3c-revert") 
     echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   elif [ "$version" = "orig" ]; then 
     anno=$(compute_diff "orig" "3c-orig") 
     anno_total=$(count_lines "orig") 
-    left=$(compute_diff "3c-orig" "manual")
+    left=$(compute_filtered_diff "3c-orig" "manual")
     left_total=$(count_lines "3c-orig") 
     echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   fi
