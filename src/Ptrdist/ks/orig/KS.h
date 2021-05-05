@@ -89,8 +89,7 @@ void ComputeNetCosts(void);
 void InitLists(void);
 void ComputeDs(ModuleListPtr group, Groups myGroup, Groups mySwap);
 float CAiBj(ModuleRecPtr mrA, ModuleRecPtr mrB);
-void SwapNode(ModuleRecPtr maxPrev, ModuleRecPtr max,
-	      ModuleListPtr group, ModuleListPtr swapTo);
+void SwapNode(ModuleRecPtr maxPrev, ModuleRecPtr max, ModuleListPtr group, ModuleListPtr swapTo);
 void UpdateDs(ModuleRecPtr max, Groups group);
 float FindMaxGpAndSwap();
 void SwapSubsetAndReset(unsigned long iMax);
