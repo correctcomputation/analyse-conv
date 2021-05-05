@@ -5,8 +5,6 @@
  */
 
 
-#define HCG_CODE
-
 
 /*
  *
@@ -20,6 +18,11 @@
 #include "types.h"
 #include "hcg.h"
 #include "channel.h"
+
+nodeHCGType *			HCG;
+ulong *				storageRootHCG;
+ulong *				storageHCG;
+ulong					storageLimitHCG;
 
 
 /*
@@ -131,10 +134,7 @@ DumpHCG(nodeHCGType * HCG)
 }
 
 void
-NoHCV(nodeHCGType * HCG,
-      ulong select,
-      ulong * netsAssign,
-      ulong * tracksNoHCV)
+NoHCV(nodeHCGType * HCG,      ulong select,      ulong * netsAssign,      ulong * tracksNoHCV)
 {
     ulong	track;
     ulong	net;

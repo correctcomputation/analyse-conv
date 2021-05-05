@@ -5,8 +5,6 @@
  */
 
 
-#define CHANNEL_CODE
-
 
 /*
  *
@@ -18,6 +16,20 @@
 #include <stdlib.h>
 #include "types.h"
 #include "channel.h"
+
+ulong *		TOP;
+ulong *		BOT;
+ulong *		FIRST;
+ulong *		LAST;
+ulong *		DENSITY;
+ulong *		CROSSING;
+ulong			channelNets;
+ulong			channelColumns;
+ulong			channelTracks;
+ulong			channelTracksCopy;
+ulong			channelDensity;
+ulong			channelDensityColumn;
+char *		channelFile;
 
 
 /*

@@ -5,9 +5,6 @@
  */
 
 
-#define ASSIGN_CODE
-
-
 /*
  *
  * Includes.
@@ -22,6 +19,18 @@
 #include "channel.h"
 #include "vcg.h"
 #include "hcg.h"
+
+_Array_ptr<struct costMatrixRow>			costMatrix : count(channelNets + 1);
+_Array_ptr<ulong>			tracksNoHCV : count(channelTracks+2);
+_Array_ptr<ulong>			tracksNotPref : count(channelTracks+2);
+_Array_ptr<ulong>			tracksTopNotPref : count(channelTracks+2);
+_Array_ptr<ulong>			tracksBotNotPref : count(channelTracks+2);
+ulong				cardNotPref;
+ulong				cardTopNotPref;
+ulong				cardBotNotPref;
+_Array_ptr<ulong>			tracksAssign : count(channelTracks+2);
+_Array_ptr<ulong>			netsAssign : count(channelNets + 1);
+_Array_ptr<ulong>			netsAssignCopy : count(channelNets + 1);
 
 #pragma CHECKED_SCOPE ON
 #define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
@@ -315,9 +324,7 @@ LeftNetsAssign(void)
 }
 
 void
-Assign(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),
-       _Array_ptr<ulong> assign : count(channelNets + 1),
-       ulong select)
+Assign(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),       _Array_ptr<ulong> assign : count(channelNets + 1),       ulong select)
 {
     long	dist;
     ulong	ideal;
@@ -510,11 +517,7 @@ Assign(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),
 }
 
 void
-Select(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),
-	_Array_ptr<nodeHCGType> HCG : count(channelNets + 1),
-	_Array_ptr<ulong> netsAssign : count(channelNets + 1),
-	_Ptr<ulong> netSelect,
-	_Array_ptr<ulong> CROSSING : count(channelNets + 1))
+Select(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),	_Array_ptr<nodeHCGType> HCG : count(channelNets + 1),	_Array_ptr<ulong> netsAssign : count(channelNets + 1),	_Ptr<ulong> netSelect,	_Array_ptr<ulong> CROSSING : count(channelNets + 1))
 {
     ulong	net;
     ulong	track;
@@ -556,10 +559,7 @@ Select(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),
 }
 
 void
-BuildCostMatrix(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),
-		_Array_ptr<nodeHCGType> HCG : count(channelNets + 1),
-		_Array_ptr<ulong> netsAssign : count(channelNets + 1),
-		_Array_ptr<ulong> CROSSING : count(channelNets + 1))
+BuildCostMatrix(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),		_Array_ptr<nodeHCGType> HCG : count(channelNets + 1),		_Array_ptr<ulong> netsAssign : count(channelNets + 1),		_Array_ptr<ulong> CROSSING : count(channelNets + 1))
 {
     ulong	net;
     ulong	track;
@@ -636,10 +636,7 @@ BuildCostMatrix(_Array_ptr<nodeVCGType> VCG : count(channelNets + 1),
 }
 
 void
-IdealTrack(ulong tracks,
-	   ulong top,
-	   ulong bot,
-	   _Ptr<ulong> ideal)
+IdealTrack(ulong tracks,	   ulong top,	   ulong bot,	   _Ptr<ulong> ideal)
 {
     ulong	num;
     ulong	den;

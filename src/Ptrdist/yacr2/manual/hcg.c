@@ -5,8 +5,6 @@
  */
 
 
-#define HCG_CODE
-
 
 /*
  *
@@ -28,6 +26,11 @@
  * Code.
  *
  */
+
+_Array_ptr<nodeHCGType>			HCG : count(channelNets + 1);
+_Array_ptr<ulong>				storageRootHCG : count(channelNets + 1);
+_Array_ptr<ulong>				storageHCG : bounds(storageRootHCG, storageRootHCG + channelNets + 1);
+ulong					storageLimitHCG;
 
 void
 AllocHCG(void)
@@ -134,10 +137,7 @@ DumpHCG(_Array_ptr<nodeHCGType> HCG : count(channelNets + 1))
 }
 
 void
-NoHCV(_Array_ptr<nodeHCGType> HCG : count(channelNets + 1),
-      ulong select,
-      _Array_ptr<ulong> netsAssign : count(channelNets + 1),
-      _Array_ptr<ulong> tracksNoHCV : count(channelTracks + 2))
+NoHCV(_Array_ptr<nodeHCGType> HCG : count(channelNets + 1),      ulong select,      _Array_ptr<ulong> netsAssign : count(channelNets + 1),      _Array_ptr<ulong> tracksNoHCV : count(channelTracks + 2))
 {
     ulong	track;
     ulong	net;

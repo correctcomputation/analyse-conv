@@ -6,8 +6,6 @@
  */
 
 
-#define VCG_CODE
-
 
 /*
  *
@@ -22,6 +20,17 @@
 #include "vcg.h"
 #include "assign.h"
 #include "channel.h"
+
+nodeVCGType *			VCG;
+constraintVCGType *			storageRootVCG;
+constraintVCGType *			storageVCG;
+ulong					storageLimitVCG;
+constraintVCGType * *		removeVCG;
+ulong					removeTotalVCG;
+ulong *				SCC;
+ulong					totalSCC;
+ulong *				perSCC;
+
 
 
 /*
@@ -143,8 +152,7 @@ BuildVCG(void)
     }
 }
 
-void
-DFSClearVCG(nodeVCGType * VCG)
+void DFSClearVCG(nodeVCGType * VCG)
 {
     ulong	net;
 
@@ -156,8 +164,7 @@ DFSClearVCG(nodeVCGType * VCG)
     }	
 }
 
-void
-DumpVCG(nodeVCGType * VCG)
+void DumpVCG(nodeVCGType * VCG)
 {
     ulong	net;
     ulong	which;
@@ -184,9 +191,7 @@ DumpVCG(nodeVCGType * VCG)
     }	
 }
 
-void
-DFSAboveVCG(nodeVCGType * VCG,
-	    ulong net)
+void DFSAboveVCG(nodeVCGType * VCG,	    ulong net)
 {
     ulong	s;
     ulong 	above;
@@ -203,9 +208,7 @@ DFSAboveVCG(nodeVCGType * VCG,
     }
 }
 
-void
-DFSBelowVCG(nodeVCGType * VCG,
-	    ulong net)
+void DFSBelowVCG(nodeVCGType * VCG,	    ulong net)
 {
     ulong	s;
     ulong 	below;
@@ -222,10 +225,7 @@ DFSBelowVCG(nodeVCGType * VCG,
     }
 }
 
-void
-SCCofVCG(nodeVCGType * VCG,
-	 ulong * SCC,
-	 ulong * perSCC)
+void SCCofVCG(nodeVCGType * VCG,	 ulong * SCC,	 ulong * perSCC)
 {
     ulong      	net;
     ulong      	scc;
@@ -302,10 +302,7 @@ SCCofVCG(nodeVCGType * VCG,
     ;
 }
 
-void
-SCC_DFSAboveVCG(nodeVCGType * VCG,
-		ulong net,
-		ulong * label)
+void SCC_DFSAboveVCG(nodeVCGType * VCG,		ulong net,		ulong * label)
 {
     ulong	s;
     ulong 	above;
@@ -324,10 +321,7 @@ SCC_DFSAboveVCG(nodeVCGType * VCG,
     VCG[net].netsAboveLabel = *label;
 }
 
-void
-SCC_DFSBelowVCG(nodeVCGType * VCG,
-		ulong net,
-		ulong label)
+void SCC_DFSBelowVCG(nodeVCGType * VCG,		ulong net,		ulong label)
 {
     ulong	s;
     ulong 	below;
@@ -345,9 +339,7 @@ SCC_DFSBelowVCG(nodeVCGType * VCG,
     VCG[net].netsBelowLabel = label;
 }
 
-void
-DumpSCC(ulong * SCC,
-	ulong * perSCC)
+void DumpSCC(ulong * SCC,	ulong * perSCC)
 {
     ulong	net;
     ulong	scc;
@@ -466,7 +458,7 @@ AcyclicVCG(void)
 	     * Introduces cycle.
 	     * Remove constraint (again).
 	     */
-	    for (which = 0; which < VCG[top].netsAbove; which++) {
+    for (which = 0; which < VCG[top].netsAbove; which++) {
 		if (VCG[top].netsAboveHook[which].bot == bot) {
 		    VCG[top].netsAboveHook[which].removed = TRUE;
 		    break;
@@ -497,11 +489,7 @@ AcyclicVCG(void)
     }
 }
 
-void
-RemoveConstraintVCG(nodeVCGType * VCG,
-		    ulong * SCC,
-		    ulong * perSCC,
-		    constraintVCGType * * removeVCG)
+void RemoveConstraintVCG(nodeVCGType * VCG,		    ulong * SCC,		    ulong * perSCC,		    constraintVCGType * * removeVCG)
 {
     ulong			scc;
     ulong			net;
@@ -637,19 +625,14 @@ RemoveConstraintVCG(nodeVCGType * VCG,
     }
 }
 
-ulong
-ExistPathAboveVCG(nodeVCGType * VCG,
-		  ulong above,
-		  ulong below)
+ulong ExistPathAboveVCG(nodeVCGType * VCG,		  ulong above,		  ulong below)
 {
     DFSClearVCG(VCG);
     DFSAboveVCG(VCG, above);
     return(VCG[below].netsAboveReached);
 }
 
-void
-LongestPathVCG(nodeVCGType * VCG,
-	       ulong net)
+void LongestPathVCG(nodeVCGType * VCG,	       ulong net)
 {
     ulong	track;
     ulong	bot;
@@ -711,9 +694,7 @@ LongestPathVCG(nodeVCGType * VCG,
     cardNotPref = not;
 }
 
-ulong
-DFSAboveLongestPathVCG(nodeVCGType * VCG,
-		       ulong net)
+ulong DFSAboveLongestPathVCG(nodeVCGType * VCG,		       ulong net)
 {
     ulong	s;
     ulong 	above;
@@ -737,9 +718,7 @@ DFSAboveLongestPathVCG(nodeVCGType * VCG,
     return(longest+1);
 }
 
-ulong
-DFSBelowLongestPathVCG(nodeVCGType * VCG,
-		       ulong net)
+ulong DFSBelowLongestPathVCG(nodeVCGType * VCG,		       ulong net)
 {
     ulong	s;
     ulong 	below;
@@ -763,11 +742,7 @@ DFSBelowLongestPathVCG(nodeVCGType * VCG,
     return(longest+1);
 }
 
-ulong
-VCV(nodeVCGType * VCG,
-    ulong check,
-    ulong track,
-    ulong * assign)
+ulong VCV(nodeVCGType * VCG,    ulong check,    ulong track,    ulong * assign)
 {
     ulong	net;
     ulong	vcv;

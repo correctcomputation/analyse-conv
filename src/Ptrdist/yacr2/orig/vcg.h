@@ -63,20 +63,6 @@ typedef struct _nodeVCGType {
  *
  */
 
-#ifdef VCG_CODE
-
-nodeVCGType *			VCG;
-constraintVCGType *			storageRootVCG;
-constraintVCGType *			storageVCG;
-ulong					storageLimitVCG;
-constraintVCGType * *		removeVCG;
-ulong					removeTotalVCG;
-ulong *				SCC;
-ulong					totalSCC;
-ulong *				perSCC;
-
-#else	/* VCG_CODE */
-
 extern nodeVCGType *			VCG;
 extern constraintVCGType *		storageRootVCG;
 extern constraintVCGType *		storageVCG;
@@ -87,8 +73,6 @@ extern ulong *			SCC;
 extern ulong				totalSCC;
 extern ulong *			perSCC;
 
-#endif	/* VCG_CODE */
-
 
 /*
  *
@@ -96,8 +80,6 @@ extern ulong *			perSCC;
  *
  */
 
-#ifdef VCG_CODE
-
 void
 AllocVCG(void);
 
@@ -114,140 +96,30 @@ void
 DumpVCG(nodeVCGType *);
 
 void
-DFSAboveVCG(nodeVCGType *,
-	    ulong);
+DFSAboveVCG(nodeVCGType *,	    ulong);
 
-void
-DFSBelowVCG(nodeVCGType *,
-	    ulong);
+void DFSBelowVCG(nodeVCGType *,	    ulong);
 
-void
-SCCofVCG(nodeVCGType *,
-	 ulong *,
-	 ulong *);
+void SCCofVCG(nodeVCGType *,	 ulong *, 	 ulong *);
 
-void
-SCC_DFSAboveVCG(nodeVCGType *,
-		ulong,
-		ulong *);
+void SCC_DFSAboveVCG(nodeVCGType *,		ulong,		ulong *);
 
-void
-SCC_DFSBelowVCG(nodeVCGType *,
-		ulong,
-		ulong);
+void SCC_DFSBelowVCG(nodeVCGType *,		ulong,		ulong);
 
-void
-DumpSCC(ulong *,
-	ulong *);
+void DumpSCC(ulong *,	ulong *);
 
-void
-AcyclicVCG(void);
+void AcyclicVCG(void);
 
-void
-RemoveConstraintVCG(nodeVCGType *,
-		    ulong *,
-		    ulong *,
-		    constraintVCGType * *);
+void RemoveConstraintVCG(nodeVCGType *,		    ulong *,		    ulong *,		    constraintVCGType * *);
 
-ulong
-ExistPathAboveVCG(nodeVCGType *,
-		  ulong,
-		  ulong);
+ulong ExistPathAboveVCG(nodeVCGType *,		  ulong,		  ulong);
 
-void
-LongestPathVCG(nodeVCGType *,
-	       ulong);
+void LongestPathVCG(nodeVCGType *,	       ulong);
 
-ulong
-DFSAboveLongestPathVCG(nodeVCGType *,
-		       ulong);
+ulong DFSAboveLongestPathVCG(nodeVCGType *,		       ulong);
 
-ulong
-DFSBelowLongestPathVCG(nodeVCGType *,
-		       ulong);
+ulong DFSBelowLongestPathVCG(nodeVCGType *, 		       ulong);
 
-ulong
-VCV(nodeVCGType *,
-    ulong,
-    ulong,
-    ulong *);
-
-#else	/* VCG_CODE */
-
-extern void
-AllocVCG(void);
-
-extern void
-FreeVCG(void);
-
-extern void
-BuildVCG(void);
-
-extern void
-DFSClearVCG(nodeVCGType *);
-
-extern void
-DumpVCG(nodeVCGType *);
-
-extern void
-DFSAboveVCG(nodeVCGType *,
-	    ulong);
-
-extern void
-DFSBelowVCG(nodeVCGType *,
-	    ulong);
-
-extern void
-SCCofVCG(nodeVCGType *,
-	 ulong *,
-	 ulong *);
-
-extern void
-SCC_DFSAboveVCG(nodeVCGType *,
-		ulong,
-		ulong *);
-
-extern void
-SCC_DFSBelowVCG(nodeVCGType *,
-		ulong,
-		ulong);
-
-extern void
-DumpSCC(ulong *,
-	ulong *);
-
-extern void
-AcyclicVCG(void);
-
-extern void
-RemoveConstraintVCG(nodeVCGType *,
-		    ulong *,
-		    ulong *,
-		    constraintVCGType * *);
-
-extern ulong
-ExistPathAboveVCG(nodeVCGType *,
-		  ulong,
-		  ulong);
-
-extern void
-LongestPathVCG(nodeVCGType *,
-	       ulong);
-
-extern ulong
-DFSAboveLongestPathVCG(nodeVCGType *,
-		       ulong);
-
-extern ulong
-DFSBelowLongestPathVCG(nodeVCGType *,
-		       ulong);
-
-extern ulong
-VCV(nodeVCGType *,
-    ulong,
-    ulong,
-    ulong *);
-
-#endif	/* VCG_CODE */
+ulong VCV(nodeVCGType *,    ulong,    ulong,    ulong *);
 
 #endif	/* VCG_H */

@@ -5,9 +5,6 @@
  */
 
 
-#define ASSIGN_CODE
-
-
 /*
  *
  * Includes.
@@ -22,6 +19,18 @@
 #include "channel.h"
 #include "vcg.h"
 #include "hcg.h"
+
+long * *			costMatrix;
+ulong *			tracksNoHCV;
+ulong *			tracksNotPref;
+ulong *			tracksTopNotPref;
+ulong *			tracksBotNotPref;
+ulong				cardNotPref;
+ulong				cardTopNotPref;
+ulong				cardBotNotPref;
+ulong *			tracksAssign;
+ulong *			netsAssign;
+ulong *			netsAssignCopy;
 
 
 /*
@@ -312,9 +321,7 @@ LeftNetsAssign(void)
 }
 
 void
-Assign(nodeVCGType * VCG,
-       ulong * assign,
-       ulong select)
+Assign(nodeVCGType * VCG, ulong * assign, ulong select)
 {
     long	dist;
     ulong	ideal;
@@ -507,11 +514,7 @@ Assign(nodeVCGType * VCG,
 }
 
 void
-Select(nodeVCGType * VCG,
-       nodeHCGType * HCG,
-       ulong * netsAssign,
-       ulong * netSelect,
-       ulong * CROSSING)
+Select(nodeVCGType * VCG, nodeHCGType * HCG, ulong * netsAssign, ulong * netSelect, ulong * CROSSING)
 {
     ulong	net;
     ulong	track;
@@ -553,10 +556,7 @@ Select(nodeVCGType * VCG,
 }
 
 void
-BuildCostMatrix(nodeVCGType * VCG,
-		nodeHCGType * HCG,
-		ulong * netsAssign,
-		ulong * CROSSING)
+BuildCostMatrix(nodeVCGType * VCG, nodeHCGType * HCG, ulong * netsAssign, ulong * CROSSING)
 {
     ulong	net;
     ulong	track;
@@ -633,10 +633,7 @@ BuildCostMatrix(nodeVCGType * VCG,
 }
 
 void
-IdealTrack(ulong tracks,
-	   ulong top,
-	   ulong bot,
-	   ulong * ideal)
+IdealTrack(ulong tracks, ulong top, ulong bot, ulong * ideal)
 {
     ulong	num;
     ulong	den;

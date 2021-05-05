@@ -84,9 +84,7 @@ FreeAllocMaps(void)
  *	they are sorted as needed by the line drawer
  */
 void
-DrawSegment(char * plane,
-	    unsigned long x1, unsigned long y1,
-	    unsigned long x2, unsigned long y2)
+DrawSegment(char * plane,	    unsigned long x1, unsigned long y1,	    unsigned long x2, unsigned long y2)
 {
     unsigned long x, y;
 
@@ -158,9 +156,7 @@ HasVia(unsigned long x, unsigned long y)
  *	they are sorted as needed by the line drawer
  */
 int
-SegmentFree(char * plane,
-	    unsigned long x1, unsigned long y1,
-	    unsigned long x2, unsigned long y2)
+SegmentFree(char * plane,	    unsigned long x1, unsigned long y1,	    unsigned long x2, unsigned long y2)
 {
     unsigned long x, y;
     unsigned long index;
@@ -313,13 +309,13 @@ DrawNets(void)
     int numLeft = 0;
 
     /* initialize maps to empty */
-    bzero(horzPlane,
+    memset(horzPlane, '\0',
 	  (int)((channelColumns+1)*(channelTracks+2)));
-    bzero(vertPlane,
+    memset(vertPlane, '\0', 
 	  (int)((channelColumns+1)*(channelTracks+2)));
-    bzero(viaPlane,
+    memset(viaPlane, '\0',
 	  (int)((channelColumns+1)*(channelTracks+2)));
-    bzero(mazeRoute,
+    memset(mazeRoute, '\0',
 	  (int)(channelColumns+1));
 
     /* draw all horizontal segments */
@@ -645,9 +641,7 @@ Maze1(void)
  * can this track be extended to the range specified, return result
  */
 int
-ExtendOK(unsigned long net, char * plane,
-	 unsigned long _x1, unsigned long _y1,	/* start seg */
-	 unsigned long _x2, unsigned long _y2)	/* end seg */
+ExtendOK(unsigned long net, char * plane,	 unsigned long _x1, unsigned long _y1,	/* start seg */	 unsigned long _x2, unsigned long _y2)	/* end seg */
 {
     unsigned long x1, y1, x2, y2;
 
@@ -878,8 +872,7 @@ Maze2(void)
 
 
 void
-FindFreeHorzSeg(unsigned long startCol, unsigned long row,
-		unsigned long * rowStart, unsigned long * rowEnd)
+FindFreeHorzSeg(unsigned long startCol, unsigned long row,		unsigned long * rowStart, unsigned long * rowEnd)
 {
     unsigned long i;
 
