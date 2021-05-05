@@ -106,7 +106,8 @@ int TreeAdd (tree_t *t)
 #ifdef FUTURES    
     future_cell_int leftval;
     int rightval;
-    tree_t *tleft, *tright;
+    tree_t *tleft;
+    tree_t *tright;
     int value;
 
     tleft = t->left;
