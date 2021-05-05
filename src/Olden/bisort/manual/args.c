@@ -1,5 +1,5 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
-#include <stdchecked.h>
+
 #include <stdlib.h>
 
 #pragma CHECKED_SCOPE ON
@@ -14,7 +14,7 @@ int mylog(int num) {
   return j;
 } 
 
-int dealwithargs(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc))
+int dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
   int size;
 
