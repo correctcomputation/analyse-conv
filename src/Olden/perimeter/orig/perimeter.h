@@ -40,8 +40,7 @@ typedef struct quad_struct {
 } quad_struct, *QuadTree;
 
 
-QuadTree MakeTree(int size, int center_x, int center_y, int lo_proc,
-                  int hi_proc, QuadTree parent, ChildType ct, int level);
+QuadTree MakeTree(int size, int center_x, int center_y, int lo_proc, int hi_proc, QuadTree parent, ChildType ct, int level);
 
 
 
