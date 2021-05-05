@@ -54,7 +54,7 @@ for version in "manual" "revert" "orig" ; do
   if [ "$version" = "manual" ]; then 
     ref=$(compute_diff "orig"  "revert" )
     ref_total=$(count_lines "orig" )
-    anno=$(compute_diff "revert" "manual") 
+    anno=$(compute_filtered_diff "revert" "manual") 
     anno_total=$(count_lines "revert")
     echo "$version,$ref,$ref_total,$anno,$anno_total,N/A,N/A" >> diffs.sum
   elif [ "$version" = "revert" ]; then
