@@ -57,8 +57,7 @@ void Compute_Tree(Root r) {
   r->D.Q = tmp.Q;
 }
 
-Demand Compute_Lateral(Lateral l, double theta_R, double theta_I, 
-                       double pi_R, double pi_I) {
+Demand Compute_Lateral(Lateral l, double theta_R, double theta_I, double pi_R, double pi_I) {
   Demand a1;
   Demand a2;
   double new_pi_R, new_pi_I;
@@ -101,8 +100,7 @@ Demand Compute_Lateral(Lateral l, double theta_R, double theta_I,
   return l->D;
 }
 
-Demand Compute_Branch(Branch br, double theta_R, double theta_I, 
-                       double pi_R, double pi_I) {
+Demand Compute_Branch(Branch br, double theta_R, double theta_I, double pi_R, double pi_I) {
   Demand a2,tmp;
   double new_pi_R, new_pi_I;
   double a,b,c,root;
