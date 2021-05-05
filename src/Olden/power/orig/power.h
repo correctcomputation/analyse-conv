@@ -90,9 +90,7 @@ Branch build_branch(int i, int j, int num);
 Leaf build_leaf();
 
 void Compute_Tree(Root r);
-Demand Compute_Lateral(Lateral l, double theta_R, double theta_I,
-                       double pi_R, double pi_I);
-Demand Compute_Branch(Branch b, double theta_R, double theta_I,
-                       double pi_R, double pi_I);
+Demand Compute_Lateral(Lateral l, double theta_R, double theta_I, double pi_R, double pi_I);
+Demand Compute_Branch(Branch b, double theta_R, double theta_I, double pi_R, double pi_I);
 Demand Compute_Leaf(Leaf l, double pi_R, double pi_I);
 
