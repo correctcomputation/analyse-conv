@@ -44,7 +44,6 @@ struct List {
 };
 
 struct Hosp {
-#if 1
   int                    personnel; 
   int                    free_personnel; 
   int                    num_waiting_patients; 
@@ -52,33 +51,15 @@ struct Hosp {
   struct List            assess; 
   struct List            inside;
   struct List            up;
-#else
-  int                    free_personnel; 
-  struct List            waiting;
-  struct List            assess;
-  struct List            inside;
-  struct List            up;
-  int                    personnel; 
-  int                    num_waiting_patients; 
-#endif
 };
  
 struct Village {
-#if 1
   struct Village         *forward[4];
   struct Village         *back;
   struct List            returned;
   struct Hosp            hosp;   
   int                    label;
   long long              seed;
-#else
-  struct Hosp            hosp;   
-  long                   seed;
-  struct Village         *forward[4];
-  int                    label;
-  struct List            returned;
-  struct Village         *back;
-#endif
 };
 
 struct Village *alloc_tree(int level, int label, struct Village *back);
@@ -92,9 +73,6 @@ struct List *sim(struct Village *village);
 void check_patients_inside(struct Village *village, struct List *list);
 struct List *check_patients_assess(struct Village *village, struct List *list);
 void check_patients_waiting(struct Village *village, struct List *list);
-float get_num_people(struct Village *village);
-float get_total_time(struct Village *village);
-float get_total_hosps(struct Village *village);
 struct Results get_results(struct Village *village);
 
 #endif

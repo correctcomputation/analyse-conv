@@ -2,16 +2,16 @@
 
 #include "em3d.h"
 #include "make_graph.h"
-#include <stdchecked.h>
+
 #pragma CHECKED_SCOPE ON
 
 extern int NumNodes;
 
 int DebugFlag;
 
-void print_graph(ptr<graph_t> graph, int id)
+void print_graph(_Ptr<graph_t> graph, int id)
 {
-  ptr<node_t> cur_node = graph->e_nodes[id];
+  _Ptr<node_t> cur_node = graph->e_nodes[id];
 
   for(; cur_node; cur_node=cur_node->next)
     {
@@ -28,10 +28,10 @@ void print_graph(ptr<graph_t> graph, int id)
 
 extern int nonlocals;
 
-int main(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc))
+int main(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
   int i;
-  ptr<graph_t> graph = NULL;
+  _Ptr<graph_t> graph = NULL;
 
   dealwithargs(argc,argv);
 

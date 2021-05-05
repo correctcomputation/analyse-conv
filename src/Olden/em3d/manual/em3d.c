@@ -3,10 +3,10 @@
 #include "em3d.h"
 #pragma CHECKED_SCOPE ON
 int nonlocals=0;
-void compute_nodes(register ptr<node_t> nodelist)
+void compute_nodes(register _Ptr<node_t> nodelist)
 {
   register int i;
-  register ptr<node_t> localnode = NULL;
+  register _Ptr<node_t> localnode = NULL;
   
   for (; nodelist; ) {
     register double cur_value;

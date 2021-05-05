@@ -8,12 +8,12 @@
 #ifndef _HEALTH
 #define _HEALTH
 
-#include <stdchecked.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #pragma CHECKED_SCOPE ON
 
-#define chatting(...) unchecked { printf(__VA_ARGS__); }
+#define chatting(...) _Unchecked { printf(__VA_ARGS__); }
 
 #define IA 16807
 #define IM 2147483647
@@ -36,17 +36,16 @@ struct Patient {
   int                     hosps_visited;
   int                     time;
   int                     time_left;
-  ptr<struct Village>     home_village;
+  _Ptr<struct Village>     home_village;
 };
 
 struct List {
-  ptr<struct List>        forward;
-  ptr<struct Patient>     patient;
-  ptr<struct List>        back;
+  _Ptr<struct List>        forward;
+  _Ptr<struct Patient>     patient;
+  _Ptr<struct List>        back;
 };
 
 struct Hosp {
-#if 1
   int                    personnel; 
   int                    free_personnel; 
   int                    num_waiting_patients; 
@@ -54,50 +53,29 @@ struct Hosp {
   struct List            assess; 
   struct List            inside;
   struct List            up;
-#else
-  int                    free_personnel; 
-  struct List            waiting;
-  struct List            assess;
-  struct List            inside;
-  struct List            up;
-  int                    personnel; 
-  int                    num_waiting_patients; 
-#endif
 };
  
 struct Village {
-#if 1
-  ptr<struct Village>    forward checked[4];
-  ptr<struct Village>    back;
+  _Ptr<struct Village>    forward _Checked[4];
+  _Ptr<struct Village>    back;
   struct List            returned;
   struct Hosp            hosp;   
   int                    label;
   long long              seed;
-#else
-  struct Hosp            hosp;   
-  long                   seed;
-  ptr<struct Village>    forward checked[4];
-  int                    label;
-  struct List            returned;
-  ptr<struct Village>    back;
-#endif
 };
 
-ptr<struct Village> alloc_tree(int level, int label, ptr<struct Village> back);
-void dealwithargs(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc));
+_Ptr<struct Village> alloc_tree(int level, int label, _Ptr<struct Village> back);
+void dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc));
 float my_rand(long long idum);
-ptr<struct Patient> generate_patient(ptr<struct Village> village);
-void put_in_hosp(ptr<struct Hosp> hosp, ptr<struct Patient>patient);
-void addList(ptr<struct List> list, ptr<struct Patient> patient);
-void removeList(ptr<struct List> list, ptr<struct Patient> patient);
-ptr<struct List> sim(ptr<struct Village> village);
-void check_patients_inside(ptr<struct Village> village, ptr<struct List> list);
-ptr<struct List> check_patients_assess(ptr<struct Village> village, ptr<struct List> list);
-void check_patients_waiting(ptr<struct Village> village, ptr<struct List> list);
-float get_num_people(ptr<struct Village> village);
-float get_total_time(ptr<struct Village> village);
-float get_total_hosps(ptr<struct Village> village);
-struct Results get_results(ptr<struct Village> village);
+_Ptr<struct Patient> generate_patient(_Ptr<struct Village> village);
+void put_in_hosp(_Ptr<struct Hosp> hosp, _Ptr<struct Patient>patient);
+void addList(_Ptr<struct List> list, _Ptr<struct Patient> patient);
+void removeList(_Ptr<struct List> list, _Ptr<struct Patient> patient);
+_Ptr<struct List> sim(_Ptr<struct Village> village);
+void check_patients_inside(_Ptr<struct Village> village, _Ptr<struct List> list);
+_Ptr<struct List> check_patients_assess(_Ptr<struct Village> village, _Ptr<struct List> list);
+void check_patients_waiting(_Ptr<struct Village> village, _Ptr<struct List> list);
+struct Results get_results(_Ptr<struct Village> village);
 
 #pragma CHECKED_SCOPE OFF
 #endif

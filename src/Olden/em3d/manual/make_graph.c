@@ -14,7 +14,7 @@
 
 #include "em3d.h"
 #include "util.h"
-#include <stdchecked.h>
+
 #pragma CHECKED_SCOPE ON
 
 extern int NumNodes;
@@ -24,17 +24,17 @@ int n_nodes;
 int d_nodes;
 int local_p;
 
-array_ptr<ptr<node_t>> make_table(int size, int procname) : count(size) {
-  array_ptr<ptr<node_t>> retval : count(size) = calloc<ptr<node_t>>(size, sizeof(ptr<node_t>));
+_Array_ptr<_Ptr<node_t>> make_table(int size, int procname) : count(size) {
+  _Array_ptr<_Ptr<node_t>> retval : count(size) = calloc<_Ptr<node_t>>(size, sizeof(_Ptr<node_t>));
   assert(retval);
   return retval;
 }
 
 /* We expect node_table to be a local table of e or h nodes */
-void fill_table(array_ptr<ptr<node_t>> node_table : count(size), array_ptr<double> values : count(size), int size, int procname)
+void fill_table(_Array_ptr<_Ptr<node_t>> node_table : count(size), _Array_ptr<double> values : count(size), int size, int procname)
 {
-  ptr<node_t> cur_node = NULL;
-  ptr<node_t> prev_node = NULL;
+  _Ptr<node_t> cur_node = NULL;
+  _Ptr<node_t> prev_node = NULL;
   int i;
   
   prev_node = calloc<node_t>(1, sizeof(node_t));
@@ -56,25 +56,25 @@ void fill_table(array_ptr<ptr<node_t>> node_table : count(size), array_ptr<doubl
   cur_node->next = NULL;
 }
 
-void make_neighbors(ptr<node_t> nodelist, array_ptr<table_arr_t> table : count(PROCS), int tablesz,
+void make_neighbors(_Ptr<node_t> nodelist, _Array_ptr<table_arr_t> table : count(PROCS), int tablesz,
 		    int degree, int percent_local, int id)
 {
-  ptr<node_t> cur_node = nodelist;
+  _Ptr<node_t> cur_node = nodelist;
 
   for(; cur_node; cur_node=cur_node->next) {
-    ptr<node_t> other_node = NULL;
+    _Ptr<node_t> other_node = NULL;
     int j,k;
     int dest_proc;
 
-    array_ptr<ptr<node_t>> tmp : count(degree) = calloc<ptr<node_t>>(degree, (sizeof(ptr<node_t>)));
-    dynamic_check(tmp != NULL);
+    _Array_ptr<_Ptr<node_t>> tmp : count(degree) = calloc<_Ptr<node_t>>(degree, (sizeof(_Ptr<node_t>)));
+    _Dynamic_check(tmp != NULL);
 
     cur_node->degree = degree;
     _Unchecked { cur_node->to_nodes = tmp; }
 
     for (j=0; j<degree; j++) {
       do {
-        array_ptr<ptr<node_t>> local_table : count(tablesz) = NULL;
+        _Array_ptr<_Ptr<node_t>> local_table : count(tablesz) = NULL;
         int number = gen_number(tablesz);
 
         if (check_percent(percent_local)) {
@@ -91,8 +91,8 @@ void make_neighbors(ptr<node_t> nodelist, array_ptr<table_arr_t> table : count(P
           exit(1);
         }
 
-        array_ptr<ptr<node_t>> ub = tmp + j;
-	array_ptr<ptr<node_t>> tmp2 : bounds(tmp2, ub)  = 0;
+        _Array_ptr<_Ptr<node_t>> ub = tmp + j;
+	_Array_ptr<_Ptr<node_t>> tmp2 : bounds(tmp2, ub)  = 0;
 	_Unchecked { tmp2 = tmp; }
         for ( ; tmp2 < ub; tmp2++)
           if (other_node == *tmp2) break;
@@ -125,8 +125,8 @@ void make_neighbors(ptr<node_t> nodelist, array_ptr<table_arr_t> table : count(P
   }
 }
 
-void update_from_coeffs(ptr<node_t> nodelist) {
-  ptr<node_t> cur_node = nodelist;
+void update_from_coeffs(_Ptr<node_t> nodelist) {
+  _Ptr<node_t> cur_node = nodelist;
   
   /* Setup coefficient and from_nodes vectors for h nodes */  
   for (; cur_node; cur_node=cur_node->next) {
@@ -134,27 +134,27 @@ void update_from_coeffs(ptr<node_t> nodelist) {
     
     if (from_count < 1) {
       chatting("Help! no from count (from_count=%d) \n", from_count);
-      cur_node->from_values = calloc<ptr<double>>(20, sizeof(ptr<double>));
+      cur_node->from_values = calloc<_Ptr<double>>(20, sizeof(_Ptr<double>));
       cur_node->coeffs = calloc<double>(20, sizeof(double));
       cur_node->from_length = 0;
     } else {
-      cur_node->from_values = calloc<ptr<double>>(from_count, sizeof(ptr<double>));
+      cur_node->from_values = calloc<_Ptr<double>>(from_count, sizeof(_Ptr<double>));
       cur_node->coeffs = calloc<double>(from_count, sizeof(double));
       cur_node->from_length = 0;
     }
   }
 }
 
-void fill_from_fields(ptr<node_t> nodelist, int degree) {
-  ptr<node_t> cur_node = nodelist;
+void fill_from_fields(_Ptr<node_t> nodelist, int degree) {
+  _Ptr<node_t> cur_node = nodelist;
   for(; cur_node; cur_node = cur_node->next) {
     int j;
 
     for (j=0; j<degree; j++) {
       int count,thecount;
-      ptr<node_t> other_node = cur_node->to_nodes[j]; /* <-- 6% load miss penalty */
-      array_ptr<ptr<double>> otherlist : count(other_node->from_count) = NULL;
-      ptr<double> value = cur_node->value;
+      _Ptr<node_t> other_node = cur_node->to_nodes[j]; /* <-- 6% load miss penalty */
+      _Array_ptr<_Ptr<double>> otherlist : count(other_node->from_count) = NULL;
+      _Ptr<double> value = cur_node->value;
 
       if (!other_node) { chatting("Help!!\n"); }
       count=(other_node->from_length)++;  /* <----- 30% load miss penalty */
@@ -175,8 +175,8 @@ void fill_from_fields(ptr<node_t> nodelist, int degree) {
   }
 }
 
-void localize_local(ptr<node_t> nodelist) {
-  ptr<node_t> cur_node = nodelist;
+void localize_local(_Ptr<node_t> nodelist) {
+  _Ptr<node_t> cur_node = nodelist;
 
   for(; cur_node; cur_node = cur_node->next) {
     cur_node->coeffs = cur_node->coeffs;
@@ -186,11 +186,11 @@ void localize_local(ptr<node_t> nodelist) {
 }
 
 
-void make_tables(ptr<table_t> table,int groupname) {
-  array_ptr<ptr<node_t>> h_table : count(n_nodes/PROCS) = NULL;
-  array_ptr<ptr<node_t>> e_table : count(n_nodes/PROCS) = NULL;
-  array_ptr<double> h_values : count(n_nodes/PROCS) = NULL;
-  array_ptr<double> e_values : count(n_nodes/PROCS) = NULL;
+void make_tables(_Ptr<table_t> table,int groupname) {
+  _Array_ptr<_Ptr<node_t>> h_table : count(n_nodes/PROCS) = NULL;
+  _Array_ptr<_Ptr<node_t>> e_table : count(n_nodes/PROCS) = NULL;
+  _Array_ptr<double> h_values : count(n_nodes/PROCS) = NULL;
+  _Array_ptr<double> e_values : count(n_nodes/PROCS) = NULL;
   int procname = 0;
 
   init_random(SEED1*groupname);
@@ -209,12 +209,12 @@ void make_tables(ptr<table_t> table,int groupname) {
   _Unchecked { table->h_table[groupname].table = h_table; }
 }
 
-void make_all_neighbors(ptr<table_t> table,int groupname) {
-  ptr<node_t> first_node = NULL;
+void make_all_neighbors(_Ptr<table_t> table,int groupname) {
+  _Ptr<node_t> first_node = NULL;
   int local_table_size = 1;
   int local_table_bounds = local_table_size;
-  array_ptr<ptr<node_t>> local_table : count(local_table_bounds) = NULL;
-  array_ptr<table_arr_t> local_table_array : count(1) = NULL;
+  _Array_ptr<_Ptr<node_t>> local_table : count(local_table_bounds) = NULL;
+  _Array_ptr<table_arr_t> local_table_array : count(1) = NULL;
 
   init_random(SEED2*groupname);
   /* We expect table to be remote */
@@ -235,12 +235,12 @@ void make_all_neighbors(ptr<table_t> table,int groupname) {
 		 d_nodes,local_p,groupname);
 }
 
-void update_all_from_coeffs(ptr<table_t> table, int groupname)    
+void update_all_from_coeffs(_Ptr<table_t> table, int groupname)    
 {
   int local_table_size = 1;
   int local_table_bounds = local_table_size;
-  array_ptr<ptr<node_t>> local_table : count(local_table_bounds) = NULL;
-  ptr<node_t> first_node = NULL;
+  _Array_ptr<_Ptr<node_t>> local_table : count(local_table_bounds) = NULL;
+  _Ptr<node_t> first_node = NULL;
 
   /* Done by do_all, table not local */
   local_table_size = table->h_table[groupname].size;
@@ -255,12 +255,12 @@ void update_all_from_coeffs(ptr<table_t> table, int groupname)
   update_from_coeffs(first_node);
 }
 
-void fill_all_from_fields(ptr<table_t> table, int groupname)
+void fill_all_from_fields(_Ptr<table_t> table, int groupname)
 {
   int local_table_size = 1;
   int local_table_bounds = local_table_size;
-  array_ptr<ptr<node_t>> local_table : count(local_table_bounds) = NULL;
-  ptr<node_t> first_node = NULL;
+  _Array_ptr<_Ptr<node_t>> local_table : count(local_table_bounds) = NULL;
+  _Ptr<node_t> first_node = NULL;
 
   init_random(SEED3*groupname);
   local_table_size = table->h_table[groupname].size;
@@ -274,12 +274,12 @@ void fill_all_from_fields(ptr<table_t> table, int groupname)
   fill_from_fields(first_node,d_nodes);
 }
 
-void localize(ptr<table_t> table, int groupname)
+void localize(_Ptr<table_t> table, int groupname)
 {
   int local_table_size = 1;
   int local_table_bounds = local_table_size;
-  array_ptr<ptr<node_t>> local_table : count(local_table_bounds) = NULL;
-  ptr<node_t> first_node = NULL;
+  _Array_ptr<_Ptr<node_t>> local_table : count(local_table_bounds) = NULL;
+  _Ptr<node_t> first_node = NULL;
 
   local_table_size = table->h_table[groupname].size;
   _Unchecked { local_table = table->h_table[groupname].table; }
@@ -292,13 +292,13 @@ void localize(ptr<table_t> table, int groupname)
   localize_local(first_node);
 }
   
-void clear_nummiss(ptr<table_t> table, int groupname)
+void clear_nummiss(_Ptr<table_t> table, int groupname)
 {
   NumMisses = 0;
 }
 
-void do_all(ptr<table_t> table, int groupname, int nproc,
-	    ptr<void(ptr<table_t>, int)> func, int groupsize) {
+void do_all(_Ptr<table_t> table, int groupname, int nproc,
+	    _Ptr<void(_Ptr<table_t>, int)> func, int groupsize) {
   /*chatting("do all group %d with %d\n",groupname,nproc);*/
   if (nproc > 1) {
     do_all(table,groupname+nproc/2,nproc/2,func,groupsize);
@@ -308,9 +308,9 @@ void do_all(ptr<table_t> table, int groupname, int nproc,
   }
 }
 
-ptr<graph_t> initialize_graph(void) {
-  ptr<table_t> table = NULL;
-  ptr<graph_t> retval = NULL;
+_Ptr<graph_t> initialize_graph(void) {
+  _Ptr<table_t> table = NULL;
+  _Ptr<graph_t> retval = NULL;
   int i,j,blocksize;
   int groupsize;
 
@@ -345,9 +345,9 @@ ptr<graph_t> initialize_graph(void) {
   for (i=0; i<NumNodes; i++) {
     int local_table_size = table->e_table[i*blocksize].size;
     int local_table_bounds = local_table_size;
-    array_ptr<ptr<node_t>> local_table : count(local_table_bounds) = NULL;
+    _Array_ptr<_Ptr<node_t>> local_table : count(local_table_bounds) = NULL;
     _Unchecked { local_table = table->e_table[i*blocksize].table; }
-    ptr<node_t> local_node_r = local_table[0];
+    _Ptr<node_t> local_node_r = local_table[0];
 
     retval->e_nodes[i] = local_node_r;
       
