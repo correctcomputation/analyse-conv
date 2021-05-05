@@ -17,10 +17,10 @@
 
 #pragma CHECKED_SCOPE ON
 
-NetPtr modules _Checked [G_SZ];		/* all modules -> nets */
+NetPtr modules _Checked[G_SZ] = {((void *)0)};                /* all modules -> nets */
 unsigned long numModules;
 
-ModulePtr nets _Checked [G_SZ];	     	/* all nets -> modules */
+ModulePtr nets _Checked [G_SZ] = {((void *)0)};	     	/* all nets -> modules */
 unsigned long numNets;
 
 ModuleList groupA, groupB;			/* current A, B */
