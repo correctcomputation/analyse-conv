@@ -50,12 +50,12 @@
 
 static HeapP * hTable[MAX_RANK];
 
-void  CombineLists(HeapP *, HeapP *);
-void  AddEntry(HeapP *, HeapP *);
-HeapP * RemoveEntry(HeapP *);
-HeapP * NewHeap(Item *);
-void  RemoveChild(HeapP *);
-void  FixRank(HeapP *, int);
+void  CombineLists(HeapP *h1, HeapP *h2);
+void  AddEntry(HeapP *h1, HeapP *h2);
+HeapP * RemoveEntry(HeapP *h);
+HeapP * NewHeap(Item *i);
+void  RemoveChild(HeapP *i);
+void  FixRank(HeapP *h, int delta);
 
 INLINE void
 InitFHeap()
@@ -74,8 +74,7 @@ MakeHeap()
   return(NULL);
 }
 
-INLINE Item *
-FindMin(HeapP * h)
+INLINE Item *FindMin(HeapP * h)
 {
   if(h == NULL)
   {
@@ -87,8 +86,7 @@ FindMin(HeapP * h)
   }
 }
 
-INLINE HeapP *
-Insert(HeapP * * h, Item * i)
+INLINE HeapP *Insert(HeapP * * h, Item * i)
 {
   HeapP * h1;
 
@@ -97,8 +95,7 @@ Insert(HeapP * * h, Item * i)
   return(h1);
 }
 
-INLINE HeapP *
-Meld(HeapP * h1, HeapP * h2)
+INLINE HeapP *Meld(HeapP * h1, HeapP * h2)
 {
   if(h2 == NULL)
   {
@@ -122,8 +119,7 @@ Meld(HeapP * h1, HeapP * h2)
 /*
  * This function needs some aesthetic changes.
  */
-INLINE HeapP *
-DeleteMin(HeapP * h)
+INLINE HeapP *DeleteMin(HeapP * h)
 {
   int   r, rMax, j;
   HeapP * h1;
@@ -268,8 +264,7 @@ DeleteMin(HeapP * h)
   return(min);
 }
 
-INLINE HeapP *
-DecreaseKey(HeapP * h, HeapP * i, int delta)
+INLINE HeapP *DecreaseKey(HeapP * h, HeapP * i, int delta)
 {
   assert(h != NULL);
   assert(i != NULL);
@@ -337,8 +332,7 @@ FixRank(HeapP * h, int delta)
   while(h != NULL);
 }
 
-INLINE HeapP *
-Delete(HeapP * h, HeapP * i)
+INLINE HeapP *Delete(HeapP * h, HeapP * i)
 {
   HeapP * h1;
   HeapP * h2;
@@ -462,8 +456,7 @@ AddEntry(HeapP * h1, HeapP * h2)
  * Return values:
  *   a smaller heap, possibly NULL
  */
-INLINE HeapP *
-RemoveEntry(HeapP * h)
+INLINE HeapP *RemoveEntry(HeapP * h)
 {
   assert(h != NULL);
 
@@ -491,8 +484,7 @@ RemoveEntry(HeapP * h)
  * Return values:
  *   a single entry heap
  */
-INLINE HeapP *
-NewHeap(Item * i)
+INLINE HeapP *NewHeap(Item * i)
 {
   HeapP * h;
 
@@ -514,14 +506,12 @@ NewHeap(Item * i)
   return(h);
 }
 
-INLINE Item *
-ItemOf(HeapP * h)
+INLINE Item *ItemOf(HeapP * h)
 {
   return(ITEM(h));
 }
 
-INLINE HeapP *
-Find(HeapP * h, Item * item)
+INLINE HeapP *Find(HeapP * h, Item * item)
 {
   HeapP * h1;
   HeapP * h2;

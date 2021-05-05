@@ -49,7 +49,7 @@
  *   FALSE:	check failed
  *   TRUE:	check succeeded
  */
-int  SanityCheck1(_Ptr<Heap> h, _Ptr<Item> i);
+int  SanityCheck1(_Ptr<HeapP> h, _Ptr<Item> i);
 
 /*
  * Check the rank fields in the structure.
@@ -64,7 +64,7 @@ int  SanityCheck1(_Ptr<Heap> h, _Ptr<Item> i);
  *   FALSE:	check failed
  *   TRUE:	check succeeded
  */
-int  SanityCheck2(_Ptr<Heap> h);
+int  SanityCheck2(_Ptr<HeapP> h);
 
 /*
  * Check the rank fields in the structure.
@@ -82,7 +82,7 @@ int  SanityCheck2(_Ptr<Heap> h);
  *   FALSE:	check failed
  *   TRUE:	check succeeded
  */
-int  SanityCheck3(_Ptr<Heap> h, int rank);
+int  SanityCheck3(_Ptr<HeapP> h, int rank);
 
 /*
  * Print the structure in some human readable form.  It is printed in a
@@ -98,7 +98,7 @@ int  SanityCheck3(_Ptr<Heap> h, int rank);
  * Return values:
  *   none
  */
-void PrettyPrint(_Ptr<Heap> h);
+void PrettyPrint(_Ptr<HeapP> h);
 
 #pragma CHECKED_SCOPE OFF
 
