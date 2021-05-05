@@ -10,9 +10,9 @@
 #ifndef EM3D
 #define EM3D
 
-#include <stdchecked.h>
 
-void dealwithargs(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc));
+
+void dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc));
 void printstats(void);
 void srand48(long);
 long lrand48(void);
@@ -21,10 +21,10 @@ long lrand48(void);
 #include <stdlib.h>
 
 #pragma CHECKED_SCOPE ON
-#define chatting(...) unchecked { printf(__VA_ARGS__); }
+#define chatting(...) _Unchecked { printf(__VA_ARGS__); }
 
-// extern char * min_ptr;
-// extern char * max_ptr;
+// extern char * min__Ptr;
+// extern char * max__Ptr;
 
 extern int n_nodes; /* number of nodes (E and H) */
 extern int d_nodes; /* degree of nodes */
@@ -34,33 +34,33 @@ extern int local_p; /* percentage of local edges */
 #define assert(a) if (!a) { puts("Assertion failure"); exit(-1); }
 
 typedef struct node_t {
-  ptr<double> value;
-  ptr<struct node_t> next;
-  array_ptr<ptr<struct node_t>> to_nodes : count(degree); /* array of nodes pointed to */
-  array_ptr<ptr<double>> from_values : count(from_count); /* array of ptrs to vals where data comes from */
-  array_ptr<double> coeffs : count(from_count); /* array of coeffs on edges */
+  _Ptr<double> value;
+  _Ptr<struct node_t> next;
+  _Array_ptr<_Ptr<struct node_t>> to_nodes : count(degree); /* array of nodes pointed to */
+  _Array_ptr<_Ptr<double>> from_values : count(from_count); /* array of _Ptrs to vals where data comes from */
+  _Array_ptr<double> coeffs : count(from_count); /* array of coeffs on edges */
   int from_count;
   int from_length;
   int degree;
 } node_t;
 
 typedef struct graph_t {
-  ptr<node_t> e_nodes checked[PROCS];
-  ptr<node_t> h_nodes checked[PROCS];
+  _Ptr<node_t> e_nodes _Checked[PROCS];
+  _Ptr<node_t> h_nodes _Checked[PROCS];
 } graph_t;
 
 typedef struct table_arr_t {
-  array_ptr<ptr<node_t>> table : count(size);
+  _Array_ptr<_Ptr<node_t>> table : count(size);
   int size;
 } table_arr_t;
 
 typedef struct table_t {
-  table_arr_t e_table checked[PROCS];
-  table_arr_t h_table checked[PROCS];
+  table_arr_t e_table _Checked[PROCS];
+  table_arr_t h_table _Checked[PROCS];
 } table_t;
 
 /* Perform 1 step for a nodelist */
-void compute_nodes(ptr<node_t> nodelist);
+void compute_nodes(_Ptr<node_t> nodelist);
 double gen_uniform_double(void);
 
 #pragma CHECKED_SCOPE OFF

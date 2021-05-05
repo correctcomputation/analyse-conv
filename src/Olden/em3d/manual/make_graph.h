@@ -7,9 +7,7 @@
  *
  */
 
- #include <stdchecked.h>
-
 /* initialize graph returns a structure with pointers to lists of e and h
  * nodes.
  */ 
-ptr<graph_t> initialize_graph(void);
+_Ptr<graph_t> initialize_graph(void);
