@@ -31,3 +31,19 @@ PATH_TO_SRC = ../
 
 include $(PATH_TO_SRC)Makefile.common
 
+revert/%.c: manual/%.c
+	mkdir -p $(dir $@)
+	$(C3) -f $^ > $@
+	perl -pi -e 's/(\w+)<.*?>/\1/g' $@
+
+revert/netstr.h: manual/netstr.h
+	mkdir -p $(dir $@)
+	sed 's/: count(l)//g' $^ > tmp.netstr.h
+	$(C3) -f tmp.netstr.h > $@
+	rm tmp.netstr.h
+
+revert/hacks.h: manual/hacks.h
+	mkdir -p $(dir $@)
+	$(C3) -f $^ > $@
+	sed -i 's/: BOUNDS//g' $@
+

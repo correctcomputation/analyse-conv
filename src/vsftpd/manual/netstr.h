@@ -4,7 +4,7 @@
 struct mystr;
 struct vsf_session;
 
-typedef _Ptr<int (_Ptr<struct vsf_session> p_sess, _Array_ptr<char> : count(l), unsigned int l)> str_netfd_read_t;
+typedef _Ptr<int (_Ptr<struct vsf_session>, _Array_ptr<char> : count(l), unsigned int l)> str_netfd_read_t;
 
 /* str_netfd_alloc()
  * PURPOSE

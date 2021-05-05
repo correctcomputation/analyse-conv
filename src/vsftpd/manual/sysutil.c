@@ -1067,10 +1067,7 @@ char *vsf_sysutil_realpath(const char *path : itype(_Nt_array_ptr<const char>), 
     }
     else
     {
-      _Nt_array_ptr<char const> original_dir = 0;
-      _Unchecked {
-        strndup(path, filename-path);
-      }
+      _Nt_array_ptr<char const> original_dir = strndup(path, filename-path);
       filename++;
       _Unchecked {
         resolved_dir = _Assume_bounds_cast<_Nt_array_ptr<char>>(realpath((const char*) original_dir, NULL), count(0));
@@ -1505,9 +1502,9 @@ _Nt_array_ptr<const char> vsf_sysutil_statbuf_get_perms(const struct vsf_sysutil
   if (p_stat->st_mode & S_IROTH) perms[7] = 'r';
   if (p_stat->st_mode & S_IWOTH) perms[8] = 'w';
   if (p_stat->st_mode & S_IXOTH) perms[9] = 'x';
-  if (p_stat->st_mode & S_ISUID) perms[3] = (perms[3] == 'x') ? 's' : 'S';
-  if (p_stat->st_mode & S_ISGID) perms[6] = (perms[6] == 'x') ? 's' : 'S';
-  if (p_stat->st_mode & S_ISVTX) perms[9] = (perms[9] == 'x') ? 't' : 'T';
+  if (p_stat->st_mode & S_ISUID) perms[3] = (perms[3] == 'x') ? 's' : /**/ 'S';
+  if (p_stat->st_mode & S_ISGID) perms[6] = (perms[6] == 'x') ? 's' : /**/ 'S';
+  if (p_stat->st_mode & S_ISVTX) perms[9] = (perms[9] == 'x') ? 't' : /**/ 'T';
   perms[10] = '\0';
   return perms;
 }
@@ -1721,11 +1718,7 @@ vsf_sysutil_readlink(_Nt_array_ptr<const char> p_filename, _Array_ptr<char> p_de
   if (bufsiz == 0) {
     return -1;
   }
-  _Nt_array_ptr<char> p_dest_nt = 0;
-  _Unchecked {
-    p_dest_nt = (_Nt_array_ptr<char>) p_dest;
-  }
-  retval = readlink(p_filename,  p_dest_nt, bufsiz - 1);
+  retval = readlink(p_filename,  p_dest, bufsiz - 1);
   if (retval < 0)
   {
     return retval;
