@@ -90,7 +90,11 @@ revert/%.h: manual/%.h
 # As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
 # fail and bisort to be omitted from the results. We think it's probably
 # unimportant, so ignore it for now.
-THREEC_FLAGS = -allow-unwritable-changes $(addprefix -extra-arg-before=,$(CFLAGS))
+#
+# As of 2021-05-05, Matt found the -warn-all-root-cause output helpful in some
+# cases. Hopefully others aren't too bothered by the extra output in cases in
+# which it isn't helpful.
+THREEC_FLAGS = -allow-unwritable-changes -warn-all-root-cause $(addprefix -extra-arg-before=,$(CFLAGS))
 
 $(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
 	$(THREEC) -alltypes -dump-stats -stats-output=origstats.json -base-dir=orig -output-dir=3c-orig \
