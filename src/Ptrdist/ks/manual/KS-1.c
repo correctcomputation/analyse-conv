@@ -39,7 +39,9 @@ ReadNetList(_Nt_array_ptr<char> fname)
     _Ptr<FILE> inFile = 0;
     char line _Nt_checked[BUF_LEN + 1] = { 0 };
     unsigned long net, dest;
-    ModulePtr node = 0, prev = 0, head = 0;
+    ModulePtr node = 0;
+    ModulePtr prev = 0;
+    ModulePtr head = 0;
 
     TRY(inFile = fopen(fname, "r"),
 	inFile != NULL, "ReadData",
