@@ -52,39 +52,29 @@ gathermanualstats:
 	$(THREEC) -alltypes -dump-stats -stats-output=manualstats.json -base-dir=manual -output-dir=3c-manual \
 		$(THREEC_FLAGS) $(SOURCES_MANUAL) -- 
 
-3c-orig: $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG)
+$(PROG_ORIG): orig $(OBJS_ORIG)
+	$(CC) -o $@ $(OBJS_ORIG) $(LDFLAGS)
+
+$(PROG_MANUAL): manual $(OBJS_MANUAL)
+	$(CC) -o $@ $(OBJS_MANUAL) $(LDFLAGS)
+
+$(PROG_REVERT): revert $(OBJS_REVERT)
+	$(CC) -o $@ $(OBJS_REVERT) $(LDFLAGS)
+
+$(PROG_3C_ORIG): 3c-orig $(OBJS_3C_ORIG)
+	$(CC) -o $@ $(OBJS_3C_ORIG) $(LDFLAGS)
+
+$(PROG_3C_REVERT): 3c-revert $(OBJS_3C_REVERT)
+	$(CC) -o $@ $(OBJS_3C_REVERT) $(LDFLAGS)
 
 revert: $(HDRS_REVERT) $(SOURCES_REVERT)
 
-3c-revert: $(HDRS_3C_REVERT) $(SOURCES_3C_REVERT)
-
-$(PROG_ORIG): $(OBJS_ORIG)
-	$(CC) -o $@ $(OBJS_ORIG) $(LDFLAGS)
-
-$(PROG_MANUAL): $(OBJS_MANUAL)
-	$(CC) -o $@ $(OBJS_MANUAL) $(LDFLAGS)
-
-$(PROG_REVERT): $(OBJS_REVERT)
-	$(CC) -o $@ $(OBJS_REVERT) $(LDFLAGS)
-
-$(PROG_3C_ORIG): $(OBJS_3C_ORIG)
-	$(CC) -o $@ $(OBJS_3C_ORIG) $(LDFLAGS)
-
-$(PROG_3C_REVERT): $(OBJS_3C_REVERT)
-	$(CC) -o $@ $(OBJS_3C_REVERT) $(LDFLAGS)
-
-$(OBJS_ORIG): $(HDRS_ORIG)
-$(OBJS_MANUAL): $(HDRS_MANUAL)
-$(OBJS_REVERT): $(HDRS_REVERT)
-$(OBJS_3C_ORIG): $(HDRS_3C_ORIG)
-$(OBJS_3C_REVERT): $(HDRS_3C_REVERT)
-
 revert/%.c: manual/%.c
-	mkdir -p revert
+	mkdir -p $(dir $@)
 	$(C3) -f $^ > $@
 
 revert/%.h: manual/%.h
-	mkdir -p revert
+	mkdir -p $(dir $@)
 	$(C3) -f $^ > $@
 
 # As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
@@ -92,15 +82,15 @@ revert/%.h: manual/%.h
 # unimportant, so ignore it for now.
 THREEC_FLAGS = -allow-unwritable-changes $(addprefix -extra-arg-before=,$(CFLAGS))
 
-$(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
+3c-orig: orig
 	$(THREEC) -alltypes -dump-stats -stats-output=origstats.json -base-dir=orig -output-dir=3c-orig \
 		$(THREEC_FLAGS) $(SOURCES_ORIG) -- && \
-		$(PATH_TO_SRC)missing-files.sh orig 3c-orig
+		cp -r -n orig/* 3c-orig
 
-$(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
+3c-revert: revert
 	$(THREEC) -alltypes -dump-stats -stats-output=revertstats.json  -base-dir=revert -output-dir=3c-revert \
 		$(THREEC_FLAGS) $(SOURCES_REVERT) -- && \
-		$(PATH_TO_SRC)missing-files.sh revert 3c-revert
+		cp -r -n revert/* 3c-revert
 
 test: test-orig test-manual test-revert test-3c-orig test-3c-revert
 

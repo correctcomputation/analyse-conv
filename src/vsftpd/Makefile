@@ -16,13 +16,15 @@ HDRS = access.h     ftpcodes.h     oneprocess.h      readwrite.h       strlist.h
 	filesize.h   logging.h      privops.h         sslslave.h        twoprocess.h \
 	filestr.h    ls.h           privsock.h        standalone.h      utility.h \
 	ftpcmdio.h   netstr.h       ptracesandbox.h   str.h             vsftpver.h \
+	port/aix_bogons.h   port/dirfd_extras.h  port/irix_bogons.h   port/solaris_bogons.h \
+	port/cmsg_extras.h  port/hpux_bogons.h   port/porting_junk.h  port/tru64_bogons.h
 
-
-CFLAGS = -g -w -O0 -idirafter dummyinc
+CFLAGS = -g -w -O0 -Wall -W -Wshadow -Werror -Wformat-security \
+	-D_FORTIFY_SOURCE=2 -idirafter dummyinc
 LDFLAGS = -Wl `./vsf_findlibs.sh`
 
 RUN_OPTIONS =
-OUTPUT = 
+OUTPUT =
 STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../
