@@ -1,13 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdchecked.h>
+
 
 #pragma CHECKED_SCOPE ON
 
 #ifdef TORONTO
 /* Toronto's hack */
-#define ALLOC(p, sz)      calloc(1, sz)
 #define ALLOC(T, p, sz)      calloc<T>(1, sz)
 #define chatting(...) _Unchecked { printf(__VA_ARGS__); } 
 extern int NumNodes, NDim;
@@ -15,27 +14,25 @@ extern int NumNodes, NDim;
 
 extern int flag;
 
-int atoi(const char * : itype(nt_array_ptr<const char>));
-int dealwithargs(int argc, array_ptr<nt_array_ptr<char>> argv : count(argc));
+int dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc));
 
 /* For copyright information, see olden_v1.0/COPYRIGHT */
 
 struct tree {
   int sz;
   double x,y;
-  ptr<struct tree> left;
-  ptr<struct tree> right;
+  _Ptr<struct tree> left;
+  _Ptr<struct tree> right;
 #ifdef TORONTO
-  ptr<struct tree> next;
-  ptr<struct tree> prev;
+  _Ptr<struct tree> next;
+  _Ptr<struct tree> prev;
 #else
-  ptr<struct tree> next {95};
-  ptr<struct tree> prev {95};
+  struct tree *next {95}, *prev {95};
 #endif
 
 };
 
-typedef ptr<struct tree> Tree;
+typedef _Ptr<struct tree> Tree;
 
 #ifdef ORDER
 

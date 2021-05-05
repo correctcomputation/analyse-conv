@@ -18,7 +18,8 @@ typedef struct tree {
   double x,y;
   struct tree *left, *right;
 #ifdef TORONTO
-  struct tree *next, *prev;
+  struct tree *next;
+  struct tree *prev;
 #else
   struct tree *next {95}, *prev {95};
 #endif
