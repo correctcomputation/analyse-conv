@@ -1,7 +1,7 @@
 #!/bin/bash 
 # Sanity check on environemtn
 
-if [[ -z $CC || -z $THREEC || -z $C3 ]]; then
+if [[ -z $CC || -z $THREEC || -z $THREEC_WORKTREE || -z $C3 ]]; then
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
   echo "!!!            Please set env correctly! See README.md                       !!!"
   echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"

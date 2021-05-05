@@ -1,5 +1,11 @@
 # Some of these patterns are a bit loose. Hope we don't get false positives.
 
+# Macro expansion output directories
+orig-em-tmp
+orig-em
+manual-em-tmp
+manual-em
+
 # C3 reverted output directory
 revert
 

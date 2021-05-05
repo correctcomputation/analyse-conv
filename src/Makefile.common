@@ -13,16 +13,38 @@
 # CC
 # C3
 # THREEC
+# THREEC_WORKTREE
+
+# `orig` and `manual` are not macro-expanded; `orig-em` and `manual-em` are
+# (`em` stands for "expand macros"). The remaining versions of the code
+# (`revert`, `3c-orig`, `3c-revert`) are all macro-expanded and don't have a
+# distinguishing suffix. The inconsistency is a little awkward, but it seemed a
+# lesser evil than either (1) renaming the non-expanded `orig` and `manual` or
+# (2) the churn of adding the `em` suffix in more places.
 
 HDRS_ORIG = $(addprefix orig/,$(HDRS))
 SOURCES_ORIG = $(addprefix orig/,$(SOURCES))
-OBJS_ORIG = $(SOURCES_ORIG:.c=.o)
-PROG_ORIG = $(PROG)_orig
+
+HDRS_ORIG_EM_TMP = $(addprefix orig-em-tmp/,$(HDRS))
+SOURCES_ORIG_EM_TMP = $(addprefix orig-em-tmp/,$(SOURCES))
+OBJS_ORIG_EM_TMP = $(SOURCES_ORIG_EM_TMP:.c=.o)
+
+HDRS_ORIG_EM = $(addprefix orig-em/,$(HDRS))
+SOURCES_ORIG_EM = $(addprefix orig-em/,$(SOURCES))
+OBJS_ORIG_EM = $(SOURCES_ORIG_EM:.c=.o)
+PROG_ORIG_EM = $(PROG)_orig_em
 
 HDRS_MANUAL = $(addprefix manual/,$(HDRS))
 SOURCES_MANUAL = $(addprefix manual/,$(SOURCES))
-OBJS_MANUAL = $(SOURCES_MANUAL:.c=.o)
-PROG_MANUAL = $(PROG)_manual
+
+HDRS_MANUAL_EM_TMP = $(addprefix manual-em-tmp/,$(HDRS))
+SOURCES_MANUAL_EM_TMP = $(addprefix manual-em-tmp/,$(SOURCES))
+OBJS_MANUAL_EM_TMP = $(SOURCES_MANUAL_EM_TMP:.c=.o)
+
+HDRS_MANUAL_EM = $(addprefix manual-em/,$(HDRS))
+SOURCES_MANUAL_EM = $(addprefix manual-em/,$(SOURCES))
+OBJS_MANUAL_EM = $(SOURCES_MANUAL_EM:.c=.o)
+PROG_MANUAL_EM = $(PROG)_manual_em
 
 HDRS_REVERT = $(addprefix revert/,$(HDRS))
 SOURCES_REVERT = $(addprefix revert/,$(SOURCES))
@@ -48,9 +70,14 @@ convert:
 	-make 3c-revert
 	-make gathermanualstats
 
+orig-em: $(HDRS_ORIG_EM) $(SOURCES_ORIG_EM)
+
+manual-em: $(HDRS_MANUAL_EM) $(SOURCES_MANUAL_EM)
+
+# TODO: This should treat the input files as unwritable.
 gathermanualstats:
-	$(THREEC) -alltypes -dump-stats -stats-output=manualstats.json -base-dir=manual -output-dir=3c-manual \
-		$(THREEC_FLAGS) $(SOURCES_MANUAL) -- 
+	$(THREEC) -alltypes -dump-stats -stats-output=manualstats.json -base-dir=manual-em -output-dir=3c-manual \
+		$(THREEC_FLAGS) $(SOURCES_MANUAL_EM) -- 
 
 3c-orig: $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG)
 
@@ -58,11 +85,11 @@ revert: $(HDRS_REVERT) $(SOURCES_REVERT)
 
 3c-revert: $(HDRS_3C_REVERT) $(SOURCES_3C_REVERT)
 
-$(PROG_ORIG): $(OBJS_ORIG)
-	$(CC) -o $@ $(OBJS_ORIG) $(LDFLAGS)
+$(PROG_ORIG_EM): $(OBJS_ORIG_EM)
+	$(CC) -o $@ $(OBJS_ORIG_EM) $(LDFLAGS)
 
-$(PROG_MANUAL): $(OBJS_MANUAL)
-	$(CC) -o $@ $(OBJS_MANUAL) $(LDFLAGS)
+$(PROG_MANUAL_EM): $(OBJS_MANUAL_EM)
+	$(CC) -o $@ $(OBJS_MANUAL_EM) $(LDFLAGS)
 
 $(PROG_REVERT): $(OBJS_REVERT)
 	$(CC) -o $@ $(OBJS_REVERT) $(LDFLAGS)
@@ -73,19 +100,49 @@ $(PROG_3C_ORIG): $(OBJS_3C_ORIG)
 $(PROG_3C_REVERT): $(OBJS_3C_REVERT)
 	$(CC) -o $@ $(OBJS_3C_REVERT) $(LDFLAGS)
 
-$(OBJS_ORIG): $(HDRS_ORIG)
-$(OBJS_MANUAL): $(HDRS_MANUAL)
+# We don't do this for {ORIG,MANUAL}_EM_TMP because we only support running that
+# process on the whole set of files at once anyway.
+$(OBJS_ORIG_EM): $(HDRS_ORIG_EM)
+$(OBJS_MANUAL_EM): $(HDRS_MANUAL_EM)
 $(OBJS_REVERT): $(HDRS_REVERT)
 $(OBJS_3C_ORIG): $(HDRS_3C_ORIG)
 $(OBJS_3C_REVERT): $(HDRS_3C_REVERT)
 
-revert/%.c: manual/%.c
-	mkdir -p revert
-	$(C3) -f $^ > $@
+# TODO: Reduce code duplication between this and manual-em (and for that matter,
+# all the other duplication in this makefile)?
+$(SOURCES_ORIG_EM) $(HDRS_ORIG_EM) &:
+# Use a separate temporary directory to ensure our build of orig-em is clean and
+# we don't copy scratch files created by convert_project (convert_all.sh, etc.)
+# that we currently don't have a way to turn off. Leave the temporary directory
+# around, even on success, in case we need to troubleshoot macro expansion.
+	rm -rf orig-em-tmp
+	mkdir orig-em-tmp
+	cp $(HDRS_ORIG) $(SOURCES_ORIG) orig-em-tmp
+	bear --cdb orig-em-tmp/compile_commands.json make $(OBJS_ORIG_EM_TMP)
+# See https://correct-computation.slack.com/archives/G01GKGKHMFD/p1619280418048000?thread_ts=1619278307.042100&cid=G01GKGKHMFD
+	(cd orig-em-tmp && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
+	mkdir orig-em
+	cp $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP) orig-em
 
-revert/%.h: manual/%.h
+$(SOURCES_MANUAL_EM) $(HDRS_MANUAL_EM) &:
+	rm -rf manual-em-tmp
+	mkdir manual-em-tmp
+	cp $(HDRS_MANUAL) $(SOURCES_MANUAL) manual-em-tmp
+	bear --cdb manual-em-tmp/compile_commands.json make $(OBJS_MANUAL_EM_TMP)
+	(cd manual-em-tmp && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
+	mkdir manual-em
+	cp $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP) manual-em
+
+# If C3 fails, don't leave an empty file. This isn't sufficient to avoid
+# silently getting wrong results from create-stats.sh if reversion failed, but
+# it's still the right thing to do. TODO: Use .DELETE_ON_ERROR?
+revert/%.c: manual-em/%.c
 	mkdir -p revert
-	$(C3) -f $^ > $@
+	$(C3) -f $^ > $@ || { $(RM) $@; false; }
+
+revert/%.h: manual-em/%.h
+	mkdir -p revert
+	$(C3) -f $^ > $@ || { $(RM) $@; false; }
 
 # As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
 # fail and bisort to be omitted from the results. We think it's probably
@@ -96,10 +153,10 @@ revert/%.h: manual/%.h
 # which it isn't helpful.
 THREEC_FLAGS = -allow-unwritable-changes -warn-all-root-cause $(addprefix -extra-arg-before=,$(CFLAGS))
 
-$(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG) $(HDRS_ORIG)
-	$(THREEC) -alltypes -dump-stats -stats-output=origstats.json -base-dir=orig -output-dir=3c-orig \
-		$(THREEC_FLAGS) $(SOURCES_ORIG) -- && \
-		$(PATH_TO_SRC)missing-files.sh orig 3c-orig
+$(SOURCES_3C_ORIG) $(HDRS_3C_ORIG) &: $(SOURCES_ORIG_EM) $(HDRS_ORIG_EM)
+	$(THREEC) -alltypes -dump-stats -stats-output=origstats.json -base-dir=orig-em -output-dir=3c-orig \
+		$(THREEC_FLAGS) $(SOURCES_ORIG_EM) -- && \
+		$(PATH_TO_SRC)missing-files.sh orig-em 3c-orig
 
 $(SOURCES_3C_REVERT) $(HDRS_3C_REVERT) &: $(SOURCES_REVERT) $(HDRS_REVERT)
 	$(THREEC) -alltypes -dump-stats -stats-output=revertstats.json  -base-dir=revert -output-dir=3c-revert \
@@ -117,13 +174,13 @@ bear-test: clean-objs clean-progs convert
 	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
 	done
 
-test-orig: $(PROG_ORIG)
-	./$(PROG_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+test-orig-em: $(PROG_ORIG_EM)
+	./$(PROG_ORIG_EM) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
 	diff -w $(OUTPUT) ACTUAL_OUTPUT
 	$(RM) ACTUAL_OUTPUT
 
-test-manual: $(PROG_MANUAL)
-	./$(PROG_MANUAL) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+test-manual-em: $(PROG_MANUAL_EM)
+	./$(PROG_MANUAL_EM) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
 	diff -w $(OUTPUT) ACTUAL_OUTPUT
 	$(RM) ACTUAL_OUTPUT
 
@@ -160,7 +217,10 @@ stats: diffs.dat
 diffs.dat diffs.sum: clean-objs
 	NAME=$(PROG) $(PATH_TO_SRC)create-stats.sh
 
-clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs clean-reports
+clean: clean-em clean-3c-orig clean-revert clean-3c-revert clean-3c-manual clean-objs clean-progs clean-diffs clean-reports
+
+clean-em:
+	$(RM) -rf orig-em orig-em-tmp manual-em manual-em-tmp
 
 clean-reports:
 	$(RM) -dr workdir
@@ -172,10 +232,10 @@ clean-diffs:
 	$(RM) origstats.json* revertstats.json* manualstats.json* PerWildPtrStats.json WildPtrStats.json
 
 clean-objs:
-	$(RM) $(OBJS_ORIG) $(OBJS_MANUAL) $(OBJS_3C_ORIG) $(OBJS_REVERT) $(OBJS_3C_REVERT)
+	$(RM) $(OBJS_ORIG_EM) $(OBJS_MANUAL_EM) $(OBJS_3C_ORIG) $(OBJS_REVERT) $(OBJS_3C_REVERT)
 
 clean-progs:
-	$(RM) $(PROG_ORIG) $(PROG_MANUAL) $(PROG_3C_ORIG) $(PROG_REVERT) $(PROG_3C_REVERT)
+	$(RM) $(PROG_ORIG_EM) $(PROG_MANUAL_EM) $(PROG_3C_ORIG) $(PROG_REVERT) $(PROG_3C_REVERT)
 
 clean-3c-orig:
 	$(RM) $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG) $(OBJS_3C_ORIG) $(PROG_3C_ORIG)
@@ -192,3 +252,7 @@ clean-3c-revert:
 	$(RM) -dr 3c-revert
 	$(RM) $(PROG_3C_REVERT)
 
+# Output directory created by `gathermanualstats`; ideally would never need to
+# be created if we could make 3C treat everything as unwritable.
+clean-3c-manual:
+	$(RM) -dr 3c-manual
