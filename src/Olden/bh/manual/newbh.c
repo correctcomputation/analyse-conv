@@ -41,7 +41,11 @@ void stepsystem(treeptr t, int nstep);
 treeptr old_main(void);
 void my_free(nodeptr n);
 bodyptr ubody_alloc(int p);
+// `movebodies` is undefined and unused, and it is preventing the wild pointer
+// inside its `bodyptr` parameter type from becoming checked.
+#if 0
 bodyptr movebodies(bodyptr list, int proc);
+#endif
 void freetree(nodeptr n);
 void freetree1(nodeptr n);
 int old_subindex(icstruct ic, int l);
@@ -757,7 +761,11 @@ hgstruct gravsub(nodeptr p, hgstruct hg)
 
 double ceil(double);
 
+// `body_alloc` is undefined and unused, and it is preventing the wild pointer
+// inside its `bodyptr` parameter type from becoming checked.
+#if 0
 bodyptr body_alloc(int p, real p0, real p1, real p2, real v0, real v1, real v2, real a0, real a1, real a2, real mass, bodyptr ob);
+#endif
 bodyptr ubody_alloc(int p);
 cellptr cell_alloc(int p);
 
