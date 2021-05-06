@@ -12,6 +12,12 @@ export THREEC_WORKTREE=path/to/3c-worktree
 `$THREEC_WORKTREE/clang/tools/3c` should exist. This is used to run the macro
 expander.)
 
+By default, macro-expanded versions of the `orig` and `manual` code of each
+program are generated in the `orig-em` and `manual-em` directories and used for
+all subsequent processing. To get results without macro expansions, you can set
+`NO_MACRO_EXPANSION=1` to turn the macro expansion step into a no-op that copies
+the files unmodified.
+
 # Running the expirement 
 Run `make` to produce the tables 
 
