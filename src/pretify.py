@@ -12,15 +12,24 @@ rows = rows[1:]
 def escape(s):
     return s.replace('%', '\\%').replace('#', '\\#')
 
-cs = 'c' * len(header)
+cs = 'c' * (len(header) + 1)
 print('\\tabcolsep=0.11cm')
 print('\\begin{tabular}{||%s||}' % ' '.join(cs))
 print('\\hline')
-print(' & '.join(map(escape, header)) + ' \\\\ [0.5ex]')
+print('BM & ' + ' & '.join(map(escape, header)) + ' \\\\ [0.5ex]')
 print('\\hline\\hline')
+bm = 'olde'
+rownum = 0
 for row in rows:
-    print(' & '.join(map(escape, row)) + ' \\\\')
+    if row[0 : 2] == ['anagram','manual']:
+        bm = 'ptrd'
+        print('\\hline')
+    if rownum % 6 < 3: print('\\rowcolor{white}')
+    if rownum % 6 >= 3: print('\\rowcolor[rgb]{0.8,0.8,0.8}')
+    print(bm + ' & ' + ' & '.join(map(escape, row)) + ' \\\\')
     print('\\hline')
+    bm = ''
+    rownum += 1
 
 print('\\end{tabular}')
 
