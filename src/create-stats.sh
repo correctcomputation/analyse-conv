@@ -50,7 +50,7 @@ function count_lines() {
   echo $(sloccount $1 | grep -e "^ansic" | awk '{ print $2 }')
 }
 
-for version in "manual" "revert" "orig" ; do 
+for version in "manual" "revert" "tweak" "orig" ; do 
   if [ "$version" = "manual" ]; then 
     ref=$(compute_diff "orig-em"  "revert" )
     ref_total=$(count_lines "orig-em" )
@@ -63,6 +63,16 @@ for version in "manual" "revert" "orig" ; do
     left=$(compute_filtered_diff "3c-revert" "manual-em")
     left_total=$(count_lines "3c-revert") 
     echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
+  elif [ "$version" = "tweak" ]; then
+    if [ -d "tweak" ]; then
+      ref=$(compute_diff "orig-em"  "tweak-em" )
+      ref_total=$(count_lines "orig-em" )
+      anno=$(compute_diff "tweak-em" "3c-tweak") 
+      anno_total=$(count_lines "tweak-em") 
+      left=$(compute_filtered_diff "3c-tweak" "manual-em")
+      left_total=$(count_lines "3c-tweak") 
+      echo "$version,$ref,$ref_total,$anno,$anno_total,$left,$left_total" >> diffs.sum
+    fi
   elif [ "$version" = "orig" ]; then 
     anno=$(compute_diff "orig-em" "3c-orig") 
     anno_total=$(count_lines "orig-em") 
