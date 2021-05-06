@@ -100,7 +100,12 @@ with open('./' + program + '/diffs.sum') as f:
     in_rows = [row for row in reader][1:]
 
 
-outrows = [process_row(row) for row in in_rows]
+try: 
+    outrows = [process_row(row) for row in in_rows]
+except Exception as e:
+    print('Error converting ' + program + '! :' + str(e), file=sys.stderr)
+    exit(1)
+
 
 # Write to workdir
 
