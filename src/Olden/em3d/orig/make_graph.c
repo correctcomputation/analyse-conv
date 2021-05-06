@@ -31,7 +31,8 @@ node_t **make_table(int size, int procname) {
 /* We expect node_table to be a local table of e or h nodes */
 void fill_table(node_t **node_table, double *values, int size, int procname)
 {
-  node_t *cur_node, *prev_node;
+  node_t *cur_node;
+  node_t *prev_node;
   int i;
   
   prev_node = (node_t *)malloc(sizeof(node_t));
