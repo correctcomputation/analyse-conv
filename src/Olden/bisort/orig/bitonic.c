@@ -27,7 +27,8 @@ int flag=0,foo=0;
 #define NewNode(h,v,procid) LocalNewNode(h,v)
 
 void InOrder(HANDLE *h) {
-  HANDLE *l, *r;
+  HANDLE *l;
+  HANDLE *r;
   if ((h != NIL)) {
     l = h->left;
     r = h->right;
@@ -134,7 +135,9 @@ int spr_val,dir;
 
 { int rightexchange;
   int elementexchange;
-  HANDLE *pl,*pll,*plr;
+  HANDLE *pl;
+  HANDLE *pll;
+  HANDLE *plr;
   HANDLE *pr,*prl,*prr;
   HANDLE *rl;
   HANDLE *rr;
