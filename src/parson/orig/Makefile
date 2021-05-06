@@ -2,14 +2,13 @@ CC = clang
 CFLAGS = -O0 -g -Wall -Wextra -std=c99 -pedantic-errors
 
 all: test
+OBJ = tests.o parson.o 
 
-.PHONY: compile test
-test: tests.c parson.c
-	$(CC) $(CFLAGS) -o $@ tests.c parson.c
-	./$@
+%.o: %.c
+	$(CC) -c -o $@ $< $(CFLAGS)
 
-compile:
-	$(CC) $(CFLAGS) -o test tests.c parson.c
+test: $(OBJ)
+	$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
 	rm -f test *.o
