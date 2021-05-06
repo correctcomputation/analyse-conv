@@ -255,7 +255,8 @@ struct List *sim(struct Village *village)
 {
   int                    i;
   struct Patient         *patient;
-  struct List            *l, *up;
+  struct List            *l;
+  struct List            *up;
   struct Hosp            *h;
   struct List            *val[4];
   

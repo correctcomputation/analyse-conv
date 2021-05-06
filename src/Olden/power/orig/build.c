@@ -10,6 +10,7 @@
  * University of California at Berkeley
  */
 
+#include <stdlib.h>
 #include "power.h"
 
 Root build_tree() 

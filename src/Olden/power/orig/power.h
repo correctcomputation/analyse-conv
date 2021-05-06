@@ -12,16 +12,12 @@
  *
  */
 
-void *malloc(unsigned Size);
-
 typedef struct demand {
   double P;
   double Q;
 } Demand;
 
 #include <math.h>
-
-#define NULL 0
 
 #ifdef SMALL_PROBLEM_SIZE   /* __llvm__ SCALED BACK SETTINGS */
 #define NUM_FEEDERS 8
