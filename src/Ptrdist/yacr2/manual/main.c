@@ -35,8 +35,7 @@
  */
 
 int
-main(int argc,
-     _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
+main(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
     ulong      	done;
     ulong	fail;

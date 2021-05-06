@@ -7,8 +7,6 @@
 
 #include <string.h>
 
-#define OPTION_CODE
-
 
 /*
  *
@@ -30,8 +28,7 @@
  */
 
 void
-Option(int argc,
-       _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
+Option(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc))
 {
     /*
      * Check arguments.

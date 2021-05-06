@@ -14,9 +14,6 @@
 #define min(a,b)	((a<b) ? a : b)
 #define max(a,b)	((a<b) ? b : a)
 
-#undef bzero
-void bzero(void * : byte_count(n), size_t n);
-
 /*
  *	plane allocation structures and routines
  */
@@ -89,9 +86,7 @@ FreeAllocMaps(void)
  *	they are sorted as needed by the line drawer
  */
 void
-DrawSegment(_Array_ptr<char> plane : count((channelColumns+1)*(channelTracks+2)),
-	    unsigned long x1, unsigned long y1,
-	    unsigned long x2, unsigned long y2)
+DrawSegment(_Array_ptr<char> plane : count((channelColumns+1)*(channelTracks+2)),	    unsigned long x1, unsigned long y1,	    unsigned long x2, unsigned long y2)
 {
     unsigned long x, y;
 
@@ -163,9 +158,7 @@ HasVia(unsigned long x, unsigned long y)
  *	they are sorted as needed by the line drawer
  */
 int
-SegmentFree(_Array_ptr<char> plane : count((channelColumns+1)*(channelTracks+2)),
-	    unsigned long x1, unsigned long y1,
-	    unsigned long x2, unsigned long y2)
+SegmentFree(_Array_ptr<char> plane : count((channelColumns+1)*(channelTracks+2)),	    unsigned long x1, unsigned long y1,	    unsigned long x2, unsigned long y2)
 {
     unsigned long x, y;
     unsigned long index;
@@ -318,13 +311,13 @@ DrawNets(void)
     int numLeft = 0;
 
     /* initialize maps to empty */
-    _Unchecked { bzero(horzPlane,
+    _Unchecked { memset(horzPlane, '\0',
 	  (int)((channelColumns+1)*(channelTracks+2))); }
-    _Unchecked { bzero(vertPlane,
+    _Unchecked { memset(vertPlane, '\0',
 	  (int)((channelColumns+1)*(channelTracks+2))); }
-    _Unchecked { bzero(viaPlane,
+    _Unchecked { memset(viaPlane, '\0',
 	  (int)((channelColumns+1)*(channelTracks+2))); }
-    _Unchecked { bzero(mazeRoute,
+    _Unchecked { memset(mazeRoute, '\0',
 	  (int)(channelColumns+1)); }
 
     /* draw all horizontal segments */
@@ -650,9 +643,7 @@ Maze1(void)
  * can this track be extended to the range specified, return result
  */
 int
-ExtendOK(unsigned long net, _Array_ptr<char> plane : count((channelColumns + 1)*(channelTracks + 3)),
-	 unsigned long _x1, unsigned long _y1,	/* start seg */
-	 unsigned long _x2, unsigned long _y2)	/* end seg */
+ExtendOK(unsigned long net, _Array_ptr<char> plane : count((channelColumns + 1)*(channelTracks + 3)),	 unsigned long _x1, unsigned long _y1,	/* start seg */	 unsigned long _x2, unsigned long _y2)	/* end seg */
 {
     unsigned long x1, y1, x2, y2;
 
@@ -883,8 +874,7 @@ Maze2(void)
 
 
 void
-FindFreeHorzSeg(unsigned long startCol, unsigned long row,
-		_Ptr<unsigned long> rowStart, _Ptr<unsigned long> rowEnd)
+FindFreeHorzSeg(unsigned long startCol, unsigned long row,		_Ptr<unsigned long> rowStart, _Ptr<unsigned long> rowEnd)
 {
     unsigned long i;
 

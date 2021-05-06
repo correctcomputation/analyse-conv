@@ -43,21 +43,10 @@ typedef struct _nodeHCGType {
  *
  */
 
-#ifdef HCG_CODE
-
-nodeHCGType *			HCG;
-ulong *				storageRootHCG;
-ulong *				storageHCG;
-ulong					storageLimitHCG;
-
-#else	/* HCG_CODE */
-
 extern nodeHCGType *			HCG;
 extern ulong *			storageRootHCG;
 extern ulong *			storageHCG;
 extern ulong				storageLimitHCG;
-
-#endif	/* HCG_CODE */
 
 
 /*
@@ -66,8 +55,6 @@ extern ulong				storageLimitHCG;
  *
  */
 
-#ifdef HCG_CODE
-
 void
 AllocHCG(void);
 
@@ -84,34 +71,6 @@ void
 DumpHCG(nodeHCGType *);
 
 void
-NoHCV(nodeHCGType *,
-      ulong,
-      ulong *,
-      ulong *);
-
-#else	/* HCG_CODE */
-
-extern void
-AllocHCG(void);
-
-extern void
-FreeHCG(void);
-
-extern void
-BuildHCG(void);
-
-extern void
-DFSClearHCG(nodeHCGType *);
-
-extern void
-DumpHCG(nodeHCGType *);
-
-extern void
-NoHCV(nodeHCGType *,
-      ulong,
-      ulong *,
-      ulong *);
-
-#endif	/* HCG_CODE */
+NoHCV(nodeHCGType *,      ulong,      ulong *,      ulong *);
 
 #endif	/* HCG_H */

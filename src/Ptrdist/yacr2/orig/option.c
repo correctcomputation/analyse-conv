@@ -7,8 +7,6 @@
 
 #include <string.h>
 
-#define OPTION_CODE
-
 
 /*
  *
@@ -28,8 +26,7 @@
  */
 
 void
-Option(int argc,
-       char *argv[])
+Option(int argc, char *argv[])
 {
     /*
      * Check arguments.

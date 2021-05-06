@@ -47,22 +47,10 @@ typedef struct _nodeHCGType {
 extern ulong channelNets;
 extern ulong channelTracks;
 
-#ifdef HCG_CODE
-
-_Array_ptr<nodeHCGType>			HCG : count(channelNets + 1);
-_Array_ptr<ulong>				storageRootHCG : count(channelNets + 1);
-_Array_ptr<ulong>				storageHCG : bounds(storageRootHCG, storageRootHCG + channelNets + 1);
-ulong					storageLimitHCG;
-
-#else	/* HCG_CODE */
-
 extern _Array_ptr<nodeHCGType>			HCG : count(channelNets + 1);
 extern _Array_ptr<ulong>			storageRootHCG : count(channelNets + 1);
 extern _Array_ptr<ulong>			storageHCG : bounds(storageRootHCG, storageRootHCG + channelNets + 1);
 extern ulong				storageLimitHCG;
-
-#endif	/* HCG_CODE */
-
 
 /*
  *
@@ -70,8 +58,6 @@ extern ulong				storageLimitHCG;
  *
  */
 
-#ifdef HCG_CODE
-
 void
 AllocHCG(void);
 
@@ -88,35 +74,7 @@ void
 DumpHCG(_Array_ptr<nodeHCGType> : count(channelNets + 1));
 
 void
-NoHCV(_Array_ptr<nodeHCGType> : count(channelNets + 1),
-      ulong,
-      _Array_ptr<ulong> : count(channelNets + 1),
-      _Array_ptr<ulong> : count(channelTracks + 2));
-
-#else	/* HCG_CODE */
-
-extern void
-AllocHCG(void);
-
-extern void
-FreeHCG(void);
-
-extern void
-BuildHCG(void);
-
-extern void
-DFSClearHCG(_Array_ptr<nodeHCGType> : count(channelNets + 1));
-
-extern void
-DumpHCG(_Array_ptr<nodeHCGType> : count(channelNets + 1));
-
-extern void
-NoHCV(_Array_ptr<nodeHCGType> : count(channelNets + 1),
-      ulong,
-      _Array_ptr<ulong> : count(channelNets + 1),
-      _Array_ptr<ulong> : count(channelTracks + 2));
-
-#endif	/* HCG_CODE */
+NoHCV(_Array_ptr<nodeHCGType> : count(channelNets + 1),      ulong,      _Array_ptr<ulong> : count(channelNets + 1),      _Array_ptr<ulong> : count(channelTracks + 2));
 
 #pragma CHECKED_SCOPE OFF
 #endif	/* HCG_H */

@@ -5,8 +5,6 @@
  */
 
 
-#define CHANNEL_CODE
-
 
 /*
  *
@@ -21,6 +19,22 @@
 
 #pragma CHECKED_SCOPE ON
 #define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
+
+ulong			channelNets;
+ulong			channelColumns;
+_Array_ptr<ulong>		TOP : count(channelColumns + 1);
+_Array_ptr<ulong>		BOT : count(channelColumns + 1);
+_Array_ptr<ulong>		FIRST : count(channelNets + 1);
+_Array_ptr<ulong>		LAST : count(channelNets + 1);
+_Array_ptr<ulong>		DENSITY : count(channelColumns + 1);
+_Array_ptr<ulong>		CROSSING : count(channelNets + 1);
+ulong			channelTracks;
+ulong			channelTracksCopy;
+ulong			channelDensity;
+ulong			channelDensityColumn;
+_Nt_array_ptr<char> channelFile = ((void *)0);
+
+
 
 /*
  *
