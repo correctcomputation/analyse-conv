@@ -1,9 +1,13 @@
 /* For copyright information, see olden_v1.0/COPYRIGHT */
+
+
+#pragma CHECKED_SCOPE ON
+
 #include <stdlib.h>
 
 int NumNodes = 1;
 
-int dealwithargs(int argc, char *argv[]) {
+int dealwithargs(int argc, _Array_ptr<_Nt_array_ptr<char>> argv : count(argc)) {
   int level;
 
   if (argc > 1)

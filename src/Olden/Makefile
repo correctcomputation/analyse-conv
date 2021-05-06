@@ -1,6 +1,6 @@
 PATH_TO_SRC=../
 NAME = Olden
-TARGETS = bh bh-alt bisort em3d health mst perimeter power treeadd tsp voronoi
+TARGETS = bh bisort em3d health mst perimeter power treeadd tsp voronoi mst-alt perimeter-alt bh-alt
 
 include $(PATH_TO_SRC)Makefile.directory
 
