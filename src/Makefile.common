@@ -118,9 +118,16 @@ $(SOURCES_ORIG_EM) $(HDRS_ORIG_EM) &:
 	rm -rf orig-em-tmp
 	mkdir orig-em-tmp
 	cp $(HDRS_ORIG) $(SOURCES_ORIG) orig-em-tmp
+# The macro expander removes comments, including the special /**/ comments that
+# we insert in some code to work around
+# https://github.com/correctcomputation/C3/issues/10 . Maybe the macro expander
+# shouldn't remove comments in general, but for now, we just temporarily hide
+# the /**/ from it.
+	sed -i 's,/\*\*/,C3_BLOCKER,' $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP)
 	bear --cdb orig-em-tmp/compile_commands.json make $(OBJS_ORIG_EM_TMP)
 # See https://correct-computation.slack.com/archives/G01GKGKHMFD/p1619280418048000?thread_ts=1619278307.042100&cid=G01GKGKHMFD
 	(cd orig-em-tmp && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
+	sed -i 's,C3_BLOCKER,/**/,' $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP)
 	mkdir orig-em
 	cp $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP) orig-em
 
@@ -128,8 +135,10 @@ $(SOURCES_MANUAL_EM) $(HDRS_MANUAL_EM) &:
 	rm -rf manual-em-tmp
 	mkdir manual-em-tmp
 	cp $(HDRS_MANUAL) $(SOURCES_MANUAL) manual-em-tmp
+	sed -i 's,/\*\*/,C3_BLOCKER,' $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP)
 	bear --cdb manual-em-tmp/compile_commands.json make $(OBJS_MANUAL_EM_TMP)
 	(cd manual-em-tmp && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
+	sed -i 's,C3_BLOCKER,/**/,' $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP)
 	mkdir manual-em
 	cp $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP) manual-em
 
