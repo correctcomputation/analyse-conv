@@ -7,6 +7,7 @@
 # CC
 # C3
 # THREEC
+# THREEC_WORKTREE
 
 convert:
 	-make 3c-orig
@@ -76,7 +77,7 @@ stats:
 diffs.dat diffs.sum: clean-objs
 	$(PATH_TO_SRC)create-stats.sh
 
-clean: clean-3c-orig clean-revert clean-3c-revert clean-objs clean-progs clean-diffs clean-reports
+clean: clean-em clean-3c-orig clean-revert clean-3c-revert clean-3c-manual clean-objs clean-progs clean-diffs clean-reports
 
 clean-reports:
 	$(RM) -dr workdir

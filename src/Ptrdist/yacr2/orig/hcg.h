@@ -31,7 +31,7 @@
  */
 
 typedef struct _nodeHCGType {
-    ulong *	netsHook;
+    ulong *     netsHook;
     ulong	nets;
     ulong	netsReached;
 } nodeHCGType;

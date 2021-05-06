@@ -6,7 +6,11 @@ For analysing addition and removal of checkedc extensions, for use with 3C and C
 export CC=path/to/checkedc/compiler
 export THREEC=path/to/converter
 export C3=path/to/deconverter
+export THREEC_WORKTREE=path/to/3c-worktree
 ```
+(`THREEC_WORKTREE` should be the 3C worktree root: that is,
+`$THREEC_WORKTREE/clang/tools/3c` should exist. This is used to run the macro
+expander.)
 
 # Running the expirement 
 Run `make` to produce the tables 

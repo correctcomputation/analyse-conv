@@ -46,11 +46,11 @@ typedef struct _constraintVCGType {
 } constraintVCGType;
 
 typedef struct _nodeVCGType {
-    constraintVCGType *	netsAboveHook;
+    constraintVCGType * netsAboveHook;
     ulong			netsAbove;
     ulong			netsAboveLabel;
     ulong			netsAboveReached;
-    constraintVCGType *	netsBelowHook;
+    constraintVCGType * netsBelowHook;
     ulong			netsBelow;
     ulong			netsBelowLabel;
     ulong			netsBelowReached;

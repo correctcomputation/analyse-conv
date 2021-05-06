@@ -52,21 +52,21 @@ function count_lines() {
 
 for version in "manual" "revert" "orig" ; do 
   if [ "$version" = "manual" ]; then 
-    ref=$(compute_diff "orig"  "revert" )
-    ref_total=$(count_lines "orig" )
-    anno=$(compute_filtered_diff "revert" "manual") 
+    ref=$(compute_diff "orig-em"  "revert" )
+    ref_total=$(count_lines "orig-em" )
+    anno=$(compute_filtered_diff "revert" "manual-em") 
     anno_total=$(count_lines "revert")
     echo "$version,$ref,$ref_total,$anno,$anno_total,N/A,N/A" >> diffs.sum
   elif [ "$version" = "revert" ]; then
     anno=$(compute_diff "revert" "3c-revert")
     anno_total=$(count_lines "revert") 
-    left=$(compute_filtered_diff "3c-revert" "manual")
+    left=$(compute_filtered_diff "3c-revert" "manual-em")
     left_total=$(count_lines "3c-revert") 
     echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   elif [ "$version" = "orig" ]; then 
-    anno=$(compute_diff "orig" "3c-orig") 
-    anno_total=$(count_lines "orig") 
-    left=$(compute_filtered_diff "3c-orig" "manual")
+    anno=$(compute_diff "orig-em" "3c-orig") 
+    anno_total=$(count_lines "orig-em") 
+    left=$(compute_filtered_diff "3c-orig" "manual-em")
     left_total=$(count_lines "3c-orig") 
     echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   fi
