@@ -3,13 +3,13 @@
 
 #include <stdio.h>
 
+#pragma CHECKED_SCOPE ON
+
 struct hash_entry {
   unsigned int key;
-  void *entry;
+  int entry;
   _Ptr<struct hash_entry> next;
 };
-
-#pragma CHECKED_SCOPE ON
 
 typedef _Ptr<struct hash_entry> HashEntry;
 
@@ -22,8 +22,8 @@ struct hash {
 typedef _Ptr<struct hash> Hash;
 
 Hash MakeHash(int size, _Ptr<int(unsigned int)> map);
-_Unchecked void *HashLookup(unsigned int key, Hash hash);
-_Unchecked void HashInsert(void *entry, unsigned int key, Hash hash);
+int HashLookup(unsigned int key, Hash hash);
+void HashInsert(int entry, unsigned int key, Hash hash);
 void HashDelete(unsigned int key, Hash hash);
 
 #pragma CHECKED_SCOPE OFF

@@ -65,7 +65,7 @@ static void AddEdges(int count1, Graph retval, int numproc, int perproc, int num
               offset = i % perproc;
               _Unchecked { dest = ((helper[pn].block)+offset); }
               hash = tmp->edgehash;
-              _Unchecked { HashInsert((void*)dist,(unsigned int) dest,hash); }
+              HashInsert(dist,(unsigned int) dest,hash); 
               /*assert(4, HashLookup((unsigned int) dest,hash) == (void*) dist);*/
             }
         } /* for i... */

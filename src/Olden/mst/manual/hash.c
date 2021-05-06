@@ -8,18 +8,19 @@
 #define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
 #define assert(num,a) if (!(a)) {printf("Assertion failure:%d in hash\n",num); exit(-1);}
 
+/*
 static int remaining = 0;
-static _Array_ptr<char> temp : count(remaining);
+static char *temp;
 
-static _Array_ptr<void> localmalloc(int size) : byte_count(size)
+static char *localmalloc(int size) 
 {
-  _Array_ptr<void> blah;
+  char *blah;
   
   if (size>remaining) 
     {
-      remaining = 32768;
-      temp = calloc<char>(remaining, sizeof(char));
+      temp = (char *) malloc(32768);
       if (!temp) printf("Error! malloc returns null\n");
+      remaining = 32768;
     }
   blah = temp;
   temp += size;
@@ -28,14 +29,15 @@ static _Array_ptr<void> localmalloc(int size) : byte_count(size)
 }
 
 #define localfree(sz)
+*/
 
 Hash MakeHash(int size, _Ptr<int(unsigned int)> map)
 {
   Hash retval = NULL;
   int i;
 
-  retval = (Hash) localmalloc(sizeof(*retval));
-  retval->array = (_Array_ptr<HashEntry>)localmalloc(size*sizeof(HashEntry));
+  retval = malloc<struct hash>(sizeof(struct hash));
+  retval->array = malloc<HashEntry>(size*sizeof(HashEntry));
   retval->size = size;
   for (i=0; i<size; i++)
     retval->array[i] = NULL;
@@ -43,7 +45,7 @@ Hash MakeHash(int size, _Ptr<int(unsigned int)> map)
   return retval;
 }
 
-_Unchecked void *HashLookup(unsigned int key, Hash hash)
+int HashLookup(unsigned int key, Hash hash)
 {
   int j;
   HashEntry ent = NULL;
@@ -59,7 +61,7 @@ _Unchecked void *HashLookup(unsigned int key, Hash hash)
   return NULL;
 }
 
-_Unchecked void HashInsert(void *entry,unsigned int key,Hash hash)
+void HashInsert(int entry,unsigned int key,Hash hash)
 {
   HashEntry ent = NULL;
   int j;
@@ -67,7 +69,7 @@ _Unchecked void HashInsert(void *entry,unsigned int key,Hash hash)
   assert(3,!HashLookup(key,hash));
   
   j = (hash->mapfunc)(key);
-  ent = (HashEntry)localmalloc(sizeof(*ent));
+  ent = malloc<struct hash_entry>(sizeof(*ent));
   ent->next = hash->array[j];
   hash->array[j]=ent;
   ent->key = key;
@@ -90,7 +92,7 @@ void HashDelete(unsigned key, Hash hash) {
 
   tmp = *ent;
   *ent = (*ent)->next;
-  localfree(tmp);
+  free<struct hash_entry>(tmp);
 }
 
   
