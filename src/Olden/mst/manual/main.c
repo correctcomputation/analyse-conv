@@ -32,7 +32,7 @@ static BlueReturn BlueRule(Vertex inserted, Vertex vlist)
   retval.vert = vlist;
   retval.dist = vlist->mindist;
   hash = vlist->edgehash;
-  _Unchecked { dist = (int) HashLookup((unsigned int) inserted, hash); }
+  dist = (int) HashLookup((unsigned int) inserted, hash);
   /*printf("Found %d at 0x%x for 0x%x\n",dist,inserted,vlist);*/
   if (dist) 
     {
@@ -58,7 +58,7 @@ static BlueReturn BlueRule(Vertex inserted, Vertex vlist)
         {
           hash = tmp->edgehash; /* <------  6% miss in tmp->edgehash */ 
           dist2 = tmp->mindist;
-          _Unchecked { dist = (int) HashLookup((unsigned int) inserted, hash); }
+          dist = (int) HashLookup((unsigned int) inserted, hash); 
           /*printf("Found %d at 0x%x for 0x%x\n",dist,inserted,tmp);*/
           if (dist) 
             {
