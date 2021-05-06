@@ -198,7 +198,7 @@ typedef struct {
  * ROOT: origin of tree; declared as nodeptr for tree with only 1 body.
  */
 
-global nodeptr root;
+global nodeptr root = ((void *)0);
 
 /*
  * Integerized coordinates: used to mantain body-tree.

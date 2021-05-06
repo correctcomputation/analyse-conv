@@ -75,9 +75,11 @@ treeptr old_main(void) {
   real tout;
   int i, nsteps, nprocs;
   treeptr t = NULL;
-  bodyptr bt0 = NULL, p = NULL;
+  bodyptr bt0 = NULL;
+  bodyptr p = NULL;
   long t1, t2;
-  vector cmr, cmv;
+  vector cmr;
+  vector cmv;
   bodyptr prev=NULL;
   int tmp=0, range=((1<<NDIM) << NDIM) / NumNodes;
   int bodiesper _Checked[MAX_NUM_NODES];
@@ -123,7 +125,7 @@ treeptr old_main(void) {
 
   /* Recall particles are in lists by processor */
   for (p = t->bodytab[0]; p != NULL; p = Next(p)) {	/* loop over particles */
-    icstruct xqic;
+    icstruct xqic = {};
 
     SUBV(Pos(p), Pos(p), cmr);		/*   offset by cm coords    */
     SUBV(Vel(p), Vel(p), cmv);
@@ -199,7 +201,9 @@ bodyptr testdata(void)
 {
     real rsc, vsc, r, v, x, y;
     vector cmr, cmv;
-    bodyptr head = NULL, p = NULL, prev = NULL;
+    bodyptr head = NULL;
+    bodyptr p = NULL;
+    bodyptr prev = NULL;
     register int i;
     double temp, t1;
     double seed = 123.0;
