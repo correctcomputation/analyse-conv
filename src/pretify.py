@@ -9,8 +9,13 @@ with open('final.csv') as f:
 header = rows[0]
 rows = rows[1:]
 
+NAcolor = '\color{gray}'
+
 def escape(s):
-    return s.replace('%', '\\%').replace('#', '\\#')
+    if s == 'N/A':
+        return '{%s 0}' % NAcolor
+    else:
+        return s.replace('%', '\\%').replace('#', '\\#')
 
 cs = 'c' * (len(header) + 1)
 print('\\tabcolsep=0.11cm')
