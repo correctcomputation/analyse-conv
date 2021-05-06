@@ -11,7 +11,8 @@
 
 typedef struct tree {
     int		val;
-    struct tree *left, *right;
+    struct tree *left;
+    struct tree *right;
 } tree_t;
 
 extern tree_t *TreeAlloc (int level, int lo, int hi);

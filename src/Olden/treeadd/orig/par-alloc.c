@@ -15,7 +15,9 @@ tree_t *TreeAlloc (int level, int lo, int proc) {
   if (level == 0)
     return NULL;
   else {
-    struct tree *new, *right, *left;
+    struct tree *new;
+    struct tree *right;
+    struct tree *left;
     new = (struct tree *) malloc(sizeof(tree_t));
     left = TreeAlloc(level -1, lo+proc/2, proc/2);
     right=TreeAlloc(level-1,lo,proc/2);
