@@ -18,9 +18,8 @@ final.csv:
 
 bear-test:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make $@ || exit 1; \
-		cd .. ; \
+		(cd $$target && \
+		make $@) || exit 1; \
 	done
 
 clean:
