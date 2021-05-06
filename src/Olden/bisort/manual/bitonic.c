@@ -88,8 +88,6 @@ _Ptr<HANDLE> RandTree(int n, int seed, int node, int level) {
   return h;
 }
 
-// CHECKED-C: The only two conversions that _Checked-c-convert could
-// perform automatically were these two.
 void SwapValue(_Ptr<HANDLE> l, _Ptr<HANDLE> r) {
   int temp,temp2;
   

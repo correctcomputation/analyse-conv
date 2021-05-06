@@ -16,7 +16,8 @@ int dealwithargs(int argc, char *argv[]);
 typedef struct tree {
   int sz;
   double x,y;
-  struct tree *left, *right;
+  struct tree *left;
+  struct tree *right;
 #ifdef TORONTO
   struct tree *next;
   struct tree *prev;
