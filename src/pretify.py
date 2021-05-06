@@ -23,14 +23,14 @@ print('\\begin{tabular}{||%s||}' % ' '.join(cs))
 print('\\hline')
 print('BM & ' + ' & '.join(map(escape, header)) + ' \\\\ [0.5ex]')
 print('\\hline\\hline')
-bm = 'olde'
+bm = 'Olden'
 rownum = 0
 last_prog = rows[0][0]
 colors = ['\\rowcolor{white}','\\rowcolor[rgb]{0.8,0.8,0.8}']
 color = 0
 for row in rows:
     if row[0 : 2] == ['anagram','manual']:
-        bm = 'ptrd'
+        bm = 'PtrDist'
         print('\\hline')
     if row[0] != last_prog:
         color = 1 - color
