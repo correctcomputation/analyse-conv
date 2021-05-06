@@ -24,7 +24,8 @@ void addList(struct List *list, struct Patient *patient) {
 } 
 
 void removeList(struct List *list, struct Patient *patient) {
-  struct List          *l1,*l2;
+  struct List          *l1;
+  struct List          *l2;
   struct Patient       *p;
 
   p = list->patient;
