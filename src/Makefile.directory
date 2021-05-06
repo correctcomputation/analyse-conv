@@ -17,33 +17,29 @@ convert:
 
 gathermanualstats:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make gathermanualstats ; \
-		cd .. ; \
+		(cd $$target && \
+		make gathermanualstats) ; \
 	done
 
 
 3c-orig revert 3c-revert:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make $@ ; \
-		cd .. ; \
+		(cd $$target && \
+		make $@) ; \
 	done
 
 test: test-orig test-manual test-revert test-3c-orig test-3c-revert
  
 test-orig test-manual test-revert test-3c-orig test-3c-revert:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make $@ || exit 1; \
-		cd .. ; \
+		(cd $$target && \
+		make $@) || exit 1; \
 	done
 
 bear-test:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make $@ || exit 1; \
-		cd .. ; \
+		(cd $$target && \
+		make $@) || exit 1; \
 	done
 
 git-diffs: 
@@ -51,23 +47,20 @@ git-diffs:
 
 git-%:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make git-$* ; \
-		cd .. ; \
+		(cd $$target && \
+		make git-$*) ; \
 	done
 
 add-git:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make add-git ; \
-		cd .. ; \
+		(cd $$target && \
+		make add-git) ; \
 	done
 
 stats:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make stats ; \
-		cd .. ; \
+		(cd $$target && \
+		make stats) ; \
 	done
 	TARGETS="$(TARGETS)" $(PATH_TO_SRC)report.sh
 	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine-stats.sh
@@ -85,17 +78,15 @@ clean-reports:
 
 clean-diffs:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make clean-diffs ; \
-		cd .. ; \
+		(cd $$target && \
+		make clean-diffs) ; \
 	done
 	$(RM) diffs.dat diffs.sum
 	$(RM) -dr git-changes
 
 clean-%:
 	for target in $(TARGETS) ; do \
-		cd $$target ; \
-		make clean-$* ; \
-		cd .. ; \
+		(cd $$target && \
+		make clean-$*) ; \
 	done
 
