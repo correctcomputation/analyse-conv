@@ -814,7 +814,7 @@ nodeptr maketree(bodyptr btab, int nb, treeptr t, int nsteps, int proc)
   register bodyptr q;
   int tmp;
   nodeptr node1;
-  icstruct xqic = {};
+  icstruct xqic;
   int holder;
 
   Root(t) = NULL;
@@ -858,7 +858,7 @@ nodeptr maketree(bodyptr btab, int nb, treeptr t, int nsteps, int proc)
 
 void expandbox(bodyptr p, treeptr t, int nsteps, int proc)       
 {
-    icstruct ic = {};
+    icstruct ic;
     int k;
     vector rmid;
     cellptr  newt;
