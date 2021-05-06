@@ -29,14 +29,14 @@ program=sys.argv[1]
 def process_row(row : List[str]) -> str:
     row = row_to_int(row)
     version = row[0] 
-    if version == 'manual':
-        out = [program, version, compute_percentage(row[1], row[2]), compute_percentage(row[3], row[4]), 'N/A'] + loadstats(version)
-# NOTE: uncomment/swap to omit lines left from table
-#        out = [program, version, compute_percentage(row[1], row[2]), compute_percentage(row[3], row[4])] + loadstats(version)
-    else:
-        out = [program, version, 'N/A', compute_percentage(row[3], row[4]), compute_percentage(row[5], row[6])] + loadstats(version)
-# NOTE: uncomment/swap to omit lines left from table
-#        out = [program, version, 'N/A', compute_percentage(row[3], row[4])] + loadstats(version)
+    out = [program, version]
+    for i, unused_name in enumerate(['refactored', 'annotated', 'left']):
+        (diff, total) = (row[2*i+1], row[2*i+2])
+        if diff == 'N/A' and total == 'N/A':
+            out.append('N/A')
+        else:
+            out.append(compute_percentage(diff, total))
+    out.extend(loadstats(version))
     assert(len(out) == len(outheader))
     return ','.join(out)
 
@@ -63,12 +63,8 @@ def loadstats(test_name: str) -> List[str]:
 
 # Map test case name to statistics file name
 def test_to_statsfile(test_name : str) -> str:
-    if test_name == 'orig':
-        return 'origstats.json.aggregate.json'
-    elif test_name == 'revert':
-        return 'revertstats.json.aggregate.json'
-    elif test_name == 'manual':
-        return 'manualstats.json.aggregate.json'
+    if test_name in ('orig', 'tweak', 'revert', 'manual'):
+        return test_name + 'stats.json.aggregate.json'
     else:
         raise Error("This kind of test doesn't have pointer stats!")
 
