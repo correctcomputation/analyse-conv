@@ -211,7 +211,7 @@ typedef struct {
 typedef _Ptr<Word> PWord;
 typedef _Array_ptr<PWord> PPWord;
 
-PWord apwCand _Checked [MAXCAND];    /* candidates we've found so far */
+PWord apwCand _Checked[MAXCAND] = {((void *)0)};    /* candidates we've found so far */
 unsigned cpwCand;                       /* how many of them? */
 
 
@@ -235,7 +235,7 @@ int cchPhraseLength;                    /* number of letters in phrase */
 Quad aqMainMask _Checked [MAX_QUADS];/* the bit field for the full phrase */
 Quad aqMainSign _Checked [MAX_QUADS];/* where the sign bits are */
 
-char achPhrase _Checked [255];
+char achPhrase _Nt_checked[255];
 
 int cchMinLength = 3;
 
@@ -487,7 +487,7 @@ void DumpCandidates(void) {
     printf("\n");
 }
 
-PWord apwSol _Checked [MAXSOL];                   /* the answers */
+PWord apwSol _Checked[MAXSOL] = {((void *)0)};                   /* the answers */
 int cpwLast;
 
 Debug(
