@@ -21,6 +21,10 @@
 # distinguishing suffix. The inconsistency is a little awkward, but it seemed a
 # lesser evil than either (1) renaming the non-expanded `orig` and `manual` or
 # (2) the churn of adding the `em` suffix in more places.
+#
+# _However_, if NO_MACRO_EXPANSION is set, then the macro expansion step is
+# turned into a no-op and `orig-em` and `manual-em` are identical to `orig` and
+# `manual`, respectively.
 
 HDRS_ORIG = $(addprefix orig/,$(HDRS))
 SOURCES_ORIG = $(addprefix orig/,$(SOURCES))
@@ -111,6 +115,7 @@ $(OBJS_3C_REVERT): $(HDRS_3C_REVERT)
 # TODO: Reduce code duplication between this and manual-em (and for that matter,
 # all the other duplication in this makefile)?
 $(SOURCES_ORIG_EM) $(HDRS_ORIG_EM) &:
+ifeq ($(NO_MACRO_EXPANSION),)
 # Use a separate temporary directory to ensure our build of orig-em is clean and
 # we don't copy scratch files created by convert_project (convert_all.sh, etc.)
 # that we currently don't have a way to turn off. Leave the temporary directory
@@ -130,8 +135,13 @@ $(SOURCES_ORIG_EM) $(HDRS_ORIG_EM) &:
 	sed -i 's,C3_BLOCKER,/**/,' $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP)
 	mkdir orig-em
 	cp $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP) orig-em
+else
+	mkdir orig-em
+	cp $(HDRS_ORIG) $(SOURCES_ORIG) orig-em
+endif
 
 $(SOURCES_MANUAL_EM) $(HDRS_MANUAL_EM) &:
+ifeq ($(NO_MACRO_EXPANSION),)
 	rm -rf manual-em-tmp
 	mkdir manual-em-tmp
 	cp $(HDRS_MANUAL) $(SOURCES_MANUAL) manual-em-tmp
@@ -141,6 +151,10 @@ $(SOURCES_MANUAL_EM) $(HDRS_MANUAL_EM) &:
 	sed -i 's,C3_BLOCKER,/**/,' $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP)
 	mkdir manual-em
 	cp $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP) manual-em
+else
+	mkdir manual-em
+	cp $(HDRS_MANUAL) $(SOURCES_MANUAL) manual-em
+endif
 
 # If C3 fails, don't leave an empty file. This isn't sufficient to avoid
 # silently getting wrong results from create-stats.sh if reversion failed, but
