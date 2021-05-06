@@ -8,6 +8,8 @@
 # declare -A diffs
 # declare -A summation
 
+# This probably needs to be updated for the `tweak` versions if we use
+# combine-stats.sh again. ~ Matt 2021-05-06
 VERSIONS="orig-to-3c-orig 3c-orig-to-manual manual-to-revert revert-to-3c-revert"
 for v in $VERSIONS; do
 	diffs[$v]=""
