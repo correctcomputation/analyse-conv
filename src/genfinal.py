@@ -51,7 +51,12 @@ def loadstats(test_name: str) -> List[str]:
         return ['N/A'] * 6
     # Select
     ptrstats = stats['AggregateStats'][0]['TotalStats']
-    casts = sum(stats['AggregateStats'][3]['PerformanceStats'][1]['ReWriteStats'].values())
+    rewritestats = stats['AggregateStats'][3]['PerformanceStats'][1]['ReWriteStats']
+    casts = 0
+    # only count stats related to "Casts"
+    for ckey in rewritestats:
+        if "Casts" in ckey:
+            casts += rewritestats[ckey]
     bounds = stats['AggregateStats'][1]['ArrBoundsStats']['NumPointersNeedBounds']
     return [str(i) for i in [ptrstats['ptr'], ptrstats['ntarr'], ptrstats['arr'], ptrstats['wild'], bounds, casts]]
 

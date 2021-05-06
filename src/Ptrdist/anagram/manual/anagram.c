@@ -235,7 +235,7 @@ int cchPhraseLength;                    /* number of letters in phrase */
 Quad aqMainMask _Checked [MAX_QUADS];/* the bit field for the full phrase */
 Quad aqMainSign _Checked [MAX_QUADS];/* where the sign bits are */
 
-char achPhrase _Nt_checked[255];
+char achPhrase _Checked[255];
 
 int cchMinLength = 3;
 
