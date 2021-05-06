@@ -200,7 +200,8 @@ treeptr old_main(void) {
 bodyptr testdata(void)
 {
     real rsc, vsc, r, v, x, y;
-    vector cmr, cmv;
+    vector cmr;
+    vector cmv;
     bodyptr head = NULL;
     bodyptr p = NULL;
     bodyptr prev = NULL;
@@ -290,7 +291,9 @@ bodyptr testdata(void)
 extern int EventCount;
 
 void stepsystem(treeptr t, int nstep) {
-  bodyptr bt = NULL, bt0 = NULL, q = NULL;
+  bodyptr bt = NULL;
+  bodyptr bt0 = NULL;
+  bodyptr q = NULL;
   int i;
   nodeptr root = NULL;
 
@@ -411,7 +414,9 @@ datapoints uniform_testdata(int proc, int nbodyx, int seedfactor)
 {
   datapoints retval = { 0.0 };
   real rsc, vsc, r, v, x, y;
-  bodyptr head = NULL, p = NULL, prev = NULL;
+  bodyptr head = NULL;
+  bodyptr p = NULL;
+  bodyptr prev = NULL;
   register int i;
   double temp, t1;
   double seed = 123.0 * (double) seedfactor;
@@ -538,7 +543,8 @@ void computegrav(treeptr t, int nstep)
 
 void grav(real rsize, nodeptr rt, bodyptr bodies, int nstep, real dthf)
 {
-  register bodyptr p = NULL, q = NULL;
+  register bodyptr p = NULL;
+  register bodyptr q = NULL;
   int i=0;
 
 
@@ -563,7 +569,11 @@ void grav(real rsize, nodeptr rt, bodyptr bodies, int nstep, real dthf)
 void vp(bodyptr q, int nstep)
 {
   real dthf;
-  vector acc1, dacc, dvel, vel1, dpos;
+  vector acc1;
+  vector dacc;
+  vector dvel;
+  vector vel1;
+  vector dpos;
 
   dthf = 0.5 * dtime;				/* set basic half-step      */
 
@@ -685,7 +695,8 @@ void hackgrav(bodyptr p, real rsize, nodeptr rt)
 hgstruct gravsub(nodeptr p, hgstruct hg)
 {
   real drabs, phii, mor3;
-  vector ai, quaddr;
+  vector ai;
+  vector quaddr;
   real dr5inv, phiquad, drquaddr;
   vector dr;
   real drsq;
@@ -806,7 +817,7 @@ nodeptr maketree(bodyptr btab, int nb, treeptr t, int nsteps, int proc)
   register bodyptr q = NULL;
   int tmp;
   nodeptr node1 = NULL;
-  icstruct xqic;
+  icstruct xqic = {};
   int holder;
 
   Root(t) = NULL;
@@ -850,7 +861,7 @@ nodeptr maketree(bodyptr btab, int nb, treeptr t, int nsteps, int proc)
 
 void expandbox(bodyptr p, treeptr t, int nsteps, int proc)       
 {
-    icstruct ic;
+    icstruct ic = {};
     int k;
     vector rmid;
     cellptr  newt = NULL;
@@ -926,7 +937,8 @@ nodeptr loadtree(bodyptr p, icstruct xpic, nodeptr t, int l, treeptr tr)
     assert(l != 0, 2);				/*   dont run out of bits   */
     if (Type(t) == BODY) {        		/*   reached a "leaf"?      */
       int i,j;
-      icstruct pic,tic;
+      icstruct pic = {};
+      icstruct tic = {};
 
       /*chatting("Collision\n");*/
       /*printtree(t); printtree(p);*/
@@ -955,7 +967,7 @@ icstruct intcoord1(double rp0, double rp1, double rp2, treeptr t)
 {
     double xsc, floor(double);
     /*double rmin,rsize;*/
-    icstruct ic;
+    icstruct ic = {};
 
 /***
    rmin = t->rmin[0];
@@ -1003,7 +1015,7 @@ icstruct intcoord(bodyptr p, treeptr t)
 {
     register double xsc;
     double floor(double);
-    icstruct ic;
+    icstruct ic = {};
     register real rsize;
     vector pos;
 
