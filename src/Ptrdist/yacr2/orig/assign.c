@@ -20,7 +20,7 @@
 #include "vcg.h"
 #include "hcg.h"
 
-long * *			costMatrix;
+ulong * *			costMatrix;
 ulong *			tracksNoHCV;
 ulong *			tracksNotPref;
 ulong *			tracksTopNotPref;
