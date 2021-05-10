@@ -16,7 +16,6 @@ XCORE_TARGET_NEEDS_MEMORY := 128
 endif
 endif
 OUTPUT = treeadd.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

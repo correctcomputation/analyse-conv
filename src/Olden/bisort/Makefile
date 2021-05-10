@@ -13,8 +13,6 @@ RUN_OPTIONS = 700000
 OUTPUT = bisort.reference_output
 endif
 
-STDIN_FILENAME = /dev/stdin
-
 PATH_TO_SRC = ../../
 
 # special handling of stdchecked macros

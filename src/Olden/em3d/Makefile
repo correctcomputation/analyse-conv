@@ -13,7 +13,6 @@ else
 RUN_OPTIONS = 1024 1000 125
 OUTPUT = em3d.reference_output
 endif
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

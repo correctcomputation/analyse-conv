@@ -15,7 +15,6 @@ RUN_OPTIONS = 20000 20
 endif
 endif
 OUTPUT = bh.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

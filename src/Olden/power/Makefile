@@ -7,7 +7,6 @@ LDFLAGS  = -lm
 
 FP_TOLERANCE = 0.00001
 OUTPUT = power.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

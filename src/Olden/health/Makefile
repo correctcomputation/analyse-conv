@@ -18,7 +18,6 @@ ifeq ($(ARCH),XCore)
 XCORE_TARGET_NEEDS_MEMORY := 64
 endif
 endif
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

@@ -11,7 +11,6 @@ else
 RUN_OPTIONS = 1000
 endif
 OUTPUT = mst.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

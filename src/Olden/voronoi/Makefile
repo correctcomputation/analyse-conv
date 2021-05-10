@@ -18,7 +18,6 @@ endif
 endif
 endif
 OUTPUT = OUT
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

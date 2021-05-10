@@ -18,7 +18,6 @@ endif
 endif
 endif
 OUTPUT = tsp.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 

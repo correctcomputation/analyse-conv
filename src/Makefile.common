@@ -3,11 +3,13 @@
 # SOURCES
 # PROG
 # RUN_OPTIONS
-# STDIN_FILENAME
 # OUTPUT
 # CFLAGS
 # LDFLAGS
 # PATH_TO_SRC
+
+# and optionally
+STDIN_FILENAME ?= /dev/stdin
 
 # also requires
 # CC

@@ -16,7 +16,6 @@ XCORE_TARGET_NEEDS_MEMORY := 64
 endif
 endif
 OUTPUT = perimeter.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 
