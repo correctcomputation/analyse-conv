@@ -3,41 +3,19 @@
 # PATH_TO_SRC
 # NAME
 
-# also requires
-# CC
-# C3
-# THREEC
-# THREEC_WORKTREE
-
-convert:
-	-make 3c-orig
-	-make 3c-tweak
-	-make revert
-	-make 3c-revert
-	-make gathermanualstats
-
-gathermanualstats:
-	for target in $(TARGETS) ; do \
-		(cd $$target && \
-		make gathermanualstats) ; \
-	done
-
-
-3c-orig 3c-tweak revert 3c-revert:
+%:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
 		make $@) ; \
 	done
 
-test: test-orig test-manual test-revert test-3c-orig test-3c-tweak test-3c-revert
-
-test-orig test-manual test-revert test-3c-orig test-3c-tweak test-3c-revert:
+convert:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) || exit 1; \
+		make $@) ; \
 	done
 
-bear-test:
+test bear_test test-%:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
 		make $@) || exit 1; \
@@ -45,18 +23,6 @@ bear-test:
 
 git-diffs: 
 	NAME=$(NAME) $(PATH_TO_SRC)create-git-diffs.sh
-
-git-%:
-	for target in $(TARGETS) ; do \
-		(cd $$target && \
-		make git-$*) ; \
-	done
-
-add-git:
-	for target in $(TARGETS) ; do \
-		(cd $$target && \
-		make add-git) ; \
-	done
 
 stats:
 	for target in $(TARGETS) ; do \
@@ -66,16 +32,7 @@ stats:
 	TARGETS="$(TARGETS)" $(PATH_TO_SRC)report.sh
 	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine-stats.sh
 
-
-
-diffs.dat diffs.sum: clean-objs
-	$(PATH_TO_SRC)create-stats.sh
-
-clean: clean-em clean-3c-orig clean-revert clean-3c-revert clean-3c-manual clean-objs clean-progs clean-diffs clean-reports
-
-clean-reports:
-	$(RM) -dr workdir
-	$(RM) final.csv
+clean: clean-tmp clean-em clean-revert clean-3c clean-diffs clean-reports
 
 clean-diffs:
 	for target in $(TARGETS) ; do \
@@ -84,10 +41,6 @@ clean-diffs:
 	done
 	$(RM) diffs.dat diffs.sum
 	$(RM) -dr git-changes
-
-clean-%:
-	for target in $(TARGETS) ; do \
-		(cd $$target && \
-		make clean-$*) ; \
-	done
+	$(RM) -dr workdir
+	$(RM) final.csv
 
