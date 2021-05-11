@@ -107,7 +107,7 @@ em-%: %
 	$(RM) -rf tmp-$@
 	mkdir tmp-$@
 	cp $(addprefix $*/,$(HDRS)) $(addprefix $*/,$(SOURCES)) tmp-$@
-	bear --cdb tmp-$@/compile_commands.json make $(addprefix tmp-$@,/$(SOURCES:.c=.o))
+	bear --cdb tmp-$@/compile_commands.json make $(addprefix tmp-$@/,$(SOURCES:.c=.o))
 # The macro expander removes comments, including the special /**/ comments that
 # we insert in some code to work around
 # https://github.com/correctcomputation/C3/issues/10 . Maybe the macro expander
