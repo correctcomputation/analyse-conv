@@ -1,6 +1,7 @@
 PROG       = mst
 SOURCES = args.c makegraph.c hash.c main.c
 HDRS = hash.h mst.h
+VERSIONS = orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual tweak 3c-em-tweak
 
 CFLAGS   = -DTORONTO
 LDFLAGS    =

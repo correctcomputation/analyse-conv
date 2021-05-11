@@ -1,6 +1,7 @@
 PROG     = perimeter
 SOURCES = args.c main.c maketree.c
 HDRS = perimeter.h
+VERSIONS = orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual tweak 3c-em-tweak
 
 CFLAGS = -DTORONTO
 LDFLAGS  = 

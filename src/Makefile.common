@@ -1,80 +1,26 @@
 # assumes that the including makefile will define
+# -------------
 # HDRS
 # SOURCES
 # PROG
-# RUN_OPTIONS
 # OUTPUT
-# CFLAGS
-# LDFLAGS
 # PATH_TO_SRC
 
 # and optionally
+# --------------
+# RUN_OPTIONS
+# CFLAGS
+# LDFLAGS
 override THREEC_FLAGS += $(addprefix -extra-arg-before=,$(CFLAGS))
 STDIN_FILENAME ?= /dev/stdin
-VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual tweak 3c-tweak
+VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual
 
-# also requires
+# also requires tools
+# -------------------
 # CC
 # C3
 # THREEC
 # THREEC_WORKTREE
-
-HDRS_ORIG = $(addprefix orig/,$(HDRS))
-SOURCES_ORIG = $(addprefix orig/,$(SOURCES))
-
-HDRS_ORIG_EM_TMP = $(addprefix orig-em-tmp/,$(HDRS))
-SOURCES_ORIG_EM_TMP = $(addprefix orig-em-tmp/,$(SOURCES))
-OBJS_ORIG_EM_TMP = $(SOURCES_ORIG_EM_TMP:.c=.o)
-
-HDRS_ORIG_EM = $(addprefix orig-em/,$(HDRS))
-SOURCES_ORIG_EM = $(addprefix orig-em/,$(SOURCES))
-OBJS_ORIG_EM = $(SOURCES_ORIG_EM:.c=.o)
-PROG_ORIG_EM = $(PROG)_orig_em
-
-HDRS_TWEAK = $(addprefix tweak/,$(HDRS))
-SOURCES_TWEAK = $(addprefix tweak/,$(SOURCES))
-
-HDRS_TWEAK_EM_TMP = $(addprefix tweak-em-tmp/,$(HDRS))
-SOURCES_TWEAK_EM_TMP = $(addprefix tweak-em-tmp/,$(SOURCES))
-OBJS_TWEAK_EM_TMP = $(SOURCES_TWEAK_EM_TMP:.c=.o)
-
-HDRS_TWEAK_EM = $(addprefix tweak-em/,$(HDRS))
-SOURCES_TWEAK_EM = $(addprefix tweak-em/,$(SOURCES))
-OBJS_TWEAK_EM = $(SOURCES_TWEAK_EM:.c=.o)
-PROG_TWEAK_EM = $(PROG)_tweak_em
-
-HDRS_MANUAL = $(addprefix manual/,$(HDRS))
-SOURCES_MANUAL = $(addprefix manual/,$(SOURCES))
-
-HDRS_MANUAL_EM_TMP = $(addprefix manual-em-tmp/,$(HDRS))
-SOURCES_MANUAL_EM_TMP = $(addprefix manual-em-tmp/,$(SOURCES))
-OBJS_MANUAL_EM_TMP = $(SOURCES_MANUAL_EM_TMP:.c=.o)
-
-HDRS_MANUAL_EM = $(addprefix manual-em/,$(HDRS))
-SOURCES_MANUAL_EM = $(addprefix manual-em/,$(SOURCES))
-OBJS_MANUAL_EM = $(SOURCES_MANUAL_EM:.c=.o)
-PROG_MANUAL_EM = $(PROG)_manual_em
-
-HDRS_REVERT = $(addprefix revert/,$(HDRS))
-SOURCES_REVERT = $(addprefix revert/,$(SOURCES))
-OBJS_REVERT = $(SOURCES_REVERT:.c=.o)
-PROG_REVERT = $(PROG)_revert
-
-HDRS_3C_ORIG = $(addprefix 3c-orig/,$(HDRS))
-SOURCES_3C_ORIG = $(addprefix 3c-orig/,$(SOURCES))
-OBJS_3C_ORIG = $(SOURCES_3C_ORIG:.c=.o)
-PROG_3C_ORIG = $(PROG)_3c_orig
-
-HDRS_3C_TWEAK = $(addprefix 3c-tweak/,$(HDRS))
-SOURCES_3C_TWEAK = $(addprefix 3c-tweak/,$(SOURCES))
-OBJS_3C_TWEAK = $(SOURCES_3C_TWEAK:.c=.o)
-PROG_3C_TWEAK = $(PROG)_3c_tweak
-
-HDRS_3C_REVERT = $(addprefix 3c-revert/,$(HDRS))
-SOURCES_3C_REVERT = $(addprefix 3c-revert/,$(SOURCES))
-OBJS_3C_REVERT = $(SOURCES_3C_REVERT:.c=.o)
-PROG_3C_REVERT = $(PROG)_3c_revert
-
 
 .SECONDARY: %.c %.h
 
@@ -132,14 +78,6 @@ em-%: %
 	$(RM) -rf $@
 	mv tmp-$@ $@
 
-
-# This might be called by Makefile.directory, so we have to accept the call and
-# then make it a no-op if this benchmark doesn't have a `tweak` version.
-ifeq ($(wildcard tweak),)
-3c-tweak:
-	:
-endif
-
 # make <prog>_<version>
 #	compile sources into an executable
 
@@ -153,10 +91,15 @@ $(PROG)_%: $$(addprefix %/,$(SOURCES:.c=.o))
 	$(CC) -o $@ $(addprefix $*/,$(SOURCES:.c=.o)) $(LDFLAGS)
 
 
-test: test-orig test-manual test-revert test-3c-orig test-3c-revert
-ifneq ($(wildcard tweak),)
-test: test-tweak test-3c-tweak
-endif
+test:
+	for ver in $(VERSIONS) ; do \
+		make test-$$ver || exit 1; \
+	done
+
+test-%: $(PROG)_%
+	./$< $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+	diff -w $(OUTPUT) ACTUAL_OUTPUT
+	$(RM) ACTUAL_OUTPUT
 
 # We need to at least clean-objs to ensure that the compilation database is
 # complete. We also need missing-files.sh to run _before_ we start adding build
@@ -167,11 +110,6 @@ bear-test: clean-objs clean-progs convert
 	  if [[ $$v =~ tweak$$ ]] && ! [ -d tweak ]; then continue; fi; \
 	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
 	done
-
-test-%: $(PROG)_%
-	./$< $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
-	diff -w $(OUTPUT) ACTUAL_OUTPUT
-	$(RM) ACTUAL_OUTPUT
 
 git-diffs: 
 	NAME=$(PROG) $(PATH_TO_SRC)create-git-diffs.sh
@@ -191,10 +129,28 @@ stats: diffs.dat
 diffs.dat diffs.sum: clean-objs
 	NAME=$(PROG) $(PATH_TO_SRC)create-stats.sh
 
-clean: clean-em clean-3c-orig clean-3c-tweak clean-revert clean-3c-revert clean-3c-manual clean-objs clean-progs clean-diffs clean-reports
+clean: clean-tmp clean-em clean-revert clean-3c clean-diffs clean-reports
+
+clean-tmp:
+	$(RM) -r tmp-*
 
 clean-em:
-	$(RM) -rf orig-em orig-em-tmp tweak-em tweak-em-tmp manual-em manual-em-tmp
+	$(RM) -r em-*
+	$(RM) $(PROG)_em-*
+
+clean-revert:
+	$(RM) -r revert-*
+	$(RM) $(PROG)_revert-*
+
+clean-3c:
+	$(RM) -r 3c-*
+	$(RM) $(PROG)_3c-*
+
+clean-objs:
+	find . -type f -name '*.o' -exec rm {} +
+
+clean-progs:
+	$(RM) $(PROG)_*
 
 clean-reports:
 	$(RM) -dr workdir
@@ -203,35 +159,5 @@ clean-reports:
 clean-diffs:
 	$(RM) diffs.dat diffs.sum final.csv
 	$(RM) -dr git-changes
-	$(RM) origstats.json* tweakstats.json* revertstats.json* manualstats.json* PerWildPtrStats.json WildPtrStats.json
+	$(RM) 3c_stats-* PerWildPtrStats.json WildPtrStats.json
 
-clean-objs:
-	$(RM) $(OBJS_ORIG_EM) $(OBJS_TWEAK_EM) $(OBJS_MANUAL_EM) $(OBJS_3C_ORIG) $(OBJS_3C_TWEAK) $(OBJS_REVERT) $(OBJS_3C_REVERT)
-
-clean-progs:
-	$(RM) $(PROG_ORIG_EM) $(PROG_TWEAK_EM) $(PROG_MANUAL_EM) $(PROG_3C_ORIG) $(PROG_3C_TWEAK) $(PROG_REVERT) $(PROG_3C_REVERT)
-
-clean-3c-orig:
-	$(RM) $(HDRS_3C_ORIG) $(SOURCES_3C_ORIG) $(OBJS_3C_ORIG) $(PROG_3C_ORIG)
-	$(RM) -dr 3c-orig
-	$(RM) $(PROG_3C_ORIG)
-
-clean-3c-tweak:
-	$(RM) $(HDRS_3C_TWEAK) $(SOURCES_3C_TWEAK) $(OBJS_3C_TWEAK) $(PROG_3C_TWEAK)
-	$(RM) -dr 3c-tweak
-	$(RM) $(PROG_3C_TWEAK)
-
-clean-revert:
-	$(RM) $(HDRS_REVERT) $(SOURCES_REVERT) $(OBJS_REVERT) $(PROG_REVERT)
-	$(RM) -dr revert
-	$(RM) $(PROG_REVERT)
-
-clean-3c-revert:
-	$(RM) $(HDRS_3C_REVERT) $(SOURCES_3C_REVERT) $(OBJS_3C_REVERT) $(PROG_3C_REVERT)
-	$(RM) -dr 3c-revert
-	$(RM) $(PROG_3C_REVERT)
-
-# Output directory created by `gathermanualstats`; ideally would never need to
-# be created if we could make 3C treat everything as unwritable.
-clean-3c-manual:
-	$(RM) -dr 3c-manual
