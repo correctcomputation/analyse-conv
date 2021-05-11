@@ -25,7 +25,7 @@ VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manua
 .SECONDARY: %.c %.h
 
 convert:
-	for $ver in $(VERSIONS) ; do \
+	for ver in $(VERSIONS) ; do \
 		make $$ver ; \
 	done
 
@@ -87,7 +87,7 @@ $(addprefix %/,$(SOURCES)) : %
 .SECONDEXPANSION:
 $(addprefix %/,$(SOURCES:.c=.o)): $($$(@:.o=.c)
 
-$(PROG)_%: $$(addprefix %/,$(SOURCES:.c=.o))
+exec_$(PROG)-%: $$(addprefix %/,$(SOURCES:.c=.o))
 	$(CC) -o $@ $(addprefix $*/,$(SOURCES:.c=.o)) $(LDFLAGS)
 
 
@@ -96,20 +96,15 @@ test:
 		make test-$$ver || exit 1; \
 	done
 
-test-%: $(PROG)_%
+bear_test: clean-objs clean-progs convert
+	-for v in $(VERSIONS); do \
+	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
+	done
+
+test-%: exec_$(PROG)-%
 	./$< $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
 	diff -w $(OUTPUT) ACTUAL_OUTPUT
 	$(RM) ACTUAL_OUTPUT
-
-# We need to at least clean-objs to ensure that the compilation database is
-# complete. We also need missing-files.sh to run _before_ we start adding build
-# products to the `orig` and `revert` subdirectories.
-bear-test: clean-objs clean-progs convert
-# Don't propagate errors for this.
-	-for v in orig tweak manual revert 3c-orig 3c-tweak 3c-revert; do \
-	  if [[ $$v =~ tweak$$ ]] && ! [ -d tweak ]; then continue; fi; \
-	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
-	done
 
 git-diffs: 
 	NAME=$(PROG) $(PATH_TO_SRC)create-git-diffs.sh
@@ -136,21 +131,21 @@ clean-tmp:
 
 clean-em:
 	$(RM) -r em-*
-	$(RM) $(PROG)_em-*
+	$(RM) exec_$(PROG)-em-*
 
 clean-revert:
 	$(RM) -r revert-*
-	$(RM) $(PROG)_revert-*
+	$(RM) exec_$(PROG)-revert-*
 
 clean-3c:
 	$(RM) -r 3c-*
-	$(RM) $(PROG)_3c-*
+	$(RM) exec_$(PROG)-3c-*
 
 clean-objs:
 	find . -type f -name '*.o' -exec rm {} +
 
 clean-progs:
-	$(RM) $(PROG)_*
+	$(RM) exec_$(PROG)-*
 
 clean-reports:
 	$(RM) -dr workdir
