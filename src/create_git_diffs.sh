@@ -6,7 +6,9 @@ PUSH= #set to anything to push changes, set to nothing to skip push
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
 if ! git diff-index --quiet HEAD --; then
-    echo please commit your changes, this script needs to change branches
+	echo "*******"
+    echo "* Please commit your changes, this script needs to change branches"
+	echo "*******"
 	exit 1
 fi
 

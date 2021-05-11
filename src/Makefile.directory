@@ -25,7 +25,7 @@ test bear_test test-%:
 	done
 
 git_diffs: 
-	NAME=$(NAME) $(PATH_TO_SRC)create_git_diffs.sh
+	NAME=$(NAME) VERSIONS="$(VERSIONS)" $(PATH_TO_SRC)create_git_diffs.sh
 
 stats:
 	for target in $(TARGETS) ; do \

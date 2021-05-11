@@ -107,7 +107,7 @@ test-%: exec_$(PROG)-%
 	$(RM) ACTUAL_OUTPUT
 
 git_diffs: 
-	NAME=$(PROG) $(PATH_TO_SRC)create_git_diffs.sh
+	NAME=$(PROG) VERSIONS="$(VERSIONS)" $(PATH_TO_SRC)create_git_diffs.sh
 
 git-%: %
 	mkdir -p git_changes
