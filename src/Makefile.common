@@ -106,23 +106,20 @@ test-%: exec_$(PROG)-%
 	diff -w $(OUTPUT) ACTUAL_OUTPUT
 	$(RM) ACTUAL_OUTPUT
 
-git-diffs: 
-	NAME=$(PROG) $(PATH_TO_SRC)create-git-diffs.sh
+git_diffs: 
+	NAME=$(PROG) $(PATH_TO_SRC)create_git_diffs.sh
 
-git-orig:
-	mkdir -p git-changes
-	cp orig/* git-changes/
+git-%: %
+	mkdir -p git_changes
+	cp -r $*/* git_changes/
 
-git-%:
-	cp $*/* git-changes/
-
-add-git:
-	git add git-changes/*
+add_git_changes:
+	git add git_changes/*
 
 stats: diffs.dat
 
 diffs.dat diffs.sum: clean-objs
-	NAME=$(PROG) $(PATH_TO_SRC)create-stats.sh
+	NAME=$(PROG) $(PATH_TO_SRC)create_stats.sh
 
 clean: clean-tmp clean-em clean-revert clean-3c clean-diffs clean-reports
 

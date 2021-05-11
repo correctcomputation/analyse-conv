@@ -2,6 +2,9 @@
 # TARGETS
 # PATH_TO_SRC
 # NAME
+# and optionally for git versions
+VERSIONS ?= orig 3c-em-orig manual revert-em-manual 3c-revert-em-manual
+
 
 %:
 	for target in $(TARGETS) ; do \
@@ -21,8 +24,8 @@ test bear_test test-%:
 		make $@) || exit 1; \
 	done
 
-git-diffs: 
-	NAME=$(NAME) $(PATH_TO_SRC)create-git-diffs.sh
+git_diffs: 
+	NAME=$(NAME) $(PATH_TO_SRC)create_git_diffs.sh
 
 stats:
 	for target in $(TARGETS) ; do \
@@ -30,7 +33,7 @@ stats:
 		make stats) ; \
 	done
 	TARGETS="$(TARGETS)" $(PATH_TO_SRC)report.sh
-	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine-stats.sh
+	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine_stats.sh
 
 clean: clean-tmp clean-em clean-revert clean-3c clean-diffs clean-reports
 
