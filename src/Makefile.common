@@ -106,28 +106,18 @@ gathermanualstats:
 		$(THREEC_FLAGS) $(SOURCES_MANUAL_EM) -- 
 
 revert: $(addprefix tmp-revert/,$(HDRS)) $(addprefix tmp-revert/,$(SOURCES))
+	$(RM) -rf revert
 	mv tmp-revert revert
 
-$(PROG_ORIG_EM): orig-em $(OBJS_ORIG_EM)
-	$(CC) -o $@ $(OBJS_ORIG_EM) $(LDFLAGS)
 
-$(PROG_TWEAK_EM): tweak-em $(OBJS_TWEAK_EM)
-	$(CC) -o $@ $(OBJS_TWEAK_EM) $(LDFLAGS)
+$(addprefix %/,$(SOURCES)) : %
+	:
 
-$(PROG_MANUAL_EM): manual-em $(OBJS_MANUAL_EM)
-	$(CC) -o $@ $(OBJS_MANUAL_EM) $(LDFLAGS)
+.SECONDEXPANSION:
+$(addprefix %/,$(SOURCES:.c=.o)): $($$(@:.o=.c)
 
-$(PROG_3C_ORIG): 3c-orig $(OBJS_3C_ORIG)
-	$(CC) -o $@ $(OBJS_3C_ORIG) $(LDFLAGS)
-
-$(PROG)_revert: revert $(addprefix revert/,$(SOURCES:.c=.o))
-	$(CC) -o $@ $(addprefix revert/,$(SOURCES:.c=.o)) $(LDFLAGS)
-
-$(PROG_3C_TWEAK): 3c-tweak $(OBJS_3C_TWEAK)
-	$(CC) -o $@ $(OBJS_3C_TWEAK) $(LDFLAGS)
-
-$(PROG)_3c_revert: 3c_revert $(addprefix 3c_revert/,$(SOURCES:.c=.o))
-	$(CC) -o $@ $(addprefix 3c_revert/,$(SOURCES:.c=.o)) $(LDFLAGS)
+$(PROG)_%: $$(addprefix %/,$(SOURCES:.c=.o))
+	$(CC) -o $@ $(addprefix $*/,$(SOURCES:.c=.o)) $(LDFLAGS)
 
 
 # TODO: Reduce code duplication between this and manual-em (and for that matter,
@@ -245,38 +235,8 @@ bear-test: clean-objs clean-progs convert
 	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
 	done
 
-test-orig-em: $(PROG_ORIG_EM)
-	./$(PROG_ORIG_EM) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
-	diff -w $(OUTPUT) ACTUAL_OUTPUT
-	$(RM) ACTUAL_OUTPUT
-
-test-tweak-em: $(PROG_TWEAK_EM)
-	./$(PROG_TWEAK_EM) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
-	diff -w $(OUTPUT) ACTUAL_OUTPUT
-	$(RM) ACTUAL_OUTPUT
-
-test-manual-em: $(PROG_MANUAL_EM)
-	./$(PROG_MANUAL_EM) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
-	diff -w $(OUTPUT) ACTUAL_OUTPUT
-	$(RM) ACTUAL_OUTPUT
-
-test-revert: $(PROG_REVERT)
-	./$(PROG_REVERT) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
-	diff -w $(OUTPUT) ACTUAL_OUTPUT
-	$(RM) ACTUAL_OUTPUT
-
-test-3c-orig: $(PROG_3C_ORIG)
-	./$(PROG_3C_ORIG) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
-	diff -w $(OUTPUT) ACTUAL_OUTPUT
-	$(RM) ACTUAL_OUTPUT
-
-test-3c-tweak: $(PROG_3C_TWEAK)
-	./$(PROG_3C_TWEAK) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
-	diff -w $(OUTPUT) ACTUAL_OUTPUT
-	$(RM) ACTUAL_OUTPUT
-
-test-3c-revert: $(PROG_3C_REVERT)
-	./$(PROG_3C_REVERT) $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
+test-%: $(PROG)_%
+	./$< $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
 	diff -w $(OUTPUT) ACTUAL_OUTPUT
 	$(RM) ACTUAL_OUTPUT
 
