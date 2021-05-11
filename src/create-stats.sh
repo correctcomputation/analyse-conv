@@ -52,32 +52,32 @@ function count_lines() {
 
 for version in "manual" "revert" "tweak" "orig" ; do 
   if [ "$version" = "manual" ]; then 
-    ref=$(compute_diff "orig-em"  "revert" )
-    ref_total=$(count_lines "orig-em" )
-    anno=$(compute_filtered_diff "revert" "manual-em") 
-    anno_total=$(count_lines "revert")
+    ref=$(compute_diff "em-orig"  "revert-em-manual" )
+    ref_total=$(count_lines "em-orig" )
+    anno=$(compute_filtered_diff "revert-em-manual" "em-manual")
+    anno_total=$(count_lines "revert-em-manual")
     echo "$version,$ref,$ref_total,$anno,$anno_total,N/A,N/A" >> diffs.sum
   elif [ "$version" = "revert" ]; then
-    anno=$(compute_diff "revert" "3c-revert")
-    anno_total=$(count_lines "revert") 
-    left=$(compute_filtered_diff "3c-revert" "manual-em")
-    left_total=$(count_lines "3c-revert") 
+    anno=$(compute_diff "revert-em-manual" "3c-revert-em-manual")
+    anno_total=$(count_lines "revert-em-manual")
+    left=$(compute_filtered_diff "3c-revert-em-manual" "em-manual")
+    left_total=$(count_lines "3c-revert-em-manual")
     echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   elif [ "$version" = "tweak" ]; then
     if [ -d "tweak" ]; then
-      ref=$(compute_diff "orig-em"  "tweak-em" )
-      ref_total=$(count_lines "orig-em" )
-      anno=$(compute_diff "tweak-em" "3c-tweak") 
-      anno_total=$(count_lines "tweak-em") 
-      left=$(compute_filtered_diff "3c-tweak" "manual-em")
-      left_total=$(count_lines "3c-tweak") 
+      ref=$(compute_diff "em-orig"  "em-tweak" )
+      ref_total=$(count_lines "em-orig" )
+      anno=$(compute_diff "em-tweak" "3c-em-tweak")
+      anno_total=$(count_lines "em-tweak")
+      left=$(compute_filtered_diff "3c-em-tweak" "em-manual")
+      left_total=$(count_lines "3c-em-tweak")
       echo "$version,$ref,$ref_total,$anno,$anno_total,$left,$left_total" >> diffs.sum
     fi
   elif [ "$version" = "orig" ]; then 
-    anno=$(compute_diff "orig-em" "3c-orig") 
-    anno_total=$(count_lines "orig-em") 
-    left=$(compute_filtered_diff "3c-orig" "manual-em")
-    left_total=$(count_lines "3c-orig") 
+    anno=$(compute_diff "em-orig" "3c-em-orig")
+    anno_total=$(count_lines "em-orig")
+    left=$(compute_filtered_diff "3c-em-orig" "em-manual")
+    left_total=$(count_lines "3c-em-orig")
     echo "$version,N/A,N/A,$anno,$anno_total,$left,$left_total" >> diffs.sum
   fi
 done

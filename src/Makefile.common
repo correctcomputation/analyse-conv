@@ -9,8 +9,9 @@
 # PATH_TO_SRC
 
 # and optionally
+override THREEC_FLAGS += $(addprefix -extra-arg-before=,$(CFLAGS))
 STDIN_FILENAME ?= /dev/stdin
-THREEC_FLAGS += -warn-all-root-cause $(addprefix -extra-arg-before=,$(CFLAGS))
+VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual tweak 3c-tweak
 
 # also requires
 # CC
@@ -78,11 +79,9 @@ PROG_3C_REVERT = $(PROG)_3c_revert
 .SECONDARY: %.c %.h
 
 convert:
-	-make 3c-orig
-	-make 3c-tweak
-	-make revert
-	-make 3c-revert
-	-make 3c-manual
+	for $ver in $(VERSIONS) ; do \
+		make $$ver ; \
+	done
 
 # make revert-<version>
 #	converts checkedc sources and headers in <version> to regular c
