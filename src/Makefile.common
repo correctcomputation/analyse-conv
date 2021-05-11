@@ -10,23 +10,13 @@
 
 # and optionally
 STDIN_FILENAME ?= /dev/stdin
+THREEC_FLAGS += -warn-all-root-cause $(addprefix -extra-arg-before=,$(CFLAGS))
 
 # also requires
 # CC
 # C3
 # THREEC
 # THREEC_WORKTREE
-
-# `orig` and `manual` are not macro-expanded; `orig-em` and `manual-em` are
-# (`em` stands for "expand macros"). The remaining versions of the code
-# (`revert`, `3c-orig`, `3c-revert`) are all macro-expanded and don't have a
-# distinguishing suffix. The inconsistency is a little awkward, but it seemed a
-# lesser evil than either (1) renaming the non-expanded `orig` and `manual` or
-# (2) the churn of adding the `em` suffix in more places.
-#
-# _However_, if NO_MACRO_EXPANSION is set, then the macro expansion step is
-# turned into a no-op and `orig-em` and `manual-em` are identical to `orig` and
-# `manual`, respectively.
 
 HDRS_ORIG = $(addprefix orig/,$(HDRS))
 SOURCES_ORIG = $(addprefix orig/,$(SOURCES))
@@ -85,30 +75,77 @@ OBJS_3C_REVERT = $(SOURCES_3C_REVERT:.c=.o)
 PROG_3C_REVERT = $(PROG)_3c_revert
 
 
-.PRECIOUS: orig/%.c tweak/%.c manual/%.c revert/%.c 3c-orig/%.c 3c-tweak/%.c 3c-revert/%.c
+.SECONDARY: %.c %.h
 
 convert:
 	-make 3c-orig
 	-make 3c-tweak
 	-make revert
 	-make 3c-revert
-	-make gathermanualstats
+	-make 3c-manual
 
-orig-em: $(HDRS_ORIG_EM) $(SOURCES_ORIG_EM)
+# make revert (from manual)
+#	converts manually converted checkedc sources and headers in <version> to regular c
 
-tweak-em: $(HDRS_TWEAK_EM) $(SOURCES_TWEAK_EM)
-
-manual-em: $(HDRS_MANUAL_EM) $(SOURCES_MANUAL_EM)
-
-# TODO: This should treat the input files as unwritable.
-gathermanualstats:
-	$(THREEC) -alltypes -dump-stats -stats-output=manualstats.json -base-dir=manual-em -output-dir=3c-manual \
-		$(THREEC_FLAGS) $(SOURCES_MANUAL_EM) -- 
-
-revert: $(addprefix tmp-revert/,$(HDRS)) $(addprefix tmp-revert/,$(SOURCES))
+revert: em-manual $(addprefix tmp-revert/,$(HDRS)) $(addprefix tmp-revert/,$(SOURCES))
 	$(RM) -rf revert
 	mv tmp-revert revert
 
+tmp-revert/%.c: em-manual/%.c
+	mkdir -p $(dir $@)
+	$(C3) -f $^ > $@
+
+tmp-revert/%.h: em-manual/%.h
+	mkdir -p $(dir $@)
+	$(C3) -f $^ > $@
+
+
+# make em-<version>
+#   expands macros in <version> sources and headers
+
+em-%: %
+	$(RM) -rf tmp-$@
+	mkdir tmp-$@
+	cp $(addprefix $*/,$(HDRS)) $(addprefix $*/,$(SOURCES)) tmp-$@
+	bear --cdb tmp-$@/compile_commands.json make $(addprefix tmp-$@,/$(SOURCES:.c=.o))
+# The macro expander removes comments, including the special /**/ comments that
+# we insert in some code to work around
+# https://github.com/correctcomputation/C3/issues/10 . Maybe the macro expander
+# shouldn't remove comments in general, but for now, we just temporarily hide
+# the /**/ from it.
+	sed -i 's,/\*\*/,C3_BLOCKER,' $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES))
+# See https://correct-computation.slack.com/archives/G01GKGKHMFD/p1619280418048000?thread_ts=1619278307.042100&cid=G01GKGKHMFD
+	(cd tmp-$@ && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
+	sed -i 's,C3_BLOCKER,/**/,' $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES))
+	$(RM) -rf $@
+	mkdir $@
+	cp $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES)) $@
+
+
+# make 3c-<version> (and 3c-stats-<version>)
+#	converts sources and headers in <version> to checkedc, and generates stats
+
+3c_stats-%.json: 3c-%
+	:
+
+3c-%: %
+	$(RM) -rf tmp-$@
+	$(THREEC) -alltypes -dump-stats -stats-output=3c_stats-$*.json -base-dir=$* -output-dir=tmp-$@ \
+		$(THREEC_FLAGS) $(addprefix $*/,$(SOURCES)) -- && \
+		cp -r -n $*/* tmp-$@
+		$(RM) -rf $@
+		mv tmp-$@ $@ 
+
+
+# This might be called by Makefile.directory, so we have to accept the call and
+# then make it a no-op if this benchmark doesn't have a `tweak` version.
+ifeq ($(wildcard tweak),)
+3c-tweak:
+	:
+endif
+
+# make <prog>_<version>
+#	compile sources into an executable
 
 $(addprefix %/,$(SOURCES)) : %
 	:
@@ -119,106 +156,6 @@ $(addprefix %/,$(SOURCES:.c=.o)): $($$(@:.o=.c)
 $(PROG)_%: $$(addprefix %/,$(SOURCES:.c=.o))
 	$(CC) -o $@ $(addprefix $*/,$(SOURCES:.c=.o)) $(LDFLAGS)
 
-
-# TODO: Reduce code duplication between this and manual-em (and for that matter,
-# all the other duplication in this makefile)?
-$(SOURCES_ORIG_EM) $(HDRS_ORIG_EM) &: $(SOURCES_ORIG) $(HDRS_ORIG)
-ifeq ($(NO_MACRO_EXPANSION),)
-# Use a separate temporary directory to ensure our build of orig-em is clean and
-# we don't copy scratch files created by convert_project (convert_all.sh, etc.)
-# that we currently don't have a way to turn off. Leave the temporary directory
-# around, even on success, in case we need to troubleshoot macro expansion.
-	rm -rf orig-em-tmp
-	mkdir orig-em-tmp
-	cp $(HDRS_ORIG) $(SOURCES_ORIG) orig-em-tmp
-	bear --cdb orig-em-tmp/compile_commands.json make $(OBJS_ORIG_EM_TMP)
-# The macro expander removes comments, including the special /**/ comments that
-# we insert in some code to work around
-# https://github.com/correctcomputation/C3/issues/10 . Maybe the macro expander
-# shouldn't remove comments in general, but for now, we just temporarily hide
-# the /**/ from it.
-	sed -i 's,/\*\*/,C3_BLOCKER,' $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP)
-# See https://correct-computation.slack.com/archives/G01GKGKHMFD/p1619280418048000?thread_ts=1619278307.042100&cid=G01GKGKHMFD
-	(cd orig-em-tmp && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
-	sed -i 's,C3_BLOCKER,/**/,' $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP)
-	mkdir orig-em
-	cp $(HDRS_ORIG_EM_TMP) $(SOURCES_ORIG_EM_TMP) orig-em
-else
-	mkdir orig-em
-	cp $(HDRS_ORIG) $(SOURCES_ORIG) orig-em
-endif
-
-$(SOURCES_TWEAK_EM) $(HDRS_TWEAK_EM) &: $(SOURCES_TWEAK) $(HDRS_TWEAK)
-ifeq ($(NO_MACRO_EXPANSION),)
-	rm -rf tweak-em-tmp
-	mkdir tweak-em-tmp
-	cp $(HDRS_TWEAK) $(SOURCES_TWEAK) tweak-em-tmp
-	bear --cdb tweak-em-tmp/compile_commands.json make $(OBJS_TWEAK_EM_TMP)
-	sed -i 's,/\*\*/,C3_BLOCKER,' $(HDRS_TWEAK_EM_TMP) $(SOURCES_TWEAK_EM_TMP)
-	(cd tweak-em-tmp && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
-	sed -i 's,C3_BLOCKER,/**/,' $(HDRS_TWEAK_EM_TMP) $(SOURCES_TWEAK_EM_TMP)
-	mkdir tweak-em
-	cp $(HDRS_TWEAK_EM_TMP) $(SOURCES_TWEAK_EM_TMP) tweak-em
-else
-	mkdir tweak-em
-	cp $(HDRS_TWEAK) $(SOURCES_TWEAK) tweak-em
-endif
-
-$(SOURCES_MANUAL_EM) $(HDRS_MANUAL_EM) &: $(SOURCES_MANUAL) $(HDRS_MANUAL)
-ifeq ($(NO_MACRO_EXPANSION),)
-	rm -rf manual-em-tmp
-	mkdir manual-em-tmp
-	cp $(HDRS_MANUAL) $(SOURCES_MANUAL) manual-em-tmp
-	bear --cdb manual-em-tmp/compile_commands.json make $(OBJS_MANUAL_EM_TMP)
-	sed -i 's,/\*\*/,C3_BLOCKER,' $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP)
-	(cd manual-em-tmp && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
-	sed -i 's,C3_BLOCKER,/**/,' $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP)
-	mkdir manual-em
-	cp $(HDRS_MANUAL_EM_TMP) $(SOURCES_MANUAL_EM_TMP) manual-em
-else
-	mkdir manual-em
-	cp $(HDRS_MANUAL) $(SOURCES_MANUAL) manual-em
-endif
-
-tmp-revert/%.c: manual-em/%.c
-	mkdir -p $(dir $@)
-	$(C3) -f $^ > $@
-
-tmp-revert/%.h: manual-em/%.h
-	mkdir -p $(dir $@)
-	$(C3) -f $^ > $@
-
-# As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
-# fail and bisort to be omitted from the results. We think it's probably
-# unimportant, so ignore it for now.
-#
-# As of 2021-05-05, Matt found the -warn-all-root-cause output helpful in some
-# cases. Hopefully others aren't too bothered by the extra output in cases in
-# which it isn't helpful.
-THREEC_FLAGS = -allow-unwritable-changes -warn-all-root-cause $(addprefix -extra-arg-before=,$(CFLAGS))
-
-3c-orig: orig-em
-	$(THREEC) -alltypes -dump-stats -stats-output=origstats.json -base-dir=orig-em -output-dir=tmp-3c-orig \
-		$(THREEC_FLAGS) $(SOURCES_ORIG_EM) -- && \
-		cp -r -n orig/* tmp-3c-orig
-		mv tmp-3c-orig 3c-orig
-
-# This might be called by Makefile.directory, so we have to accept the call and
-# then make it a no-op if this benchmark doesn't have a `tweak` version.
-3c-tweak:
-ifneq ($(wildcard tweak),)
-3c-tweak: tweak-em
-	$(THREEC) -alltypes -dump-stats -stats-output=tweakstats.json -base-dir=tweak-em -output-dir=3c-tweak \
-		$(THREEC_FLAGS) $(SOURCES_TWEAK_EM) -- && \
-		cp -r -n tweak-em/* tmp-3c-tweak
-		mv tmp-3c-tweak 3c-tweak
-endif
-
-3c-revert: revert
-	$(THREEC) -alltypes -dump-stats -stats-output=revertstats.json  -base-dir=revert -output-dir=tmp-3c-revert \
-		$(THREEC_FLAGS) $(SOURCES_REVERT) -- && \
-		cp -r -n revert/* tmp-3c-revert
-		mv tmp-3c-revert 3c-revert
 
 test: test-orig test-manual test-revert test-3c-orig test-3c-revert
 ifneq ($(wildcard tweak),)
