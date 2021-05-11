@@ -84,20 +84,17 @@ convert:
 	-make 3c-revert
 	-make 3c-manual
 
-# make revert (from manual)
-#	converts manually converted checkedc sources and headers in <version> to regular c
+# make revert-<version>
+#	converts checkedc sources and headers in <version> to regular c
 
-revert: em-manual $(addprefix tmp-revert/,$(HDRS)) $(addprefix tmp-revert/,$(SOURCES))
-	$(RM) -rf revert
-	mv tmp-revert revert
-
-tmp-revert/%.c: em-manual/%.c
-	mkdir -p $(dir $@)
-	$(C3) -f $^ > $@
-
-tmp-revert/%.h: em-manual/%.h
-	mkdir -p $(dir $@)
-	$(C3) -f $^ > $@
+revert-%: %
+	$(RM) -rf tmp-$@
+	mkdir tmp-$@
+	for src in $(HDRS) $(SOURCES) ; do \
+		$(C3) -f $*/$$src > tmp-revert-$*/$$src || exit 1; \
+	done
+	$(RM) -rf $@
+	mv tmp-$@ $@
 
 
 # make em-<version>
@@ -131,10 +128,10 @@ em-%: %
 3c-%: %
 	$(RM) -rf tmp-$@
 	$(THREEC) -alltypes -dump-stats -stats-output=3c_stats-$*.json -base-dir=$* -output-dir=tmp-$@ \
-		$(THREEC_FLAGS) $(addprefix $*/,$(SOURCES)) -- && \
-		cp -r -n $*/* tmp-$@
-		$(RM) -rf $@
-		mv tmp-$@ $@ 
+		$(THREEC_FLAGS) $(addprefix $*/,$(SOURCES)) --
+	cp -r -n $*/* tmp-$@
+	$(RM) -rf $@
+	mv tmp-$@ $@
 
 
 # This might be called by Makefile.directory, so we have to accept the call and
