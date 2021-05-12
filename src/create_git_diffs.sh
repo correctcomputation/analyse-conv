@@ -22,7 +22,7 @@ for ver in $VERSIONS ; do
 done
 
 NOW=$(date '+%Y%m%d%H%M%S')
-git checkout -b $NAME-$NOW
+git checkout -b "${NAME}_${NOW}"
 [ ! -z $PUSH ] && git push --set-upstream origin $NAME-$NOW
 
 git checkout $BRANCH
