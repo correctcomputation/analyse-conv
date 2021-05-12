@@ -78,7 +78,7 @@ em-%: %
 	$(RM) -rf $@
 	mv tmp-$@ $@
 
-# make <prog>_<version>
+# make prog_<prog>-<version>
 #	compile sources into an executable
 
 $(addprefix %/,$(SOURCES)) : %
@@ -87,9 +87,11 @@ $(addprefix %/,$(SOURCES)) : %
 .SECONDEXPANSION:
 $(addprefix %/,$(SOURCES:.c=.o)): $($$(@:.o=.c)
 
-exec_$(PROG)-%: $$(addprefix %/,$(SOURCES:.c=.o))
+prog_$(PROG)-%: $$(addprefix %/,$(SOURCES:.c=.o))
 	$(CC) -o $@ $(addprefix $*/,$(SOURCES:.c=.o)) $(LDFLAGS)
 
+prog-%: $$(addprefix %/,$(SOURCES:.c=.o))
+	$(CC) -o $@ $(addprefix $*/,$(SOURCES:.c=.o)) $(LDFLAGS)
 
 test:
 	for ver in $(VERSIONS) ; do \
@@ -101,7 +103,7 @@ bear_test: clean-objs clean-progs convert
 	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
 	done
 
-test-%: exec_$(PROG)-%
+test-%: prog_$(PROG)-%
 	./$< $(RUN_OPTIONS) < $(STDIN_FILENAME) > ACTUAL_OUTPUT 2>&1
 	diff -w $(OUTPUT) ACTUAL_OUTPUT
 	$(RM) ACTUAL_OUTPUT
@@ -121,35 +123,31 @@ stats: diffs.dat
 diffs.dat diffs.sum: clean-objs
 	NAME=$(PROG) $(PATH_TO_SRC)create_stats.sh
 
-clean: clean-tmp clean-em clean-revert clean-3c clean-diffs clean-reports
+clean: clean-tmp clean-em clean-revert clean-3c clean_objs clean_progs clean_diffs clean_reports clean_bear
 
 clean-tmp:
 	$(RM) -r tmp-*
 
-clean-em:
-	$(RM) -r em-*
-	$(RM) exec_$(PROG)-em-*
+clean-%:
+	$(RM) -r $*-*
+	$(RM) prog_$(PROG)-$*-*
 
-clean-revert:
-	$(RM) -r revert-*
-	$(RM) exec_$(PROG)-revert-*
-
-clean-3c:
-	$(RM) -r 3c-*
-	$(RM) exec_$(PROG)-3c-*
-
-clean-objs:
+clean_objs:
 	find . -type f -name '*.o' -exec rm {} +
 
-clean-progs:
-	$(RM) exec_$(PROG)-*
+clean_progs:
+	$(RM) prog_$(PROG)-*
 
-clean-reports:
+clean_reports:
 	$(RM) -dr workdir
 	$(RM) final.csv
 
-clean-diffs:
+clean_diffs:
 	$(RM) diffs.dat diffs.sum final.csv
 	$(RM) -dr git-changes
 	$(RM) 3c_stats-* PerWildPtrStats.json WildPtrStats.json
+
+clean_bear:
+	find . -type f -name 'build.log' -exec rm {} +
+	find . -type f -name 'compile_commands.json' -exec rm {} +
 

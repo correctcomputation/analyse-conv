@@ -35,15 +35,21 @@ stats:
 	TARGETS="$(TARGETS)" $(PATH_TO_SRC)report.sh
 	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine_stats.sh
 
-clean: clean-tmp clean-em clean-revert clean-3c clean-diffs clean-reports
+clean: clean-tmp clean-em clean-revert clean-3c clean_objs clean_progs clean_diffs clean_reports clean_bear
 
-clean-diffs:
+clean_reports:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make clean-diffs) ; \
+		make $@) ; \
+	done
+	$(RM) -dr workdir
+	$(RM) final.csv
+
+clean_diffs:
+	for target in $(TARGETS) ; do \
+		(cd $$target && \
+		make $@) ; \
 	done
 	$(RM) diffs.dat diffs.sum
 	$(RM) -dr git-changes
-	$(RM) -dr workdir
-	$(RM) final.csv
 
