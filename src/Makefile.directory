@@ -43,7 +43,7 @@ clean_reports:
 		make $@) ; \
 	done
 	$(RM) -dr workdir
-	$(RM) final.csv
+	$(RM) final.tex final.txt final.csv
 
 clean_diffs:
 	for target in $(TARGETS) ; do \
