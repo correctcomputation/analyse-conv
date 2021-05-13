@@ -16,5 +16,13 @@ final.txt: final.csv
 final.csv:
 	TARGETS="$(TARGETS)" ./tally_report.sh 
 
-include $(PATH_TO_SRC)Makefile.directory
+bear-test:
+	for target in $(TARGETS) ; do \
+		(cd $$target && \
+		make $@) || exit 1; \
+	done
 
+clean:
+	rm -f final.tex final.txt final.csv  
+	TARGETS="$(TARGETS)" ./clean.sh
+	
