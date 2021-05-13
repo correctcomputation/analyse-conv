@@ -66,7 +66,7 @@ def test_to_statsfile(test_name : str) -> str:
 	if test_name == 'orig':
 		return '3c_stats-em-orig.json.aggregate.json'
 	elif test_name == 'manual':
-		return '3c_stats-em-manual.json.aggregate.json'
+		return '3c_stats-manual.json.aggregate.json'
 	elif test_name == 'revert':
 		return '3c_stats-revert-em-manual.json.aggregate.json'
 	elif test_name == 'tweak':
