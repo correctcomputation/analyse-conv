@@ -17,10 +17,11 @@ VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manua
 
 # also requires tools
 # -------------------
-# CC
-# C3
-# THREEC
-# THREEC_WORKTREE
+# FMT - clang-format
+# CC - checkedc compiler
+# C3 - checkedc reverter
+# THREEC - checkedc converter
+# THREEC_WORKTREE - contains macro-expander
 
 .SECONDARY: %.c %.h
 
@@ -29,16 +30,29 @@ convert:
 		make $$ver ; \
 	done
 
+# make fmt-<version>
+# 	runs clang-format on the files
+
+fmt-%: %
+	$(RM) -r tmp-$@
+	mkdir tmp-$@
+	for src in $(HDRS) $(SOURCES) ; do \
+		$(FMT) --style=file $*/$$src > tmp-fmt-$*/$$src || exit 1; \
+	done
+	$(RM) -r $@
+	mv tmp-$@ $@
+	
+
 # make revert-<version>
 #	converts checkedc sources and headers in <version> to regular c
 
 revert-%: %
-	$(RM) -rf tmp-$@
+	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	for src in $(HDRS) $(SOURCES) ; do \
 		$(C3) -f $*/$$src > tmp-revert-$*/$$src || exit 1; \
 	done
-	$(RM) -rf $@
+	$(RM) -r $@
 	mv tmp-$@ $@
 
 
@@ -46,7 +60,7 @@ revert-%: %
 #   expands macros in <version> sources and headers
 
 em-%: %
-	$(RM) -rf tmp-$@
+	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	cp $(addprefix $*/,$(HDRS)) $(addprefix $*/,$(SOURCES)) tmp-$@
 	bear --cdb tmp-$@/compile_commands.json make $(addprefix tmp-$@/,$(SOURCES:.c=.o))
@@ -59,7 +73,7 @@ em-%: %
 # See https://correct-computation.slack.com/archives/G01GKGKHMFD/p1619280418048000?thread_ts=1619278307.042100&cid=G01GKGKHMFD
 	(cd tmp-$@ && $(THREEC_WORKTREE)/clang/tools/3c/utils/port_tools/convert_project.py -dr --expand_macros_before_conversion -pr .)
 	sed -i 's,C3_BLOCKER,/**/,' $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES))
-	$(RM) -rf $@
+	$(RM) -r $@
 	mkdir $@
 	cp $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES)) $@
 
@@ -71,11 +85,11 @@ em-%: %
 	:
 
 3c-%: %
-	$(RM) -rf tmp-$@
+	$(RM) -r tmp-$@
 	$(THREEC) -alltypes -dump-stats -stats-output=3c_stats-$*.json -base-dir=$* -output-dir=tmp-$@ \
 		$(THREEC_FLAGS) $(addprefix $*/,$(SOURCES)) --
 	cp -r -n $*/* tmp-$@
-	$(RM) -rf $@
+	$(RM) -r $@
 	mv tmp-$@ $@
 
 # make prog_<prog>-<version>

@@ -18,7 +18,13 @@ convert:
 		make $@) ; \
 	done
 
-test bear_test test-%:
+test bear_test:
+	for target in $(TARGETS) ; do \
+		(cd $$target && \
+		make $@) || exit 1; \
+	done
+
+test-%:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
 		make $@) || exit 1; \
