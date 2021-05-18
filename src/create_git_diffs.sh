@@ -23,7 +23,7 @@ done
 
 NOW=$(date '+%Y%m%d%H%M%S')
 git checkout -b "${NAME}_${NOW}"
-git commit -m"extra changes are probably an error"
+git commit -am"extra changes are probably an error"
 [ ! -z $PUSH ] && git push --set-upstream origin $NAME-$NOW
 
 git checkout $BRANCH
