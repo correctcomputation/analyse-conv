@@ -1,6 +1,6 @@
 PATH_TO_SRC=./
 NAME = All
-TARGETS = Olden Ptrdist
+TARGETS ?= Olden Ptrdist
 
 all: checkenv final.tex final.txt
 
