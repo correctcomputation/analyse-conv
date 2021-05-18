@@ -137,7 +137,7 @@ stats: diffs.dat
 diffs.dat diffs.sum: clean-objs
 	NAME=$(PROG) $(PATH_TO_SRC)create_stats.sh
 
-clean: clean-tmp clean-em clean-revert clean-3c clean_objs clean_progs clean_diffs clean_reports clean_bear
+clean: clean-tmp clean-fmt clean-em clean-revert clean-3c clean_objs clean_progs clean_diffs clean_reports clean_bear
 
 clean-tmp:
 	$(RM) -r tmp-*
