@@ -1,0 +1,6 @@
+EXTERNAL_FMT = # path/to/clang-format (checkedc version)
+EXTERNAL_CC = # path/to/clang (checkedc version)
+EXTERNAL_C3 = # path/to/main.exe (checkedc reverter)
+EXTERNAL_THREEC = # path/to/3c (checkedc porting tool)
+EXTERNAL_THREEC_WORKTREE = # path/to/checkedc-clang (3c repo)
+

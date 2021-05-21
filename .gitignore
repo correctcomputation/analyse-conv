@@ -1,6 +1,10 @@
 # Some of these patterns are a bit loose. Hope we don't get false positives.
 
+# user-dependent makefiles
+Makefile.external
+
 # Converted directories
+fmt-*
 tmp-*
 revert-*
 em-*
