@@ -1,6 +1,6 @@
-EXTERNAL_FMT = # path/to/clang-format (checkedc version)
-EXTERNAL_CC = # path/to/clang (checkedc version)
-EXTERNAL_C3 = # path/to/main.exe (checkedc reverter)
-EXTERNAL_THREEC = # path/to/3c (checkedc porting tool)
-EXTERNAL_THREEC_WORKTREE = # path/to/checkedc-clang (3c repo)
+EXTERNAL_FMT = /home/kyle/Documents/Projects/3C/checkedc-clang/llvm/cmake-build-release/bin/clang-format
+EXTERNAL_CC = /home/kyle/Documents/Projects/3C/checkedc-clang/llvm/cmake-build-release/bin/clang
+EXTERNAL_C3 = /home/kyle/Documents/Projects/3C/C3/_build/default/src/main.exe
+EXTERNAL_THREEC = /home/kyle/Documents/Projects/3C/checkedc-clang/llvm/cmake-build-release/bin/3c
+EXTERNAL_THREEC_WORKTREE = /home/kyle/Documents/Projects/3C/checkedc-clang
 

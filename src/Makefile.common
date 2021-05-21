@@ -15,13 +15,18 @@ override THREEC_FLAGS += $(addprefix -extra-arg-before=,$(CFLAGS))
 STDIN_FILENAME ?= /dev/stdin
 VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual
 
-# also requires tools
+# also requires tools - on commandline or exported or in tools/Makefile.external
 # -------------------
 # FMT - clang-format
 # CC - checkedc compiler
 # C3 - checkedc reverter
 # THREEC - checkedc converter
 # THREEC_WORKTREE - contains macro-expander
+
+# load in tools commands
+include $(PATH_TO_SRC)../tools/Makefile
+
+.PHONY: convert
 
 .SECONDARY: %.c %.h
 
@@ -34,6 +39,10 @@ convert:
 # 	runs clang-format on the files
 
 fmt-%: %
+ifndef FMT
+	echo "FMT needs to be set"
+	exit 1
+endif
 	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	for src in $(HDRS) $(SOURCES) ; do \
@@ -47,6 +56,10 @@ fmt-%: %
 #	converts checkedc sources and headers in <version> to regular c
 
 revert-%: %
+ifndef C3
+	echo "C3 needs to be set"
+	exit 1
+endif
 	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	for src in $(HDRS) $(SOURCES) ; do \
@@ -60,6 +73,10 @@ revert-%: %
 #   expands macros in <version> sources and headers
 
 em-%: %
+ifndef THREEC_WORKTREE
+	echo "THREEC_WORKTREE needs to be set"
+	exit 1
+endif
 	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	cp $(addprefix $*/,$(HDRS)) $(addprefix $*/,$(SOURCES)) tmp-$@
@@ -85,6 +102,10 @@ em-%: %
 	:
 
 3c-%: %
+ifndef THREEC
+	echo "THREEC needs to be set"
+	exit 1
+endif
 	$(RM) -r tmp-$@
 	$(THREEC) -alltypes -dump-stats -stats-output=3c_stats-$*.json -base-dir=$* -output-dir=tmp-$@ \
 		$(THREEC_FLAGS) $(addprefix $*/,$(SOURCES)) --
