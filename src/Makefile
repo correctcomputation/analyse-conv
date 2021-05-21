@@ -2,10 +2,7 @@ PATH_TO_SRC=./
 NAME = All
 TARGETS ?= Olden Ptrdist
 
-all: checkenv final.tex final.txt
-
-checkenv:
-	./checkenv.sh
+all: final.tex final.txt
 
 final.tex: final.csv
 	./pretify.py > final.tex
@@ -14,7 +11,14 @@ final.txt: final.csv
 	column -ts, final.csv > final.txt
 
 final.csv:
-	TARGETS="$(TARGETS)" ./tally_report.sh 
+	# Grab our headers
+	./genfinal.py  > final.csv
+	# Loop through targets and start 
+	# append their final result to the global final
+	for target in $(TARGETS); do \
+	  (cd $$target && make && make stats); \
+	  cat $$target/final.csv >> final.csv; \
+	done
 
 bear-test:
 	for target in $(TARGETS) ; do \
@@ -24,5 +28,6 @@ bear-test:
 
 clean:
 	rm -f final.tex final.txt final.csv  
-	TARGETS="$(TARGETS)" ./clean.sh
-	
+	for target in $(TARGETS); do \
+	  (cd $$target && make clean); \
+	done
