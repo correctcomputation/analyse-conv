@@ -4,6 +4,7 @@ PROG       = em3d
 
 CFLAGS   = -DTORONTO 
 LDFLAGS    = 
+C3FLAGS = -c
 
 ifdef SMALL_PROBLEM_SIZE
 RUN_OPTIONS = 256 250 35
@@ -15,9 +16,6 @@ OUTPUT = em3d.reference_output
 endif
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
 

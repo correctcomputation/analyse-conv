@@ -11,6 +11,7 @@
 # RUN_OPTIONS
 # CFLAGS
 # LDFLAGS
+# C3FLAGS
 override THREEC_FLAGS += $(addprefix -extra-arg-before=,$(CFLAGS))
 STDIN_FILENAME ?= /dev/stdin
 VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual
@@ -66,7 +67,7 @@ endif
 	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	for src in $(HDRS) $(SOURCES) ; do \
-		$(C3) -f $*/$$src > tmp-revert-$*/$$src || exit 1; \
+		$(C3) $(C3FLAGS) -f $*/$$src > tmp-revert-$*/$$src || exit 1; \
 	done
 	$(RM) -r $@
 	mv tmp-$@ $@

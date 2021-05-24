@@ -4,6 +4,7 @@ PROG     = bisort
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
+C3FLAGS = -c
 
 # As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
 # fail and bisort to be omitted from the results. We think it's probably
@@ -19,9 +20,6 @@ OUTPUT = bisort.reference_output
 endif
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
 

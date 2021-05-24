@@ -4,6 +4,7 @@ HDRS = health.h
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
+C3FLAGS = -c
 
 FP_TOLERANCE = 0.001
 
@@ -20,9 +21,6 @@ endif
 endif
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
 

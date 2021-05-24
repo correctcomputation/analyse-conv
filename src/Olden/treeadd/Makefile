@@ -4,6 +4,7 @@ HDRS = tree.h
 
 CFLAGS   = -DTORONTO
 LDFLAGS    = 
+C3FLAGS = -c
 
 ifdef SMALL_PROBLEM_SIZE
 RUN_OPTIONS = 20
@@ -18,9 +19,6 @@ endif
 OUTPUT = treeadd.reference_output
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
 

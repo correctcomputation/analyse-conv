@@ -5,6 +5,7 @@ VERSIONS = orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
+C3FLAGS = -c
 
 ifdef LARGE_PROBLEM_SIZE
 RUN_OPTIONS = 40960000
@@ -21,8 +22,5 @@ endif
 OUTPUT = tsp.reference_output
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
