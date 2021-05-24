@@ -87,7 +87,7 @@ endif
 	bear --cdb tmp-$@/compile_commands.json make $(addprefix tmp-$@/,$(SOURCES:.c=.o))
 # Patch some wrapper macros so that the call in the body is not recognized as a
 # macro call. A hack, but nicer than editing the source files.
-	sed -Ei 's,^(#define ([_a-z]+)\(\.\.\.\) _Unchecked \{ )\2(\(__VA_ARGS__\); \})$$,\1(\2)\3,' $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES))
+	sed -Ei 's,^(#define ([_a-z]+)\(\.\.\.\) (_Unchecked|unchecked) \{ )\2(\(__VA_ARGS__\); \})$$,\1(\2)\4,' $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES))
 # The macro expander removes comments, including the special /**/ comments that
 # we insert in some code to work around
 # https://github.com/correctcomputation/C3/issues/10 . Maybe the macro expander
