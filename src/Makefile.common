@@ -18,13 +18,16 @@ VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manua
 # also requires tools - on commandline or exported or in tools/Makefile.external
 # -------------------
 # FMT - clang-format
-# CC - checkedc compiler
+# CCClang - checkedc compiler
 # C3 - checkedc reverter
 # THREEC - checkedc converter
 # THREEC_WORKTREE - contains macro-expander
 
 # load in tools commands
 include $(PATH_TO_SRC)../tools/Makefile
+
+# set default compiler
+CC = $(CCClang)
 
 .PHONY: convert
 
