@@ -5,10 +5,10 @@ TARGETS ?= Olden Ptrdist
 all: final.tex final.txt
 
 final.tex: final.csv
-	./pretify.py > final.tex
+	-./pretify.py > final.tex
 
 final.txt: final.csv
-	column -ts, final.csv > final.txt
+	-column -ts, final.csv > final.txt
 
 final.csv:
 	# Grab our headers
@@ -16,8 +16,9 @@ final.csv:
 	# Loop through targets and start 
 	# append their final result to the global final
 	for target in $(TARGETS); do \
-	  (cd $$target && make && make stats); \
-	  cat $$target/final.csv >> final.csv; \
+		(cd $$target && (make ; make stats)); \
+		cat $$target/final.csv >> final.csv; \
+		true; \
 	done
 
 bear-test:

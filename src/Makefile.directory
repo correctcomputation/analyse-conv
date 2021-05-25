@@ -34,11 +34,18 @@ git_diffs:
 	NAME=$(NAME) VERSIONS="$(VERSIONS)" $(PATH_TO_SRC)create_git_diffs.sh
 
 stats:
+	# generate the stats
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
 		make stats) ; \
+		true; \
 	done
-	TARGETS="$(TARGETS)" $(PATH_TO_SRC)report.sh
+	# combine the stats
+	mkdir workdir 2> /dev/null
+	for program in $(TARGETS); do \
+	  $(PATH_TO_SRC)genfinal.py $$program; true; \
+	done
+	cat workdir/*.csv > final.csv
 	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine_stats.sh
 
 clean: clean-tmp clean-em clean-revert clean-3c clean_objs clean_progs clean_diffs clean_reports clean_bear
