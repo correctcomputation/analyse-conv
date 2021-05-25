@@ -31,7 +31,7 @@
  */
 
 typedef struct _nodeHCGType {
-    _Ptr<ulong> netsHook;
+    ulong *	netsHook;
     ulong	nets;
     ulong	netsReached;
 } nodeHCGType;
@@ -115,3 +115,4 @@ NoHCV(nodeHCGType *,
 #endif	/* HCG_CODE */
 
 #endif	/* HCG_H */
+
