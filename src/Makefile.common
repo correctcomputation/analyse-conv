@@ -160,10 +160,16 @@ git-%: %
 add_git_changes:
 	git add git_changes/*
 
-stats: diffs.dat
-
-diffs.dat diffs.sum: clean-objs
+report:
 	NAME=$(PROG) $(PATH_TO_SRC)create_stats.sh
+
+report_fmt_early:
+	NAME=$(PROG) $(PATH_TO_SRC)create_stats_fmt_early.sh
+	
+#stats: diffs.dat
+#
+#diffs.dat diffs.sum: clean-objs
+#	NAME=$(PROG) $(PATH_TO_SRC)create_stats.sh
 
 clean: clean-tmp clean-fmt clean-em clean-revert clean-3c clean_objs clean_progs clean_diffs clean_reports clean_bear
 

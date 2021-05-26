@@ -1,7 +1,7 @@
 PROG     = tsp
 SOURCES = args.c build.c main.c tsp.c
 HDRS = tsp.h
-VERSIONS = manual 3c-manual revert-em-manual 3c-revert-em-manual
+VERSIONS ?= manual 3c-manual revert-em-manual 3c-revert-em-manual
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm

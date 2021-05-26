@@ -1,7 +1,7 @@
 SOURCES = args.c newbh.c util.c walksub.c
 HDRS = code.h defs.h stdinc.h vectmath.h
 PROG     = bh
-VERSIONS = orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual tweak 3c-em-tweak
+VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual tweak 3c-em-tweak
 
 CFLAGS = -fcommon -DTORONTO
 LDFLAGS  = -lm

@@ -33,17 +33,31 @@ git-% test-%:
 git_diffs: 
 	NAME=$(NAME) VERSIONS="$(VERSIONS)" $(PATH_TO_SRC)create_git_diffs.sh
 
-stats:
+report:
 	# generate the stats
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		$(MAKE) stats) ; \
+		$(MAKE) $@) ; \
 		true; \
 	done
 	# combine the stats
 	mkdir workdir 2> /dev/null
 	for program in $(TARGETS); do \
 	  $(PATH_TO_SRC)genfinal.py $$program; true; \
+	done
+	cat workdir/*.csv > final.csv
+
+report_fmt_early:
+	# generate the stats
+	for target in $(TARGETS) ; do \
+		(cd $$target && \
+		$(MAKE) $@) ; \
+		true; \
+	done
+	# combine the stats
+	mkdir workdir 2> /dev/null
+	for program in $(TARGETS); do \
+	  $(PATH_TO_SRC)genfinal_early.py $$program; true; \
 	done
 	cat workdir/*.csv > final.csv
 	#NAME=$(NAME) TARGETS="$(TARGETS)" $(PATH_TO_SRC)combine_stats.sh
