@@ -8,7 +8,7 @@ report:
 	# Loop through targets and start 
 	# append their final result to the global final
 	for target in $(TARGETS); do \
-		(cd $$target && ($(MAKE) report VERSIONS= \
+		(cd $$target && ($(MAKE) VERSIONS= \
 			"3c-manual 3c-em-orig 3c-revert-em-manual 3c-em-tweak"; \
 		$(MAKE) $@)); \
 		cat $$target/final.csv >> final.csv; \
@@ -23,7 +23,7 @@ report_fmt_early:
 	# Loop through targets and start 
 	# append their final result to the global final
 	for target in $(TARGETS); do \
-		(cd $$target && ($(MAKE) report_fmt_early VERSIONS= \
+		(cd $$target && ($(MAKE) VERSIONS= \
 			"fmt-3c-em-orig_early fmt-revert-em-manual_early fmt-3c-revert-em-manual_early fmt-em-manual_early fmt-em-orig_early fmt-em-tweak fmt-3c-em-tweak"; \
 		$(MAKE) $@)); \
 		cat $$target/final.csv >> final.csv; \
