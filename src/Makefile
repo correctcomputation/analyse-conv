@@ -16,7 +16,7 @@ final.csv:
 	# Loop through targets and start 
 	# append their final result to the global final
 	for target in $(TARGETS); do \
-		(cd $$target && (make ; make stats)); \
+		(cd $$target && ($(MAKE) ; $(MAKE) stats)); \
 		cat $$target/final.csv >> final.csv; \
 		true; \
 	done
@@ -24,11 +24,11 @@ final.csv:
 bear-test:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) || exit 1; \
+		$(MAKE) $@) || exit 1; \
 	done
 
 clean:
 	rm -f final.tex final.txt final.csv  
 	for target in $(TARGETS); do \
-	  (cd $$target && make clean); \
+	  (cd $$target && $(MAKE) clean); \
 	done

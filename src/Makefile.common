@@ -36,7 +36,7 @@ CC = $(CCClang)
 
 convert:
 	for ver in $(VERSIONS) ; do \
-		make $$ver ; \
+		$(MAKE) $$ver ; \
 	done
 
 # make fmt-<version>
@@ -84,7 +84,7 @@ endif
 	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	cp $(addprefix $*/,$(HDRS)) $(addprefix $*/,$(SOURCES)) tmp-$@
-	bear --cdb tmp-$@/compile_commands.json make $(addprefix tmp-$@/,$(SOURCES:.c=.o))
+	bear --cdb tmp-$@/compile_commands.json $(MAKE) $(addprefix tmp-$@/,$(SOURCES:.c=.o))
 # Patch some wrapper macros so that the call in the body is not recognized as a
 # macro call. A hack, but nicer than editing the source files.
 	sed -Ei 's,^(#define ([_a-z]+)\(\.\.\.\) (_Unchecked|unchecked) \{ )\2(\(__VA_ARGS__\); \})$$,\1(\2)\4,' $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES))
@@ -137,12 +137,12 @@ prog-%: $$(addprefix %/,$(SOURCES:.c=.o))
 
 test:
 	for ver in $(VERSIONS) ; do \
-		make test-$$ver || exit 1; \
+		$(MAKE) test-$$ver || exit 1; \
 	done
 
 bear_test: clean-objs clean-progs convert
 	-for v in $(VERSIONS); do \
-	  bear --cdb $$v/compile_commands.json make -k test-$$v 2>&1 | tee $$v/build.log || : ; \
+	  bear --cdb $$v/compile_commands.json $(MAKE) -k test-$$v 2>&1 | tee $$v/build.log || : ; \
 	done
 
 test-%: prog_$(PROG)-%

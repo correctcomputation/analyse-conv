@@ -9,25 +9,25 @@ VERSIONS ?= orig 3c-em-orig manual revert-em-manual 3c-revert-em-manual
 %:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) ; \
+		$(MAKE) $@) ; \
 	done
 
 convert:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) ; \
+		$(MAKE) $@) ; \
 	done
 
 test bear_test:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) || exit 1; \
+		$(MAKE) $@) || exit 1; \
 	done
 
 git-% test-%:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) || exit 1; \
+		$(MAKE) $@) || exit 1; \
 	done
 
 git_diffs: 
@@ -37,7 +37,7 @@ stats:
 	# generate the stats
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make stats) ; \
+		$(MAKE) stats) ; \
 		true; \
 	done
 	# combine the stats
@@ -53,7 +53,7 @@ clean: clean-tmp clean-em clean-revert clean-3c clean_objs clean_progs clean_dif
 clean_reports:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) ; \
+		$(MAKE) $@) ; \
 	done
 	$(RM) -dr workdir
 	$(RM) final.tex final.txt final.csv
@@ -61,7 +61,7 @@ clean_reports:
 clean_diffs:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
-		make $@) ; \
+		$(MAKE) $@) ; \
 	done
 	$(RM) diffs.dat diffs.sum
 	$(RM) -dr git-changes
