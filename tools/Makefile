@@ -5,7 +5,7 @@
 # PATH_TO_SRC
 
 
-include $(PATH_TO_SRC)../tools/Makefile.external
+include $(PATH_TO_SRC)../tools/Makefile.config
 
 FMT ?= $(EXTERNAL_FMT)
 CCClang ?= $(EXTERNAL_CCClang)
