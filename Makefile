@@ -1,6 +1,6 @@
 
-report report_fmt_early: 
-	cd src && ($(MAKE) $@; cp final.txt ../ ; cp final.tex ../)
+report%: 
+	cd src && ($(MAKE) $@; cp final* ../)
 
 clean: 
 	rm -f final.tex final.txt

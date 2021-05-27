@@ -163,6 +163,9 @@ add_git_changes:
 report:
 	NAME=$(PROG) $(PATH_TO_SRC)create_stats.sh
 
+report_early:
+	NAME=$(PROG) $(PATH_TO_SRC)create_stats_early.sh
+	
 report_fmt_early:
 	NAME=$(PROG) $(PATH_TO_SRC)create_stats_fmt_early.sh
 	

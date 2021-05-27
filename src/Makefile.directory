@@ -41,13 +41,13 @@ report:
 		true; \
 	done
 	# combine the stats
-	mkdir workdir 2> /dev/null
+	mkdir -p workdir
 	for program in $(TARGETS); do \
 	  $(PATH_TO_SRC)genfinal.py $$program; true; \
 	done
 	cat workdir/*.csv > final.csv
 
-report_fmt_early:
+report_fmt_early report_early:
 	# generate the stats
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
@@ -55,7 +55,7 @@ report_fmt_early:
 		true; \
 	done
 	# combine the stats
-	mkdir workdir 2> /dev/null
+	mkdir -p workdir
 	for program in $(TARGETS); do \
 	  $(PATH_TO_SRC)genfinal_early.py $$program; true; \
 	done
