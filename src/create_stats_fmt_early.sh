@@ -17,11 +17,11 @@ echo "TEST,REFACTOR_LINES,REFACTOR_TOTAL,ANNOTATED_LINES,ANNOTATED_TOTAL,LEFT_LI
 
 # pass the two folders to compare
 function compute_diff() { 
-  local added=$(diff -w $1 $2 | diffstat -s | awk '{ print $4 }')
+  local added=$(git diff --shortstat --word-diff --no-index $1 $2 | awk '{ print $4 }')
   if [ -z $added ]; then 
     added=0
   fi
-  local delled=$(diff -w $1 $2 | diffstat -s | awk '{ print $6 }')
+  local delled=$(git diff --shortstat --word-diff --no-index $1 $2| awk '{ print $6 }')
   if [ -z $delled ]; then 
     delled=0 
   fi
@@ -29,16 +29,13 @@ function compute_diff() {
 }
 
 # pass the two folders to compare
-function compute_filtered_diff() { 
-  local workfile=$(mktemp)
-  for file in $(ls $1); do 
-    cat "$2/$file" | ../../filter.sh | diff -w "$1/$file" - >> $workfile
-  done
-  local added=$(cat $workfile | diffstat -s | awk '{ print $4 }')
+function compute_filtered_diff() {
+  make filter-$2 &>/dev/null
+  local added=$(git diff --shortstat --word-diff --no-index $1 filter-$2 | awk '{ print $4 }')
   if [ -z $added ]; then 
     added=0
   fi
-  local delled=$(cat $workfile | diffstat -s | awk '{ print $6 }')
+  local delled=$(git diff --shortstat --word-diff --no-index $1 filter-$2 | awk '{ print $6 }')
   if [ -z $delled ]; then 
     delled=0 
   fi

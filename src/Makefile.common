@@ -39,6 +39,20 @@ convert:
 		$(MAKE) $$ver ; \
 	done
 
+
+# make filter-<version>
+# 	removes some checkedc artifacts 
+
+filter-%: %
+	$(RM) -r tmp-$@
+	mkdir tmp-$@
+	for src in $(HDRS) $(SOURCES) ; do \
+		$(PATH_TO_SRC)filter.sh < $*/$$src > tmp-filter-$*/$$src || exit 1; \
+	done
+	$(RM) -r $@
+	mv tmp-$@ $@
+	
+
 # make fmt-<version>
 # 	runs clang-format on the files
 
