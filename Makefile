@@ -1,3 +1,5 @@
+report:
+	cd src && ($(MAKE) $@; cp final* ../)
 
 report%: 
 	cd src && ($(MAKE) $@; cp final* ../)
