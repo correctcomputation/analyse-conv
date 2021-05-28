@@ -32,6 +32,7 @@ report_early:
 	-./pretify.py > final_early.tex
 	-column -ts, final.csv > final_early.txt
 
+# currently configured to use git word-diff so some data may not correspond (esp. %'s)
 report_fmt_early:
 	# Grab our headers
 	./genfinal_early.py  > final.csv
