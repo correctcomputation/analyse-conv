@@ -32,7 +32,7 @@ CC = $(CCClang)
 
 .PHONY: convert
 
-.SECONDARY: %.c %.h
+.SECONDARY:
 
 convert:
 	for ver in $(VERSIONS) ; do \
