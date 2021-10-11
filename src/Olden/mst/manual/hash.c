@@ -91,7 +91,8 @@ void HashDelete(unsigned key, Hash hash) {
   assert(4, *ent);
 
   tmp = *ent;
-  *ent = (*ent)->next;
+  HashEntry temp_entry = (*ent)->next;
+  *ent = temp_entry;
   free<struct hash_entry>(tmp);
 }
 
