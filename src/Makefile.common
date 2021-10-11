@@ -98,7 +98,7 @@ endif
 	$(RM) -r tmp-$@
 	mkdir tmp-$@
 	cp $(addprefix $*/,$(HDRS)) $(addprefix $*/,$(SOURCES)) tmp-$@
-	bear --cdb tmp-$@/compile_commands.json $(MAKE) CFLAGS='$(CFLAGS) -f3c-tool' $(addprefix tmp-$@/,$(SOURCES:.c=.o))
+	bear --cdb tmp-$@/compile_commands.json $(MAKE) $(addprefix tmp-$@/,$(SOURCES:.c=.o))
 # Patch some wrapper macros so that the call in the body is not recognized as a
 # macro call. A hack, but nicer than editing the source files.
 	sed -Ei 's,^(#define ([_a-z]+)\(\.\.\.\) (_Unchecked|unchecked) \{ )\2(\(__VA_ARGS__\); \})$$,\1(\2)\4,' $(addprefix tmp-$@/,$(HDRS)) $(addprefix tmp-$@/,$(SOURCES))
