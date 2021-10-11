@@ -6,10 +6,7 @@ CFLAGS = -DTORONTO
 LDFLAGS  = -lm
 C3FLAGS = -c
 
-# As of 2021-05-03, there's an unwritable change in bisort that is causing 3C to
-# fail and bisort to be omitted from the results. We think it's probably
-# unimportant, so ignore it for now.
-THREEC_FLAGS = -allow-unwritable-changes
+THREEC_FLAGS =
 
 ifdef LARGE_PROBLEM_SIZE
 RUN_OPTIONS = 40000000
