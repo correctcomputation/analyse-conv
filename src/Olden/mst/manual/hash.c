@@ -37,8 +37,8 @@ Hash MakeHash(int size, _Ptr<int(unsigned int)> map)
   int i;
 
   retval = malloc<struct hash>(sizeof(struct hash));
-  retval->array = malloc<HashEntry>(size*sizeof(HashEntry));
-  retval->size = size;
+  retval->size = size,
+    retval->array = malloc<HashEntry>(size*sizeof(HashEntry));
   for (i=0; i<size; i++)
     retval->array[i] = NULL;
   retval->mapfunc = map;
