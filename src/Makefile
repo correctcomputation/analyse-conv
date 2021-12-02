@@ -48,7 +48,7 @@ report_fmt_early:
 	-./pretify.py > final.tex
 	-column -ts, final.csv > final_fmt_early.txt
 
-bear-test:
+test bear_test:
 	for target in $(TARGETS) ; do \
 		(cd $$target && \
 		$(MAKE) $@) || exit 1; \
