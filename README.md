@@ -27,7 +27,10 @@ each sample project has at least 2 versions of its source code:
 - manual: checkedc version, manually ported from the c version
 most also have
 - orig_early: orig version unmodified from microsoft test suite
-- manual_early: manual version unmodified from microsoft test suite
+- manual_early: manual version unmodified from microsoft test suite (currently
+  unused and would probably need to be updated with some patches from
+  https://github.com/microsoft/checkedc-llvm-test-suite/commits/master before
+  being used again)
 
 You may add more directories with source files as well.
 
