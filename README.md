@@ -1,5 +1,5 @@
-# analyse-conv
-For analysing addition and removal of checkedc extensions, for use with 3C and C3
+# analyze-conversion
+For analyzing addition and removal of checkedc extensions, for use with 3C and C3
 
 # requirements
 we need the paths to our tools to use them, you can add them to /tools/Makefile.config (see .template) or on the command line:
@@ -62,7 +62,7 @@ make bear-test
 
 in `src` or any descendant directory.
 
-# Analyse
+# Analyze
 
 After conversion is done you can make diffs or generate their stats
 Any failed conversions will not be included in the stats (needs to be confirmed for more cases)
