@@ -43,10 +43,12 @@ colors = ['\\rowcolor{white}','\\rowcolor[rgb]{0.8,0.8,0.8}']
 color = 0
 for row in rows:
     if row[0 : 2] == ['anagram','manual']:
-        print_benchmark_header('PtrDist')
+        print_benchmark_header('Ptrdist')
     if row[0] != last_prog:
         color = 1 - color
         last_prog = row[0]
+    if row[1] != 'manual':
+        row[1] = f'3c ({row[1]})'
     print(colors[color])
     # Match the idiosyncratic formatting of the existing table in the paper for
     # now to facilitate comparison. Once we're happy, we can clean up the
