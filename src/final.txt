@@ -1,0 +1,44 @@
+Program    Version  Lines Refactored  Lines Annotated  Lines Left     #ptr  #ntarr  #arr  #wild  #bounds  #casts
+bh         manual   136 (10.44 %)     45 (3.44 %)      N/A            135   3       54    0      49       10
+bh         revert   N/A               48 (3.66 %)      30 (2.29 %)    135   3       54    0      49       11
+bh         tweak    3 (0.23 %)        100 (7.67 %)     104 (7.96 %)   132   3       54    0      49       16
+bh         orig     N/A               103 (7.90 %)     105 (8.03 %)   132   3       54    0      49       16
+bisort     manual   57 (21.43 %)      35 (13.73 %)     N/A            44    2       2     0      0        0
+bisort     revert   N/A               34 (13.33 %)     1 (0.39 %)     44    2       2     0      0        1
+bisort     orig     N/A               51 (19.17 %)     49 (19.22 %)   32    2       2     1      0        3
+em3d       manual   170 (37.04 %)     88 (17.74 %)     N/A            61    3       31    0      24       6
+em3d       revert   N/A               88 (17.74 %)     34 (6.88 %)    64    2       29    0      23       8
+em3d       orig     N/A               76 (16.56 %)     158 (34.50 %)  63    2       30    2      20       12
+health     manual   42 (11.38 %)      57 (15.62 %)     N/A            70    3       7     0      4        0
+health     revert   N/A               57 (15.62 %)     0 (0.00 %)     72    2       6     0      4        0
+health     orig     N/A               57 (15.45 %)     24 (6.50 %)    72    2       6     0      4        3
+mst        manual   133 (40.43 %)     28 (8.33 %)      N/A            44    4       8     0      6        3
+mst        revert   N/A               28 (8.33 %)      4 (1.19 %)     46    3       7     0      5        1
+mst        tweak    19 (5.78 %)       52 (16.51 %)     91 (28.53 %)   39    2       13    5      9        5
+mst        orig     N/A               42 (12.77 %)     116 (34.94 %)  29    2       14    16     9        3
+perimeter  manual   34 (10.27 %)      10 (3.03 %)      N/A            26    2       2     0      0        0
+perimeter  revert   N/A               10 (3.03 %)      0 (0.00 %)     26    2       2     0      0        0
+perimeter  tweak    3 (0.91 %)        20 (6.02 %)      24 (7.23 %)    26    2       2     1      0        1
+perimeter  orig     N/A               23 (6.95 %)      26 (7.81 %)    26    2       2     1      0        1
+power      manual   53 (11.67 %)      30 (6.55 %)      N/A            35    1       21    0      8        0
+power      revert   N/A               30 (6.55 %)      0 (0.00 %)     41    1       15    0      8        0
+power      orig     N/A               55 (12.11 %)     37 (8.08 %)    41    1       15    0      8        4
+treeadd    manual   30 (20.98 %)      16 (11.03 %)     N/A            12    2       2     0      0        0
+treeadd    revert   N/A               16 (11.03 %)     0 (0.00 %)     12    2       2     0      0        0
+treeadd    orig     N/A               18 (12.59 %)     24 (16.67 %)   12    2       2     2      0        3
+tsp        manual   68 (16.15 %)      10 (2.38 %)      N/A            66    3       3     0      0        0
+tsp        revert   N/A               9 (2.14 %)       1 (0.24 %)     68    2       2     0      0        0
+tsp        tweak    4 (0.95 %)        40 (9.48 %)      30 (7.11 %)    68    2       2     1      0        1
+tsp        orig     N/A               42 (9.98 %)      31 (7.35 %)    68    2       2     1      0        1
+anagram    manual   90 (26.87 %)      52 (14.48 %)     N/A            16    4       32    4      23       0
+anagram    revert   N/A               28 (7.80 %)      37 (10.36 %)   15    7       12    22     7        6
+anagram    orig     N/A               28 (8.36 %)      97 (28.96 %)   12    7       13    12     7        3
+ft         manual   147 (16.63 %)     122 (13.74 %)    N/A            169   1       2     0      1        4
+ft         revert   N/A               122 (13.74 %)    0 (0.00 %)     169   1       2     0      1        0
+ft         orig     N/A               126 (14.25 %)    146 (16.57 %)  169   1       2     0      1        4
+ks         manual   85 (17.03 %)      35 (7.06 %)      N/A            56    6       15    0      13       4
+ks         revert   N/A               35 (7.06 %)      11 (2.22 %)    57    4       15    1      13       3
+ks         orig     N/A               64 (12.83 %)     86 (17.23 %)   56    5       15    1      13       8
+yacr2      manual   280 (12.69 %)     157 (7.07 %)     N/A            15    5       135   0      57       0
+yacr2      revert   N/A               195 (8.78 %)     143 (6.44 %)   54    4       93    4      52       42
+yacr2      orig     N/A               190 (8.61 %)     389 (17.64 %)  53    4       88    13     47       62
