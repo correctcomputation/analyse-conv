@@ -1,0 +1,374 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include "types.h"
+#include "channel.h"
+
+#pragma CHECKED_SCOPE ON
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
+
+unsigned long channelNets;
+unsigned long channelColumns;
+_Array_ptr<unsigned long> TOP : count(channelColumns + 1);
+_Array_ptr<unsigned long> BOT : count(channelColumns + 1);
+_Array_ptr<unsigned long> FIRST : count(channelNets + 1);
+_Array_ptr<unsigned long> LAST : count(channelNets + 1);
+_Array_ptr<unsigned long> DENSITY : count(channelColumns + 1);
+_Array_ptr<unsigned long> CROSSING : count(channelNets + 1);
+unsigned long channelTracks;
+unsigned long channelTracksCopy;
+unsigned long channelDensity;
+unsigned long channelDensityColumn;
+_Nt_array_ptr<char> channelFile = ((void *)0);
+
+
+
+
+
+
+
+
+
+void
+BuildChannel(void)
+{
+
+
+
+
+    DimensionChannel();
+
+
+
+
+
+    DescribeChannel();
+
+
+
+
+
+
+    DensityChannel();
+}
+
+void
+DimensionChannel(void)
+{
+    _Ptr<FILE> channelFP = ((void*)0);
+    unsigned long line;
+    unsigned long dim;
+    unsigned long net;
+    unsigned long col;
+    unsigned long bot;
+    unsigned long top;
+    long stat;
+
+
+
+
+    channelFP = fopen(channelFile, "r");
+    if (channelFP == ((void*)0)) {
+
+
+
+ _Unchecked { (printf)("Error:\n"); };
+ _Unchecked { (printf)("\tChannel file cannot be opened.\n"); };
+ exit(1);
+    }
+
+
+
+
+
+
+
+
+
+    line = 0;
+    dim = 0;
+    net = 0;
+    do {
+ line++;
+ unsigned int c1, b1, t1;
+ _Unchecked { stat = fscanf(channelFP, "%u%u%u", &c1, &b1, &t1); }
+ col = c1; bot = b1; top = t1;
+ if (stat != (-1)) {
+     if (stat == 3) {
+
+
+
+  if (col > dim) {
+      dim = col;
+  }
+
+
+
+
+  if (bot > net) {
+      net = bot;
+  }
+  if (top > net) {
+      net = top;
+  }
+     }
+     else {
+
+
+
+  _Unchecked { (printf)("Error:\n"); };
+  _Unchecked { (printf)("\tChannel file description invalid at line %d.\n", line); };
+  _Unchecked { (printf)("\tIncorrect number of specifiers.\n"); };
+  exit(1);
+     }
+ }
+    } while (stat != (-1));
+
+
+
+
+    if (fclose(channelFP) == (-1)) {
+
+
+
+ _Unchecked { (printf)("Error:\n"); };
+ _Unchecked { (printf)("\tChannel file cannot be closed.\n"); };
+ exit(1);
+    }
+
+
+
+
+    if (dim == 0) {
+
+
+
+ _Unchecked { (printf)("Error:\n"); };
+ _Unchecked { (printf)("\tChannel description invalid.\n"); };
+ _Unchecked { (printf)("\tChannel has null dimension.\n"); };
+ exit(1);
+    }
+
+
+
+
+    channelColumns = dim;
+    channelNets = net;
+}
+
+void
+DescribeChannel(void)
+{
+    _Ptr<FILE> channelFP = ((void*)0);
+    unsigned long line;
+    unsigned long col;
+    unsigned long bot;
+    unsigned long top;
+    long stat;
+
+
+
+
+    TOP = malloc<unsigned long>((channelColumns+1) * sizeof(unsigned long));
+
+
+
+
+    BOT = malloc<unsigned long>((channelColumns+1) * sizeof(unsigned long));
+
+
+
+
+    for (col = 0; col <= channelColumns; col++) {
+ TOP[col] = 0;
+ BOT[col] = 0;
+    }
+
+
+
+
+    channelFP = fopen(channelFile, "r");
+    if (channelFP == ((void*)0)) {
+
+
+
+ _Unchecked { (printf)("Error:\n"); };
+ _Unchecked { (printf)("\tChannel file cannot be opened.\n"); };
+ exit(1);
+    }
+
+
+
+
+
+
+
+
+
+    line = 0;
+    do {
+ line++;
+ unsigned int c1, b1, t1;
+ _Unchecked { stat = fscanf(channelFP, "%u%u%u", &c1, &b1, &t1); }
+ col = c1; bot = b1; top = t1;
+ if (stat != (-1)) {
+     if (stat == 3) {
+
+
+
+  if (col > channelColumns) {
+
+
+
+      _Unchecked { (printf)("Error:\n"); };
+      _Unchecked { (printf)("\tChannel file description invalid at line %d.\n", line); };
+      _Unchecked { (printf)("\tColumn number out of range.\n"); };
+      exit(1);
+  }
+  else {
+
+
+
+      BOT[col] = bot;
+      TOP[col] = top;
+  }
+     }
+     else {
+
+
+
+  _Unchecked { (printf)("Error:\n"); };
+  _Unchecked { (printf)("\tChannel file description invalid at line %d.\n", line); };
+  _Unchecked { (printf)("\tIncorrect number of specifiers.\n"); };
+  exit(1);
+     }
+ }
+    } while (stat != (-1));
+
+
+
+
+    if (fclose(channelFP) == (-1)) {
+
+
+
+ _Unchecked { (printf)("Error:\n"); };
+ _Unchecked { (printf)("\tChannel file cannot be closed.\n"); };
+ exit(1);
+    }
+}
+
+void
+DensityChannel(void)
+{
+    unsigned long init;
+    unsigned long which;
+    unsigned long col;
+    unsigned long bound;
+    unsigned long boundColumn;
+
+
+
+
+    FIRST = malloc<unsigned long>((channelNets+1) * sizeof(unsigned long));
+    LAST = malloc<unsigned long>((channelNets+1) * sizeof(unsigned long));
+    DENSITY = malloc<unsigned long>((channelColumns+1) * sizeof(unsigned long));
+    CROSSING = malloc<unsigned long>((channelNets+1) * sizeof(unsigned long));
+
+
+
+
+    for (init = 0; init <= channelNets; init++) {
+ FIRST[init] = 0;
+ LAST[init] = 0;
+ CROSSING[init] = 0;
+    }
+    for (init = 0; init <= channelColumns; init++) {
+ DENSITY[init] = 0;
+    }
+
+
+
+
+    for (which = 1; which <= channelNets; which++) {
+
+
+
+
+ for (col = 1; col <= channelColumns; col++) {
+     if ((BOT[col] == which) || (TOP[col] == which)) {
+  FIRST[which] = col;
+  break;
+     }
+ }
+
+
+
+
+
+ for (col = channelColumns; col >= 1; col--) {
+     if ((BOT[col] == which) || (TOP[col] == which)) {
+  LAST[which] = col;
+  break;
+     }
+ }
+
+
+
+
+
+ for (col = FIRST[which]; col <= LAST[which]; col++) {
+     DENSITY[col]++;
+ }
+    }
+
+
+
+
+#ifdef SCOTT
+
+
+
+
+
+
+
+#else
+    bound = 0;
+    for (col = channelColumns; col >= 1; col--) {
+ if (DENSITY[col] > bound) {
+     bound = DENSITY[col];
+     boundColumn = col;
+ }
+    }
+#endif
+
+
+
+
+    channelTracks = bound;
+    channelDensity = bound;
+    channelDensityColumn = boundColumn;
+}
+
+
+
+
+
+
+
+
+

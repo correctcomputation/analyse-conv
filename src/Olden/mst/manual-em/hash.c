@@ -1,0 +1,101 @@
+
+
+
+#include <stdlib.h>
+#include "hash.h"
+#pragma CHECKED_SCOPE ON
+
+#define printf(...) _Unchecked { (printf)(__VA_ARGS__); }
+#define assert(num,a) if (!(a)) {printf("Assertion failure:%d in hash\n",num); exit(-1);}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#define localfree(sz)
+
+
+Hash MakeHash(int size, _Ptr<int(unsigned int)> map)
+{
+  Hash retval = ((void*)0);
+  int i;
+
+  retval = malloc<struct hash>(sizeof(struct hash));
+  retval->array = malloc<HashEntry>(size*sizeof(HashEntry));
+  retval->size = size;
+  for (i=0; i<size; i++)
+    retval->array[i] = ((void*)0);
+  retval->mapfunc = map;
+  return retval;
+}
+
+int HashLookup(unsigned int key, Hash hash)
+{
+  int j;
+  HashEntry ent = ((void*)0);
+
+  j = (hash->mapfunc)(key);
+  if (!(j>=0)) {_Unchecked { (printf)("Assertion failure:%d in hash\n",1); }; exit(-1);};
+  if (!(j<hash->size)) {_Unchecked { (printf)("Assertion failure:%d in hash\n",2); }; exit(-1);};
+  for (ent = hash->array[j];
+       ent &&
+           ent->key!=key;
+       ent=ent->next);
+  if (ent) return ent->entry;
+  return ((void*)0);
+}
+
+void HashInsert(int entry,unsigned int key,Hash hash)
+{
+  HashEntry ent = ((void*)0);
+  int j;
+
+  if (!(!HashLookup(key,hash))) {_Unchecked { (printf)("Assertion failure:%d in hash\n",3); }; exit(-1);};
+
+  j = (hash->mapfunc)(key);
+  ent = malloc<struct hash_entry>(sizeof(*ent));
+  ent->next = hash->array[j];
+  hash->array[j]=ent;
+  ent->key = key;
+  ent->entry = entry;
+}
+
+void HashDelete(unsigned key, Hash hash) {
+  HashEntry tmp = ((void*)0);
+  int j = (hash->mapfunc)(key);
+  int size = hash->size;
+  _Dynamic_check(j <= size);
+  _Ptr<HashEntry> ent = 0;
+  _Unchecked { ent = &hash->array[j]; }
+
+  while (*ent && (*ent)->key != key) {
+    ent = &(*ent)->next;
+  }
+
+  if (!(*ent)) {_Unchecked { (printf)("Assertion failure:%d in hash\n",4); }; exit(-1);};
+
+  tmp = *ent;
+  *ent = (*ent)->next;
+  free<struct hash_entry>(tmp);
+}
+
+
+
+
+

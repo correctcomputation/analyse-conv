@@ -1,0 +1,125 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include "types.h"
+
+
+#ifndef VCG_H
+#define VCG_H
+
+
+
+
+
+
+
+#define	EMPTY			0
+#define	EMPTY_HALF_EMPTY	2
+#define	EMPTY_FULL		3
+#define	HALF_EMPTY		4
+#define	HALF_EMPTY_FULL		5
+#define	FULL			6
+
+
+
+
+
+
+
+
+typedef struct _constraintVCGType {
+    unsigned long top;
+    unsigned long bot;
+    unsigned long col;
+    unsigned long removed;
+} constraintVCGType;
+
+typedef struct _nodeVCGType {
+    constraintVCGType * netsAboveHook;
+    unsigned long netsAbove;
+    unsigned long netsAboveLabel;
+    unsigned long netsAboveReached;
+    constraintVCGType * netsBelowHook;
+    unsigned long netsBelow;
+    unsigned long netsBelowLabel;
+    unsigned long netsBelowReached;
+} nodeVCGType;
+
+
+
+
+
+
+
+
+extern _Array_ptr<nodeVCGType> VCG;
+extern constraintVCGType * storageRootVCG;
+extern constraintVCGType * storageVCG;
+extern unsigned long storageLimitVCG;
+extern _Array_ptr<constraintVCGType *> removeVCG : count(removeTotalVCG);
+extern unsigned long removeTotalVCG;
+extern _Array_ptr<unsigned long> SCC;
+extern unsigned long totalSCC;
+extern _Array_ptr<unsigned long> perSCC;
+
+
+
+
+
+
+
+
+void
+AllocVCG(void);
+
+void
+FreeVCG(void);
+
+void
+BuildVCG(void);
+
+void
+DFSClearVCG(_Array_ptr<nodeVCGType> VCG);
+
+void
+DumpVCG(_Array_ptr<nodeVCGType> VCG);
+
+void
+DFSAboveVCG(_Array_ptr<nodeVCGType> VCG : count(net), unsigned long net);
+
+void DFSBelowVCG(_Array_ptr<nodeVCGType> VCG, unsigned long net);
+
+void SCCofVCG(_Array_ptr<nodeVCGType> VCG, _Array_ptr<unsigned long> SCC, _Array_ptr<unsigned long> perSCC);
+
+void SCC_DFSAboveVCG(_Array_ptr<nodeVCGType> VCG, unsigned long net, _Ptr<unsigned long> label);
+
+void SCC_DFSBelowVCG(_Array_ptr<nodeVCGType> VCG, unsigned long net, unsigned long label);
+
+void DumpSCC(_Array_ptr<unsigned long> SCC, _Array_ptr<unsigned long> perSCC);
+
+void AcyclicVCG(void);
+
+void RemoveConstraintVCG(_Array_ptr<nodeVCGType> VCG, _Array_ptr<unsigned long> SCC, _Array_ptr<unsigned long> perSCC, _Array_ptr<constraintVCGType *> removeVCG : count(removeTotalVCG));
+
+unsigned long ExistPathAboveVCG(_Array_ptr<nodeVCGType> VCG : count(above), unsigned long above, unsigned long below);
+
+void LongestPathVCG(_Array_ptr<nodeVCGType> VCG : count(net), unsigned long net);
+
+unsigned long DFSAboveLongestPathVCG(_Array_ptr<nodeVCGType> VCG : count(net), unsigned long net);
+
+unsigned long DFSBelowLongestPathVCG(_Array_ptr<nodeVCGType> VCG : count(net), unsigned long net);
+
+unsigned long VCV(_Array_ptr<nodeVCGType> VCG : count(check), unsigned long check, unsigned long track, _Array_ptr<unsigned long> assign);
+
+#endif	
