@@ -1,8 +1,10 @@
+report:
+	cd src && ($(MAKE) $@; cp final* ../)
 
-all: 
-	bash -c "cd src && make && cp final.txt ../ && cp final.tex ../"
+report%: 
+	cd src && ($(MAKE) $@; cp final* ../)
 
 clean: 
 	rm -f final.tex final.txt
-	bash -c "cd src && make clean"
+	cd src && $(MAKE) clean
 

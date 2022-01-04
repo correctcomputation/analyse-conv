@@ -4,6 +4,7 @@ HDRS = tree.h
 
 CFLAGS   = -DTORONTO
 LDFLAGS    = 
+C3FLAGS = -c
 
 ifdef SMALL_PROBLEM_SIZE
 RUN_OPTIONS = 20
@@ -16,12 +17,8 @@ XCORE_TARGET_NEEDS_MEMORY := 128
 endif
 endif
 OUTPUT = treeadd.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
 

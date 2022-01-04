@@ -4,6 +4,7 @@ HDRS = health.h
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
+C3FLAGS = -c
 
 FP_TOLERANCE = 0.001
 
@@ -18,12 +19,8 @@ ifeq ($(ARCH),XCore)
 XCORE_TARGET_NEEDS_MEMORY := 64
 endif
 endif
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common
 

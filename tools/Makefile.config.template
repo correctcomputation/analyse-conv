@@ -1,0 +1,6 @@
+EXTERNAL_FMT = #/path/to/clang-format
+EXTERNAL_CCClang = #/path/to/clang
+EXTERNAL_C3 = #/path/to/main.exe
+EXTERNAL_THREEC = #/path/to/3c
+EXTERNAL_THREEC_WORKTREE = #/path/to/checkedc-clang
+

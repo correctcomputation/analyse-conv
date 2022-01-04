@@ -1,9 +1,11 @@
 PROG     = tsp
 SOURCES = args.c build.c main.c tsp.c
 HDRS = tsp.h
+VERSIONS ?= manual 3c-manual revert-em-manual 3c-revert-em-manual
 
 CFLAGS = -DTORONTO
 LDFLAGS  = -lm
+C3FLAGS = -c
 
 ifdef LARGE_PROBLEM_SIZE
 RUN_OPTIONS = 40960000
@@ -18,11 +20,7 @@ endif
 endif
 endif
 OUTPUT = tsp.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
-
-# special handling of stdchecked macros
-C3 := $(C3) -c
 
 include $(PATH_TO_SRC)Makefile.common

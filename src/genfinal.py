@@ -63,10 +63,16 @@ def loadstats(test_name: str) -> List[str]:
 
 # Map test case name to statistics file name
 def test_to_statsfile(test_name : str) -> str:
-    if test_name in ('orig', 'tweak', 'revert', 'manual'):
-        return test_name + 'stats.json.aggregate.json'
-    else:
-        raise Error("This kind of test doesn't have pointer stats!")
+	if test_name == 'orig':
+		return '3c_stats-em-orig.json.aggregate.json'
+	elif test_name == 'manual':
+		return '3c_stats-manual.json.aggregate.json'
+	elif test_name == 'revert':
+		return '3c_stats-revert-em-manual.json.aggregate.json'
+	elif test_name == 'tweak':
+		return '3c_stats-em-tweak.json.aggregate.json'
+	else:
+		raise Error("This kind of test doesn't have pointer stats!")
 
 # Compute percentage and format correctly
 def compute_percentage(figure: int, total: int) -> str:

@@ -4,7 +4,6 @@ PROG = yacr2
 
 RUN_OPTIONS = ./input2.in
 OUTPUT = OUT
-STDIN_FILENAME = /dev/stdin
 
 CFLAGS = -I.. -DTODD
 LDFLAGS=

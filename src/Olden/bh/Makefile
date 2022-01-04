@@ -1,6 +1,7 @@
 SOURCES = args.c newbh.c util.c walksub.c
 HDRS = code.h defs.h stdinc.h vectmath.h
 PROG     = bh
+VERSIONS ?= orig manual 3c-manual 3c-em-orig revert-em-manual 3c-revert-em-manual tweak 3c-em-tweak
 
 CFLAGS = -fcommon -DTORONTO
 LDFLAGS  = -lm
@@ -15,7 +16,6 @@ RUN_OPTIONS = 20000 20
 endif
 endif
 OUTPUT = bh.reference_output
-STDIN_FILENAME = /dev/stdin
 
 PATH_TO_SRC = ../../
 
