@@ -15,8 +15,8 @@ from typing import List
 
 # NOTE: uncomment/swap to omit lines left from table
 # Output format:
-outheader = ['Program', 'Version', 'Lines Refactored', 'Lines Annotated', 'Lines Left',  '#ptr', '#ntarr', '#arr', '#wild', '#bounds', '#casts']
-#outheader = ['Program', 'Version', 'Lines Refactored', 'Lines Annotated', '#ptr', '#ntarr', '#arr', '#wild', '#bounds', '#casts']
+outheader = ['Program', 'Version', 'Lines Refactored', 'Lines Annotated', 'Lines Left',  '#ptr', '#arr', '#ntarr', '#wild', '#bounds', '#casts']
+#outheader = ['Program', 'Version', 'Lines Refactored', 'Lines Annotated', '#ptr', '#arr', '#ntarr', '#wild', '#bounds', '#casts']
 # If run w/ no arguments, just output the header
 if len(sys.argv) < 2:
     print(','.join(outheader))
@@ -61,7 +61,7 @@ def loadstats(test_name: str) -> List[str]:
     bounds_dict = stats['AggregateStats'][1]['ArrBoundsStats']['Details']['BoundsFound']['ArrayBoundsInferenceStats']
     for k in bounds_dict:
         bounds += bounds_dict[k]
-    return [str(i) for i in [ptrstats['ptr'], ptrstats['ntarr'], ptrstats['arr'], ptrstats['wild'], bounds, casts]]
+    return [str(i) for i in [ptrstats['ptr'], ptrstats['arr'], ptrstats['ntarr'], ptrstats['wild'], bounds, casts]]
 
 
 # Map test case name to statistics file name
