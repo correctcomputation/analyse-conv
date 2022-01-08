@@ -57,7 +57,10 @@ def loadstats(test_name: str) -> List[str]:
     for ckey in rewritestats:
         if "Casts" in ckey:
             casts += rewritestats[ckey]
-    bounds = stats['AggregateStats'][1]['ArrBoundsStats']['NumPointersNeedBounds']
+    bounds = 0
+    bounds_dict = stats['AggregateStats'][1]['ArrBoundsStats']['Details']['BoundsFound']['ArrayBoundsInferenceStats']
+    for k in bounds_dict:
+        bounds += bounds_dict[k]
     return [str(i) for i in [ptrstats['ptr'], ptrstats['ntarr'], ptrstats['arr'], ptrstats['wild'], bounds, casts]]
 
 
